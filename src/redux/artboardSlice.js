@@ -20,16 +20,16 @@ const artboardSlice = createSlice( {
             return { ...state, zoom: Math.max( state.zoom - 0.0625, 0.0625 ) };
         },
         moveArtboardLeft( state ) {
-            return { ...state, offsexX: state.offsetX - 1 };
+            return { ...state, offsetY: state.offsetY - 1 };
         },
         moveArtboardRight( state ) {
-            return { ...state, offsexX: state.offsetX + 1 };
+            return { ...state, offsetY: state.offsetY + 1 };
         },
         moveArtboardUp( state ) {
-            return { ...state, offsexY: state.offsetY - 1 };
+            return { ...state, offsetX: state.offsetX - 1 };
         },
         moveArtboardDown( state ) {
-            return { ...state, offsexY: state.offsetY + 1 };
+            return { ...state, offsetX: state.offsetX + 1 };
         }
     }
 } );

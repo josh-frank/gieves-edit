@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-const StyledArtboard = styled.svg`
-    position: absolute;
-    top: ${ props => props.offsetX }%;
-    left: ${ props => props.offsetY }%;
-    transform: translate( -50%, -50% );
-    outline: 2px solid #999999;
-    box-shadow: 5px 5px 2px 1px #999999;
-`;
+const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
+    style: {
+      top: `${ offsetX }%`,
+      left: `${ offsetY }%`,
+      outline: `${ 2 * zoom }px solid #999999`,
+      boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
+    },
+  } ) )`position: absolute; transform: translate( -50%, -50% );`;
 
 export default function Artboard( { shapes } ) {
 

@@ -1,23 +1,32 @@
 import './App.css';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Artboard from './components/Artboard';
-import { zoomIn, zoomOut } from './redux/artboardSlice';
+import { moveArtboardDown, moveArtboardLeft, moveArtboardRight, moveArtboardUp, zoomIn, zoomOut } from './redux/artboardSlice';
 
 function App() {
 
   const dispatch = useDispatch();
 
-  // const handleClick = useCallback( clickEvent => {
-  //   console.log( `x:${ clickEvent.clientX } y:${ clickEvent.clientY }` );
-  // }, [] );
+  const [ clickActive, setClickActive ] = useState( false );
+  const [ mouseDownCoordinates, setMouseDownCoordinates ] = useState( { x: null, y: null } );
 
-  // useEffect( () => {
-  //   window.addEventListener( "click", handleClick );
-  //   return () => window.removeEventListener( "click", handleClick );
-  // }, [ handleClick ] );
+  const handleMouseDown = useCallback( mouseDownEvent => {
+    setClickActive( true );
+    setMouseDownCoordinates( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } );
+  }, [] );
+
+  const handleMouseUp = useCallback( () => setClickActive( false ), [] );
+
+  const handleMouseMove = useCallback( mouseMoveEvent => {
+    if ( clickActive && mouseMoveEvent.clientX < mouseDownCoordinates.x ) dispatch( moveArtboardLeft() ); 
+    if ( clickActive && mouseMoveEvent.clientX > mouseDownCoordinates.x ) dispatch( moveArtboardRight() ); 
+    if ( clickActive && mouseMoveEvent.clientY < mouseDownCoordinates.y ) dispatch( moveArtboardUp() ); 
+    if ( clickActive && mouseMoveEvent.clientY > mouseDownCoordinates.y ) dispatch( moveArtboardDown() ); 
+    setMouseDownCoordinates( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } );
+  }, [ clickActive, mouseDownCoordinates, dispatch ] );
 
   const handleZoom = useCallback( zoomEvent => {
     if ( zoomEvent.deltaY > 0 ) { dispatch( zoomIn() ); }
@@ -26,8 +35,16 @@ function App() {
 
   useEffect( () => {
     window.addEventListener( "wheel", handleZoom );
-    return () => window.removeEventListener( "wheel", handleZoom );
-  }, [ handleZoom ] );
+    window.addEventListener( "mousedown", handleMouseDown );
+    window.addEventListener( "mouseup", handleMouseUp );
+    window.addEventListener( "mousemove", handleMouseMove );
+    return () => {
+      window.removeEventListener( "wheel", handleZoom );
+      window.removeEventListener( "mousedown", handleMouseDown );
+      window.removeEventListener( "mouseup", handleMouseUp );
+      window.removeEventListener( "mousemove", handleMouseMove );
+    };
+  }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove ] );
 
   return (
     <>
