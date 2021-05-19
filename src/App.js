@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
 import './App.css';
+
+import { useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import Artboard from './components/Artboard';
+import { zoomIn, zoomOut } from './redux/artboardSlice';
 
 function App() {
 
-  const [ artboardPosition, setArtboardPosition ] = useState( {
-    zoom: 1.0,
-    offsetX: 50.0,
-    offsetY: 50.0
-  } );
+  const dispatch = useDispatch();
 
   // const handleClick = useCallback( clickEvent => {
   //   console.log( `x:${ clickEvent.clientX } y:${ clickEvent.clientY }` );
@@ -19,23 +19,21 @@ function App() {
   //   return () => window.removeEventListener( "click", handleClick );
   // }, [ handleClick ] );
 
-  // const handleScroll = useCallback( scrollEvent => {
-  //   console.log('scrollEvent: ', scrollEvent);
-  // }, [] );
+  const handleZoom = useCallback( zoomEvent => {
+    if ( zoomEvent.deltaY > 0 ) { dispatch( zoomIn() ); }
+    else if ( zoomEvent.deltaY < 0 ) { dispatch( zoomOut() ); }
+  }, [ dispatch ] );
 
-  // useEffect( () => {
-  //   window.addEventListener( "scroll", handleScroll );
-  //   return () => window.removeEventListener( "scroll", handleScroll );
-  // }, [ handleScroll ] );
+  useEffect( () => {
+    window.addEventListener( "wheel", handleZoom );
+    return () => window.removeEventListener( "wheel", handleZoom );
+  }, [ handleZoom ] );
 
   return (
     <>
       <Artboard
-        width={ 300 }
-        height={ 300 }
-        position={ artboardPosition }
         shapes={ [
-          "m 0 0 l 50 0 l 0 50 l -50 0 l 0 -50",
+          "m 25 25 l 50 0 l 0 50 l -50 0 l 0 -50",
           "m 150, 150 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0"
         ] }
       />
