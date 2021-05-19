@@ -2,31 +2,38 @@ import './App.css';
 
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { moveArtboardDown, moveArtboardLeft, moveArtboardRight, moveArtboardUp, zoomIn, zoomOut } from './redux/artboardSlice';
+import { addShape } from './redux/shapesSlice';
 
 import Artboard from './components/Artboard';
-import { moveArtboardDown, moveArtboardLeft, moveArtboardRight, moveArtboardUp, zoomIn, zoomOut } from './redux/artboardSlice';
+import ArtboardViewInfo from './components/ArtboardViewInfo';
+
+const testShapes = [
+  "m 25 25 l 50 0 l 0 50 l -50 0 l 0 -50",
+  "m 150, 150 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0"
+];
 
 function App() {
 
   const dispatch = useDispatch();
 
-  const [ clickActive, setClickActive ] = useState( false );
+  const [ dragActive, setDragActive ] = useState( false );
   const [ mouseDownCoordinates, setMouseDownCoordinates ] = useState( { x: null, y: null } );
 
   const handleMouseDown = useCallback( mouseDownEvent => {
-    setClickActive( true );
+    setDragActive( true );
     setMouseDownCoordinates( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } );
   }, [] );
 
-  const handleMouseUp = useCallback( () => setClickActive( false ), [] );
+  const handleMouseUp = useCallback( () => setDragActive( false ), [] );
 
   const handleMouseMove = useCallback( mouseMoveEvent => {
-    if ( clickActive && mouseMoveEvent.clientX < mouseDownCoordinates.x ) dispatch( moveArtboardLeft() ); 
-    if ( clickActive && mouseMoveEvent.clientX > mouseDownCoordinates.x ) dispatch( moveArtboardRight() ); 
-    if ( clickActive && mouseMoveEvent.clientY < mouseDownCoordinates.y ) dispatch( moveArtboardUp() ); 
-    if ( clickActive && mouseMoveEvent.clientY > mouseDownCoordinates.y ) dispatch( moveArtboardDown() ); 
+    if ( dragActive && mouseMoveEvent.clientX < mouseDownCoordinates.x ) dispatch( moveArtboardLeft() ); 
+    if ( dragActive && mouseMoveEvent.clientX > mouseDownCoordinates.x ) dispatch( moveArtboardRight() ); 
+    if ( dragActive && mouseMoveEvent.clientY < mouseDownCoordinates.y ) dispatch( moveArtboardUp() ); 
+    if ( dragActive && mouseMoveEvent.clientY > mouseDownCoordinates.y ) dispatch( moveArtboardDown() ); 
     setMouseDownCoordinates( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } );
-  }, [ clickActive, mouseDownCoordinates, dispatch ] );
+  }, [ dragActive, mouseDownCoordinates, dispatch ] );
 
   const handleZoom = useCallback( zoomEvent => {
     if ( zoomEvent.deltaY > 0 ) { dispatch( zoomIn() ); }
@@ -46,14 +53,12 @@ function App() {
     };
   }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove ] );
 
+  useEffect( () => testShapes.forEach( shape => dispatch( addShape( shape ) ) ), [ dispatch ] );
+
   return (
     <>
-      <Artboard
-        shapes={ [
-          "m 25 25 l 50 0 l 0 50 l -50 0 l 0 -50",
-          "m 150, 150 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0"
-        ] }
-      />
+      <Artboard />
+      <ArtboardViewInfo />
     </>
   );
 
