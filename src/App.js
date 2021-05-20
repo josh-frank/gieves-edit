@@ -9,8 +9,8 @@ import Artboard from './components/Artboard';
 import ArtboardViewInfo from './components/ArtboardViewInfo';
 
 const testShapes = [
-  "m 25 25 l 50 0 l 0 50 l -50 0 l 0 -50",
-  "m 150, 150 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0"
+  "m 25,25 l 50,0 l 0,50 l -50,0 z",
+  "m 150,150 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0 z"
 ];
 
 function App() {
