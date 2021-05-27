@@ -14,12 +14,21 @@ export default function Menu() {
         { Object.keys( menuItems ).map( menuItem => {
             return <button
                 key={ menuItem }
-                className="menu-button"
                 onClick={ () => setMenuToDisplay( menuItem ) }
+                onBlur={ () => setMenuToDisplay( null ) }
             >
                 <u>{ menuItem.slice( 0, 1 ) }</u>{ menuItem.slice( 1 ) }
             </button>;
         } ) }
+        { menuToDisplay && <div className="sub-menu">
+            { menuItems[ menuToDisplay ].map( subMenuItem => {
+                return <button
+                    key={ subMenuItem }
+                >
+                    <u>{ subMenuItem.slice( 0, 1 ) }</u>{ subMenuItem.slice( 1 ) }
+                </button>;
+            } ) }
+        </div> }
     </div>;
 
 }

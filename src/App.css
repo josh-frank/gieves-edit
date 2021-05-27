@@ -8,13 +8,25 @@ body, html {
   top: 0;
   left: 0;
   width: 100%;
-  height: 5%;
+  height: 20px;
   z-index: 1000;
   background-color: gray;
   display: flex;
 }
 
-.menu-button {
+.sub-menu {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  z-index: 1001;
+  background-color: lightgray;
+  display: flex;
+}
+
+.menu button,
+.sub-menu button {
   font-weight: bold;
   background-color: transparent;
   border: none;
