@@ -20,8 +20,20 @@ body, html {
   border: none;
 }
   
-.artboard-view-info {
+.artboard-info {
     position: fixed;
     bottom: 2.5%;
     right: 2.5%;
+}
+
+.artboard-info input[type=number] {
+  border: none;
+  background-color: transparent;
+  -moz-appearance: textfield;
+}
+
+.artboard-info input::-webkit-outer-spin-button,
+.artboard-info input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

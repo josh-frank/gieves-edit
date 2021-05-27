@@ -1,12 +1,12 @@
 import './App.css';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { moveArtboardDown, moveArtboardLeft, moveArtboardRight, moveArtboardUp, zoomIn, zoomOut } from './redux/artboardSlice';
 import { addShape } from './redux/shapesSlice';
 
 import Artboard from './components/Artboard';
-import ArtboardViewInfo from './components/ArtboardViewInfo';
+import ArtboardInfo from './components/ArtboardInfo';
 import Menu from './components/Menu';
 
 const testShapes = [
@@ -60,7 +60,7 @@ function App() {
     <>
       <Menu />
       <Artboard />
-      <ArtboardViewInfo />
+      <ArtboardInfo artboardDisplayOptions={ useSelector( state => state.artboardDisplayOptions ) } />
     </>
   );
 

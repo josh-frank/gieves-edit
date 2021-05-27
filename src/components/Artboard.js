@@ -23,11 +23,11 @@ export default function Artboard( { shapes } ) {
         className="artboard"
         x={ 0 }
         y={ 0 }
-        width={ width * zoom }
-        height={ height * zoom }
+        width={ width * zoom / 100 }
+        height={ height * zoom / 100 }
         offsetX={ offsetX }
         offsetY={ offsetY }
-        zoom={ zoom }
+        zoom={ zoom / 100 }
         viewBox={ `0 0 ${ width } ${ height }` }
         enableBackground={ `new 0 0 ${ width } ${ height }` }
     >

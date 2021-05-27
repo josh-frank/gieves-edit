@@ -5,7 +5,7 @@ const artboardSlice = createSlice( {
     initialState: {
         width: 300,
         height: 300,
-        zoom: 1.0,
+        zoom: 100,
         offsetX: 50.0,
         offsetY: 50.0
     },
@@ -13,11 +13,17 @@ const artboardSlice = createSlice( {
         setArtboardDimensions( state, action ) {
             return { ...state, width: action.payload.width || state.width, height: action.payload.height || state.height };
         },
+        setZoom( state, action ) {
+            return { ...state, zoom: action.payload };
+        },
         zoomIn( state ) {
-            return { ...state, zoom: Math.min( state.zoom + 0.0625, 6.25 ) };
+            return { ...state, zoom: Math.min( state.zoom + 6.25, 625 ) };
         },
         zoomOut( state ) {
-            return { ...state, zoom: Math.max( state.zoom - 0.0625, 0.0625 ) };
+            return { ...state, zoom: Math.max( state.zoom - 6.25, 6.25 ) };
+        },
+        setArtboardOffset( state, action ) {
+            return { ...state, offsetX: action.payload.offsetX || state.offsetX, offsetY: action.payload.offsetY || state.offsetY };
         },
         moveArtboardLeft( state ) {
             return { ...state, offsetY: state.offsetY - 0.5 };
@@ -36,8 +42,10 @@ const artboardSlice = createSlice( {
 
 export const {
     setArtboardDimensions,
+    setZoom,
     zoomIn,
     zoomOut,
+    setArtboardOffset,
     moveArtboardLeft,
     moveArtboardRight,
     moveArtboardUp,
