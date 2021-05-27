@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
 import { pointsFromDescriptor } from "../utilities/parseDescriptor";
+import Handle from "./Handle";
 
 export default function Shape( { descriptor, active } ) {
 
@@ -24,7 +25,7 @@ export default function Shape( { descriptor, active } ) {
             onClick={ toggleActive }
         />
         { active && pointsFromDescriptor( descriptor ).map( ( coordinates, index ) => {
-            return <circle key={ index } cx={ coordinates[ 0 ] } cy={ coordinates[ 1 ] } r="4" />;
+            return <Handle key={ index } coordinates={ coordinates } />;
         } ) }
     </g>;
 

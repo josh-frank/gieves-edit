@@ -18,11 +18,38 @@ function pointsFromDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 result.push( currentPoint );
                 break;
+            case "L":
+                nextPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ] ) ];
+                currentPoint = nextPoint;
+                result.push( currentPoint );
+                break;
             case "a":
                 nextPoint = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
                 ];
+                currentPoint = nextPoint;
+                result.push( currentPoint );
+                break;
+            case "A":
+                nextPoint = [ parseInt( splitCommand[ splitCommand.length - 2 ] ), parseInt( splitCommand[ splitCommand.length - 1 ] ) ];
+                currentPoint = nextPoint;
+                result.push( currentPoint );
+                break;
+            case "c":
+                break;
+            case "C":
+                break;
+            case "t":
+                nextPoint = [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
+                ];
+                currentPoint = nextPoint;
+                result.push( currentPoint );
+                break;
+            case "T":
+                nextPoint = [ parseInt( splitCommand[ splitCommand.length - 2 ] ), parseInt( splitCommand[ splitCommand.length - 1 ] ) ];
                 currentPoint = nextPoint;
                 result.push( currentPoint );
                 break;

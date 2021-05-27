@@ -4,31 +4,31 @@ const shapesSlice = createSlice( {
     name: "shapes",
     initialState: {
         inactiveShapes: [],
-        activeShapes: []
+        activeShape: null
     },
     reducers: {
         addShape( state, action ) {
             return {
                 inactiveShapes: [ ...state.inactiveShapes, action.payload ],
-                activeShapes: state.activeShapes
+                activeShape: state.activeShape
             };
         },
         removeShape( state, action ) {
             return {
                 inactiveShapes: state.inactiveShapes.filter( shape => shape !== action.payload ),
-                activeShapes: state.activeShapes.filter( shape => shape !== action.payload )
+                activeShape: action.payload === state.activeShape ? null : state.activeShape
             };
         },
         activateShape( state, action ) {
             return {
-                inactiveShapes: state.inactiveShapes.filter( shape => shape !== action.payload ),
-                activeShapes: [ ...state.activeShapes, action.payload ]
+                inactiveShapes: [ ...state.inactiveShapes.filter( shape => shape !== action.payload ), state.activeShape ],
+                activeShape: action.payload
             };           
         },
         deactivateShape( state, action ) {
             return {
                 inactiveShapes: [ ...state.inactiveShapes, action.payload ],
-                activeShapes: state.activeShapes.filter( shape => shape !== action.payload )
+                activeShape: null
             };
         }
     }

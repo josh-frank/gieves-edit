@@ -15,7 +15,7 @@ const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
 export default function Artboard( { shapes } ) {
 
     const { width, height, zoom, offsetX, offsetY } = useSelector( state => state.artboardDisplayOptions );
-    const { activeShapes, inactiveShapes } = useSelector( state => state.shapes );
+    const { activeShape, inactiveShapes } = useSelector( state => state.shapes );
 
     return <StyledArtboard
         version="1.1"
@@ -31,7 +31,7 @@ export default function Artboard( { shapes } ) {
         viewBox={ `0 0 ${ width } ${ height }` }
         enableBackground={ `new 0 0 ${ width } ${ height }` }
     >
-        { activeShapes.map( ( shape, index ) => <Shape key={ index } descriptor={ shape } active={ true } /> ) }
+        { activeShape && <Shape descriptor={ activeShape } active={ true } /> }
         { inactiveShapes.map( ( shape, index ) => <Shape key={ index } descriptor={ shape } active={ false } /> ) }
     </StyledArtboard>;
 
