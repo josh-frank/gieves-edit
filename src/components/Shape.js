@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
-import { pointsFromDescriptor } from "../utilities/parseDescriptor";
+import { parseDescriptor } from "../utilities/parseDescriptor";
 import Handle from "./Handle";
 
 export default function Shape( { descriptor, active } ) {
@@ -14,18 +14,20 @@ export default function Shape( { descriptor, active } ) {
         dispatch( active ? deactivateShape( descriptor ) : activateShape( descriptor ) );
     }
 
+    const parsedDescriptor = active && parseDescriptor( descriptor );
+
     return <g>
         <path
             d={ descriptor }
             stroke={ hover ? "green" : active ? "blue" : "black" }
-            strokeWidth="4"
+            strokeWidth="2"
             fill="white"
             onMouseEnter={ () => toggleHover( true ) }
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ toggleActive }
         />
-        { active && pointsFromDescriptor( descriptor ).map( ( coordinates, index ) => {
-            return <Handle key={ index } coordinates={ coordinates } />;
+        { active && Object.keys( parsedDescriptor ).map( ( command, index ) => {
+            return <Handle key={ index } parsedCommand={ parsedDescriptor[ command ] } />;
         } ) }
     </g>;
 

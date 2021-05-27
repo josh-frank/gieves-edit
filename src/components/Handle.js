@@ -1,5 +1,9 @@
-export default function Handle( { coordinates } ) {
+export default function Handle( { parsedCommand } ) {
 
-    return <circle cx={ coordinates[ 0 ] } cy={ coordinates[ 1 ] } r="4" />;
+    return <circle
+        cx={ parsedCommand.point[ 0 ] }
+        cy={ parsedCommand.point[ 1 ] }
+        r="4"
+    />;
 
 }

@@ -1,8 +1,8 @@
 const splitDescriptorByCommands = /\s(?=[AaCcHhLlMmQqSsTtVvZz])/;
 const splitCommandByParameters = /[\s,]/;
 
-function pointsFromDescriptor( descriptor ) {
-    const result = [];
+function parseDescriptor( descriptor ) {
+    const result = {};
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
     let currentPoint, nextPoint;
     splitDescriptor.forEach( command => {
@@ -10,18 +10,15 @@ function pointsFromDescriptor( descriptor ) {
         switch ( command[ 0 ] ) {
             case "m":
             case "M":
-                currentPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ]) ];
-                result.push( currentPoint );
+                currentPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ] ) ];
                 break;
             case "l":
                 nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] ) ];
                 currentPoint = nextPoint;
-                result.push( currentPoint );
                 break;
             case "L":
                 nextPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ] ) ];
                 currentPoint = nextPoint;
-                result.push( currentPoint );
                 break;
             case "a":
                 nextPoint = [
@@ -29,12 +26,10 @@ function pointsFromDescriptor( descriptor ) {
                     currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
                 ];
                 currentPoint = nextPoint;
-                result.push( currentPoint );
                 break;
             case "A":
                 nextPoint = [ parseInt( splitCommand[ splitCommand.length - 2 ] ), parseInt( splitCommand[ splitCommand.length - 1 ] ) ];
                 currentPoint = nextPoint;
-                result.push( currentPoint );
                 break;
             case "c":
                 break;
@@ -46,17 +41,17 @@ function pointsFromDescriptor( descriptor ) {
                     currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
                 ];
                 currentPoint = nextPoint;
-                result.push( currentPoint );
                 break;
             case "T":
                 nextPoint = [ parseInt( splitCommand[ splitCommand.length - 2 ] ), parseInt( splitCommand[ splitCommand.length - 1 ] ) ];
                 currentPoint = nextPoint;
-                result.push( currentPoint );
                 break;
             default: break;
         }
+        result[ command ] = { ...result[ command ], point: currentPoint };
     } );
-    return [ ...new Set( result.map( coordinates => coordinates.toString() ) ) ].map( coordinates => coordinates.split( "," ).map( element => parseInt( element ) ) );
+    // return [ ...new Set( result.map( coordinates => coordinates.toString() ) ) ].map( coordinates => coordinates.split( "," ).map( element => parseInt( element ) ) );
+    return result;
 }
 
-export { pointsFromDescriptor };
+export { parseDescriptor };
