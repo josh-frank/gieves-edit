@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
-import { parseDescriptor } from "../utilities/parseDescriptor";
+import { parseDescriptor } from "../utilities/descriptorUtilities";
 import Handle from "./Handle";
 
 export default function Shape( { descriptor, active } ) {
@@ -20,7 +20,7 @@ export default function Shape( { descriptor, active } ) {
         <path
             d={ descriptor }
             stroke={ hover ? "green" : active ? "blue" : "black" }
-            strokeWidth="2"
+            strokeWidth="1"
             fill="white"
             onMouseEnter={ () => toggleHover( true ) }
             onMouseLeave={ () => toggleHover( false ) }

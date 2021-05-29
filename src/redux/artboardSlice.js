@@ -7,7 +7,9 @@ const artboardSlice = createSlice( {
         height: 400,
         zoom: 100,
         offsetX: 50.0,
-        offsetY: 50.0
+        offsetY: 50.0,
+        displayGrid: false,
+        gridInterval: 50
     },
     reducers: {
         setArtboardDimensions( state, action ) {
@@ -36,6 +38,12 @@ const artboardSlice = createSlice( {
         },
         moveArtboardDown( state ) {
             return { ...state, offsetX: state.offsetX + 0.5 };
+        },
+        toggleGridDisplay( state ) {
+            return { ...state, displayGrid: !state.displayGrid };
+        },
+        setGridInterval( state, action ) {
+            return { ...state, gridInterval: action.payload };
         }
     }
 } );
@@ -49,6 +57,8 @@ export const {
     moveArtboardLeft,
     moveArtboardRight,
     moveArtboardUp,
-    moveArtboardDown
+    moveArtboardDown,
+    toggleGridDisplay,
+    setGridInterval
 } = artboardSlice.actions;
 export default artboardSlice.reducer;

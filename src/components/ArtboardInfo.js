@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
-import { setArtboardDimensions, setZoom, setArtboardOffset } from "../redux/artboardSlice";
+import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval } from "../redux/artboardSlice";
 
 const StyledInput = styled.input.attrs( ( { characterLength } ) => ( {
     style: { width: `${ characterLength }ch` },
@@ -17,7 +17,7 @@ export default function ArtboardInfo( { artboardDisplayOptions } ) {
     
     const dispatch = useDispatch();
 
-    const { offsetX, offsetY, width, height, zoom } = artboardDisplayOptions;
+    const { offsetX, offsetY, width, height, zoom, displayGrid, gridInterval } = artboardDisplayOptions;
 
     const [ activeInput, setActiveInput ] = useState( {} );
     
@@ -37,6 +37,9 @@ export default function ArtboardInfo( { artboardDisplayOptions } ) {
                 break;
             case "zoom":
                 dispatch( setZoom( roundAndClamp( activeInput.value ) ) );
+                break;
+            case "gridInterval":
+                dispatch( setGridInterval( activeInput.value ) );
                 break;
             default: break;
         }
@@ -97,6 +100,25 @@ export default function ArtboardInfo( { artboardDisplayOptions } ) {
             characterLength={ ( activeInput.name === "zoom" ? activeInput.value : zoom ).toString().length }
         />
         %
+        { " • " }
+        <input
+            type="checkbox"
+            name="toggleGridDisplay"
+            checked={ displayGrid }
+            onClick={ () => dispatch( toggleGridDisplay() ) }
+        />
+        <label for="toggleGridDisplay">{ displayGrid ? "Hide grid" : "Show grid" }</label>
+        { " • " }
+        Grid interval:
+        <StyledInput
+            type="number"
+            name="gridInterval"
+            value={ activeInput.name === "gridInterval" ? activeInput.value : gridInterval }
+            onFocus={ () => setActiveInput( { name: "gridInterval", value: gridInterval } ) }
+            onChange={ changeEvent => setActiveInput( { name: "gridInterval", value: parseInt( changeEvent.target.value ) || 5 } ) }
+            onBlur={ dispatchinputStateChange }
+            characterLength={ ( activeInput.name === "gridInterval" ? activeInput.value : gridInterval ).toString().length }
+        />
     </div>;
 
 }

@@ -15,6 +15,10 @@ function parseDescriptor( descriptor ) {
                 nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] ];
                 currentPoint = nextPoint;
                 break;
+            case "v":
+                nextPoint = [ currentPoint[ 0 ], currentPoint[ 1 ] + parseInt( splitCommand[ 1 ] ) ];
+                currentPoint = nextPoint;
+                break;
             case "l":
                 nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] ) ];
                 currentPoint = nextPoint;
@@ -34,6 +38,13 @@ function parseDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 break;
             case "t":
+                nextPoint = [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
+                ];
+                currentPoint = nextPoint;
+                break;
+            case "q":
                 nextPoint = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
