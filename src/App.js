@@ -12,6 +12,7 @@ import Menu from './components/Menu';
 const testShapes = [
   "m 25,25 l 50,0 l 0,50 l -50,0 z",
   "m 150,150 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0 z",
+  "m 372 68 h -101 c -5 0 -9 4 -9 9 h 119 c 0 -5 -4 -9 -9 -9 z"
 ];
 
 function App() {

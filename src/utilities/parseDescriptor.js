@@ -9,15 +9,14 @@ function parseDescriptor( descriptor ) {
         const splitCommand = command.split( splitCommandByParameters );
         switch ( command[ 0 ] ) {
             case "m":
-            case "M":
                 currentPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ] ) ];
+                break;
+            case "h":
+                nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] ];
+                currentPoint = nextPoint;
                 break;
             case "l":
                 nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] ) ];
-                currentPoint = nextPoint;
-                break;
-            case "L":
-                nextPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ] ) ];
                 currentPoint = nextPoint;
                 break;
             case "a":
@@ -27,23 +26,18 @@ function parseDescriptor( descriptor ) {
                 ];
                 currentPoint = nextPoint;
                 break;
-            case "A":
-                nextPoint = [ parseInt( splitCommand[ splitCommand.length - 2 ] ), parseInt( splitCommand[ splitCommand.length - 1 ] ) ];
-                currentPoint = nextPoint;
-                break;
             case "c":
-                break;
-            case "C":
-                break;
-            case "t":
                 nextPoint = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
                 ];
                 currentPoint = nextPoint;
                 break;
-            case "T":
-                nextPoint = [ parseInt( splitCommand[ splitCommand.length - 2 ] ), parseInt( splitCommand[ splitCommand.length - 1 ] ) ];
+            case "t":
+                nextPoint = [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
+                ];
                 currentPoint = nextPoint;
                 break;
             default: break;
