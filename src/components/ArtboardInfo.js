@@ -48,21 +48,21 @@ export default function ArtboardInfo( { artboardDisplayOptions } ) {
         <StyledInput
             type="number"
             name="offsetX"
-            value={ activeInput.name === "offsetX" ? activeInput.value : offsetX - 50 }
-            onFocus={ () => setActiveInput( { name: "offsetX", value: offsetX - 50 } ) }
+            value={ activeInput.name === "offsetX" ? activeInput.value : Math.round( offsetX - 50 ) }
+            onFocus={ () => setActiveInput( { name: "offsetX", value: Math.round( offsetX - 50 ) } ) }
             onChange={ changeEvent => setActiveInput( { name: "offsetX", value: parseInt( changeEvent.target.value ) || 0 } ) }
             onBlur={ dispatchinputStateChange }
-            characterLength={ ( activeInput.name === "offsetX" ? activeInput.value : offsetX - 50 ).toString().length }
+            characterLength={ ( activeInput.name === "offsetX" ? activeInput.value : Math.round( offsetX - 50 ) ).toString().length }
         />
         ,
         <StyledInput
             type="number"
             name="offsetY"
-            value={ activeInput.name === "offsetY" ? activeInput.value : offsetY - 50 }
-            onFocus={ () => setActiveInput( { name: "offsetY", value: offsetY - 50 } ) }
+            value={ activeInput.name === "offsetY" ? activeInput.value : Math.round( offsetY - 50 ) }
+            onFocus={ () => setActiveInput( { name: "offsetY", value: Math.round( offsetY - 50 ) } ) }
             onChange={ changeEvent => setActiveInput( { name: "offsetY", value: parseInt( changeEvent.target.value ) || 0 } ) }
             onBlur={ dispatchinputStateChange }
-            characterLength={ ( activeInput.name === "offsetY" ? activeInput.value : offsetY - 50 ).toString().length }
+            characterLength={ ( activeInput.name === "offsetY" ? activeInput.value : Math.round( offsetY - 50 ) ).toString().length }
         />
         { " • " }
         📏

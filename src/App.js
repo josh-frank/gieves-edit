@@ -2,7 +2,7 @@ import './App.css';
 
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { moveArtboardDown, moveArtboardLeft, moveArtboardRight, moveArtboardUp, zoomIn, zoomOut } from './redux/artboardSlice';
+import { setArtboardOffset, zoomIn, zoomOut } from './redux/artboardSlice';
 import { addShape } from './redux/shapesSlice';
 
 import Artboard from './components/Artboard';
@@ -18,6 +18,8 @@ function App() {
 
   const dispatch = useDispatch();
 
+  const artboardDisplayOptions = useSelector( state => state.artboardDisplayOptions );
+
   const [ dragActive, setDragActive ] = useState( false );
   const [ mouseDownCoordinates, setMouseDownCoordinates ] = useState( { x: null, y: null } );
 
@@ -29,16 +31,18 @@ function App() {
   const handleMouseUp = useCallback( () => setDragActive( false ), [] );
 
   const handleMouseMove = useCallback( mouseMoveEvent => {
-    if ( dragActive && mouseMoveEvent.clientX < mouseDownCoordinates.x ) dispatch( moveArtboardLeft() ); 
-    if ( dragActive && mouseMoveEvent.clientX > mouseDownCoordinates.x ) dispatch( moveArtboardRight() ); 
-    if ( dragActive && mouseMoveEvent.clientY < mouseDownCoordinates.y ) dispatch( moveArtboardUp() ); 
-    if ( dragActive && mouseMoveEvent.clientY > mouseDownCoordinates.y ) dispatch( moveArtboardDown() ); 
-    setMouseDownCoordinates( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } );
-  }, [ dragActive, mouseDownCoordinates, dispatch ] );
+    if ( dragActive ) {
+      dispatch( setArtboardOffset( {
+        offsetX: artboardDisplayOptions.offsetX + ( ( mouseMoveEvent.clientY - mouseDownCoordinates.y ) / document.documentElement.clientHeight * 100 ),
+        offsetY: artboardDisplayOptions.offsetY + ( ( mouseMoveEvent.clientX - mouseDownCoordinates.x ) / document.documentElement.clientWidth * 100 ),
+      } ) );
+      setMouseDownCoordinates( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } );
+    }
+  }, [ dragActive, artboardDisplayOptions, mouseDownCoordinates, dispatch ] );
 
   const handleZoom = useCallback( zoomEvent => {
-    if ( zoomEvent.deltaY > 0 ) { dispatch( zoomIn() ); }
-    else if ( zoomEvent.deltaY < 0 ) { dispatch( zoomOut() ); }
+    if ( zoomEvent.deltaY > 0 ) dispatch( zoomIn() );
+    if ( zoomEvent.deltaY < 0 ) dispatch( zoomOut() );
   }, [ dispatch ] );
 
   useEffect( () => {
@@ -60,7 +64,7 @@ function App() {
     <>
       <Menu />
       <Artboard />
-      <ArtboardInfo artboardDisplayOptions={ useSelector( state => state.artboardDisplayOptions ) } />
+      <ArtboardInfo artboardDisplayOptions={ artboardDisplayOptions } />
     </>
   );
 
