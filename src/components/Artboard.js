@@ -8,7 +8,7 @@ const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
     style: {
       top: `${ offsetX }%`,
       left: `${ offsetY }%`,
-      outline: `${ 2 * zoom }px solid #999999`,
+      outline: `${ zoom }px solid #999999`,
       boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
     },
   } ) )`position: absolute; transform: translate( -50%, -50% );`;
@@ -32,7 +32,6 @@ export default function Artboard( { shapes } ) {
           offsetY={ offsetY }
           zoom={ zoom / 100 }
           viewBox={ `0 0 ${ width } ${ height }` }
-          // enableBackground={ `new 0 0 ${ width } ${ height }` }
       >
           { activeShape && <Shape descriptor={ activeShape } active={ true } /> }
           { inactiveShapes.map( ( shape, index ) => <Shape key={ index } descriptor={ shape } active={ false } /> ) }

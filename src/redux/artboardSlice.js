@@ -43,7 +43,7 @@ const artboardSlice = createSlice( {
             return { ...state, displayGrid: !state.displayGrid };
         },
         setGridInterval( state, action ) {
-            return { ...state, gridInterval: action.payload };
+            return { ...state, gridInterval: Math.min( Math.max( Math.round( action.payload ), 5 ), 100 ) };
         }
     }
 } );

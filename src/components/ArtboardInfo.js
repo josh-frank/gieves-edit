@@ -105,9 +105,9 @@ export default function ArtboardInfo( { artboardDisplayOptions } ) {
             type="checkbox"
             name="toggleGridDisplay"
             checked={ displayGrid }
-            onClick={ () => dispatch( toggleGridDisplay() ) }
+            onChange={ () => dispatch( toggleGridDisplay() ) }
         />
-        <label for="toggleGridDisplay">{ displayGrid ? "Hide grid" : "Show grid" }</label>
+        <label htmlFor="toggleGridDisplay">{ displayGrid ? "Hide grid" : "Show grid" }</label>
         { " • " }
         Grid interval:
         <StyledInput

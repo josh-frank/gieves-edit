@@ -4,7 +4,7 @@ export default function Handle( { parsedCommand } ) {
         <circle
             cx={ parsedCommand.point[ 0 ] }
             cy={ parsedCommand.point[ 1 ] }
-            r="3"
+            r="2"
             fill="red"
         />
     </>;
