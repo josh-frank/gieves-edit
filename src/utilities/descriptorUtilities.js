@@ -38,10 +38,22 @@ function parseDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 break;
             case "c":
+                result[ command ] = { startHandle: [
+                    currentPoint[ 0 ],
+                    currentPoint[ 1 ],
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )                    
+                ] }
+                result[ command ] = { ...result[ command ], endHandle: [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 3 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 4 ] )                    
+                ] }
                 nextPoint = [
-                    currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
-                    currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 5 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 6 ] )
                 ];
+                result[ command ].endHandle.unshift( nextPoint[ 1 ] );
+                result[ command ].endHandle.unshift( nextPoint[ 0 ] );
                 currentPoint = nextPoint;
                 break;
             case "t":
@@ -59,7 +71,7 @@ function parseDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 break;
             case "s":
-                result[ command ] = { controlPoint: [
+                result[ command ] = { endHandle: [
                     currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )                    
                 ] }
@@ -67,6 +79,8 @@ function parseDescriptor( descriptor ) {
                     currentPoint[ 0 ] + parseInt( splitCommand[ 3 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 4 ] )
                 ];
+                result[ command ].endHandle.unshift( nextPoint[ 1 ] );
+                result[ command ].endHandle.unshift( nextPoint[ 0 ] );
                 currentPoint = nextPoint;
                 break;
             case "z":
