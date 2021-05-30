@@ -27,7 +27,11 @@ export default function Shape( { descriptor, active } ) {
             onClick={ toggleActive }
         />
         { active && Object.keys( parsedDescriptor ).map( ( command, index ) => {
-            return <Handle key={ index } parsedCommand={ parsedDescriptor[ command ] } />;
+            return <Handle
+                key={ index }
+                command={ command }
+                parsedCommand={ parsedDescriptor[ command ] }
+            />;
         } ) }
     </g>;
 

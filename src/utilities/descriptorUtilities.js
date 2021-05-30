@@ -4,12 +4,16 @@ const splitCommandByParameters = /[\s,]/;
 function parseDescriptor( descriptor ) {
     const result = {};
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
-    let currentPoint, nextPoint;
+    let currentPoint = [ 0, 0 ], nextPoint;
     splitDescriptor.forEach( command => {
         const splitCommand = command.split( splitCommandByParameters );
         switch ( command[ 0 ] ) {
             case "m":
-                currentPoint = [ parseInt( splitCommand[ 1 ] ), parseInt( splitCommand[ 2 ] ) ];
+                nextPoint = [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )
+                ];
+                currentPoint = nextPoint;
                 break;
             case "h":
                 nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] ];
@@ -20,7 +24,10 @@ function parseDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 break;
             case "l":
-                nextPoint = [ currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ), currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] ) ];
+                nextPoint = [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )
+                ];
                 currentPoint = nextPoint;
                 break;
             case "a":
@@ -51,11 +58,26 @@ function parseDescriptor( descriptor ) {
                 ];
                 currentPoint = nextPoint;
                 break;
-            default: break;
+            case "s":
+                result[ command ] = { controlPoint: [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )                    
+                ] }
+                nextPoint = [
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 3 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 4 ] )
+                ];
+                currentPoint = nextPoint;
+                break;
+            case "z":
+            case "Z":
+            default:
+                break;
         }
         result[ command ] = { ...result[ command ], point: currentPoint };
     } );
     // return [ ...new Set( result.map( coordinates => coordinates.toString() ) ) ].map( coordinates => coordinates.split( "," ).map( element => parseInt( element ) ) );
+    // console.log('result: ', result);
     return result;
 }
 
