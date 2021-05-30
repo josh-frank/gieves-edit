@@ -1,6 +1,4 @@
 export default function Handle( { command, parsedCommand } ) {
-    console.log('command: ', command);
-    console.log('parsedCommand: ', parsedCommand);
 
     return <g>
         <circle

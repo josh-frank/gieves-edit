@@ -1,35 +1,37 @@
 body, html {
     overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
   }
 
 .menu {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 20px;
+  width: 15rem;
+  height: 100%;
   z-index: 1000;
-  background-color: gray;
-  display: flex;
-}
-
-.sub-menu {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  width: 100%;
-  height: 20px;
-  z-index: 1001;
   background-color: lightgray;
-  display: flex;
 }
 
-.menu button,
-.sub-menu button {
+.menu-header {
+  background-color: gray;
+  color: white;
   font-weight: bold;
-  background-color: transparent;
-  border: none;
+}
+
+.menu textarea {
+  box-sizing: border-box;
+  width: inherit;
+  resize: none;
+}
+  
+.zoom-buttons {
+  display: grid;
+  position: fixed;
+  top: 2.5%;
+  right: 2.5%;
+  z-index: 1000;
 }
   
 .artboard-info {
@@ -38,14 +40,12 @@ body, html {
   right: 2.5%;
 }
 
+.artboard-info input::-webkit-outer-spin-button,
+.artboard-info input::-webkit-inner-spin-button,
 .artboard-info input[type=number] {
   border: none;
   background-color: transparent;
   -moz-appearance: textfield;
-}
-
-.artboard-info input::-webkit-outer-spin-button,
-.artboard-info input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

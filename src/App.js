@@ -8,6 +8,7 @@ import { addShape } from './redux/shapesSlice';
 import Artboard from './components/Artboard';
 import ArtboardInfo from './components/ArtboardInfo';
 import Menu from './components/Menu';
+import ZoomButtons from './components/ZoomButtons';
 
 const testShapes = [
   "m 25,25 l 50,0 l 0,50 l -50,0 z",
@@ -24,25 +25,23 @@ function App() {
 
   const artboardDisplayOptions = useSelector( state => state.artboardDisplayOptions );
 
-  const [ dragActive, setDragActive ] = useState( false );
-  const [ mouseDownCoordinates, setMouseDownCoordinates ] = useState( { x: null, y: null } );
+  const [ mouseDownCoordinates, setMouseDownCoordinates ] = useState( null );
 
   const handleMouseDown = useCallback( mouseDownEvent => {
-    setDragActive( true );
     setMouseDownCoordinates( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY } );
   }, [] );
 
-  const handleMouseUp = useCallback( () => setDragActive( false ), [] );
+  const handleMouseUp = useCallback( () => setMouseDownCoordinates( null ), [] );
 
   const handleMouseMove = useCallback( mouseMoveEvent => {
-    if ( dragActive ) {
+    if ( mouseDownCoordinates ) {
       dispatch( setArtboardOffset( {
         offsetX: artboardDisplayOptions.offsetX + ( ( mouseMoveEvent.clientY - mouseDownCoordinates.y ) / document.documentElement.clientHeight * 100 ),
         offsetY: artboardDisplayOptions.offsetY + ( ( mouseMoveEvent.clientX - mouseDownCoordinates.x ) / document.documentElement.clientWidth * 100 ),
       } ) );
       setMouseDownCoordinates( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY } );
     }
-  }, [ dragActive, artboardDisplayOptions, mouseDownCoordinates, dispatch ] );
+  }, [ mouseDownCoordinates, artboardDisplayOptions, dispatch ] );
 
   const handleZoom = useCallback( zoomEvent => {
     if ( zoomEvent.deltaY > 0 ) dispatch( zoomIn() );
@@ -67,8 +66,9 @@ function App() {
   return (
     <>
       <Menu />
+      <ZoomButtons />
       <Artboard />
-      <ArtboardInfo artboardDisplayOptions={ artboardDisplayOptions } />
+      <ArtboardInfo />
     </>
   );
 

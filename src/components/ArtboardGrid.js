@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 function gridLineSpacing( range, unit ) {
-  return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].slice( 1, Math.floor( range / unit ) ).map( i => i * unit );
+  return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].map( i => i * unit );
+  // return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].slice( 1, Math.floor( range / unit ) ).map( i => i * unit );
 }
 
 const StyledGrid = styled.svg.attrs( ( { offsetX, offsetY } ) => ( {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval } from "../redux/artboardSlice";
@@ -13,11 +13,11 @@ function roundAndClamp( payload ){
     return Math.min( Math.max( Math.round( payload * 4 ) / 4, 6.25 ), 625 );
 }
 
-export default function ArtboardInfo( { artboardDisplayOptions } ) {
+export default function ArtboardInfo() {
     
     const dispatch = useDispatch();
 
-    const { offsetX, offsetY, width, height, zoom, displayGrid, gridInterval } = artboardDisplayOptions;
+    const { offsetX, offsetY, width, height, zoom, displayGrid, gridInterval } = useSelector( state => state.artboardDisplayOptions );
 
     const [ activeInput, setActiveInput ] = useState( {} );
     

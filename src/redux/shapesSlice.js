@@ -20,8 +20,9 @@ const shapesSlice = createSlice( {
             };
         },
         activateShape( state, action ) {
+            const filteredShapes = state.inactiveShapes.filter( shape => shape !== action.payload );
             return {
-                inactiveShapes: [ ...state.inactiveShapes.filter( shape => shape !== action.payload ), state.activeShape ],
+                inactiveShapes: state.activeShape ? [ ...filteredShapes, state.activeShape ] : filteredShapes,
                 activeShape: action.payload
             };           
         },

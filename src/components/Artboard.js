@@ -13,7 +13,7 @@ const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
     },
   } ) )`position: absolute; transform: translate( -50%, -50% );`;
 
-export default function Artboard( { shapes } ) {
+export default function Artboard() {
 
     const { width, height, zoom, offsetX, offsetY, displayGrid } = useSelector( state => state.artboardDisplayOptions );
     const { activeShape, inactiveShapes } = useSelector( state => state.shapes );

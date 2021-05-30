@@ -1,34 +1,43 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { zoomMode, pathMode } from '../redux/modeSlice';
 
-const menuItems = {
-    "File": [ "Save", "Load" ],
-    "View": [ "Zoom" ],
-    "Path": [ "Transform/Scale", "Translate", "Round" ]
-};
 
 export default function Menu() {
 
-    const [ menuToDisplay, setMenuToDisplay ] = useState( null );
+    const dispatch = useDispatch();
+
+    const { activeShape } = useSelector( state => state.shapes );
+
+    const editMode = useSelector( state => state.editMode );
+
+    const ModePanel = () => <>
+        <div className="menu-header">Edit mode</div>
+        <button
+            disabled={ editMode === "zoom" }
+            onClick={ () => dispatch( zoomMode() ) }
+        >
+            🔎
+        </button>
+        <button
+            disabled={ editMode === "path" }
+            onClick={ () => dispatch( pathMode() ) }
+        >
+            👆
+        </button>
+    </>;
+
+    const PathPanel = () => <>
+        <div className="menu-header">Path</div>
+        <textarea
+            rows="6"
+            readOnly
+            value={ activeShape || "No path selected" }
+        />
+    </>;
 
     return <div className="menu">
-        { Object.keys( menuItems ).map( menuItem => {
-            return <button
-                key={ menuItem }
-                onClick={ () => setMenuToDisplay( menuItem ) }
-                onBlur={ () => setMenuToDisplay( null ) }
-            >
-                <u>{ menuItem.slice( 0, 1 ) }</u>{ menuItem.slice( 1 ) }
-            </button>;
-        } ) }
-        { menuToDisplay && <div className="sub-menu">
-            { menuItems[ menuToDisplay ].map( subMenuItem => {
-                return <button
-                    key={ subMenuItem }
-                >
-                    <u>{ subMenuItem.slice( 0, 1 ) }</u>{ subMenuItem.slice( 1 ) }
-                </button>;
-            } ) }
-        </div> }
+        <ModePanel />
+        <PathPanel />
     </div>;
 
 }
