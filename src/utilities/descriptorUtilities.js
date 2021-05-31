@@ -103,20 +103,32 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
     const commandIndex = splitDescriptor.findIndex( descriptorCommand => descriptorCommand === command );
     let adjustedDescriptor = splitDescriptor.slice( 0, commandIndex ).join( " " );
-    splitDescriptor.slice( commandIndex ).forEach( ( commandToAdjust, index ) => {
+    splitDescriptor.slice( commandIndex, commandIndex + 2 ).forEach( ( commandToAdjust, index ) => {
         const splitCommand = commandToAdjust.split( splitCommandByParameters ).map( i => parseInt( i ) );
         switch ( commandToAdjust[ 0 ] ) {
             case "m":
-                adjustedDescriptor += " m " + [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " );
+                adjustedDescriptor += ( !commandIndex ? "m " : " m " ) + (
+                    !index ? [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " ) : 
+                    [ splitCommand[ 1 ] - xChange, splitCommand[ 2 ] - yChange ].join( " " )
+                );
                 break;
             case "h":
-                adjustedDescriptor += " h " + ( splitCommand[ 1 ] + xChange );
+                adjustedDescriptor += " h " + ( 
+                    !index ? splitCommand[ 1 ] + xChange :
+                    splitCommand[ 1 ] - xChange
+                );
                 break;
             case "v":
-                adjustedDescriptor += " v " + ( splitCommand[ 2 ] + yChange );
+                adjustedDescriptor += " v " + (
+                    !index ? splitCommand[ 1 ] + yChange :
+                    splitCommand[ 1 ] - yChange
+                );
                 break;
             case "l":
-                adjustedDescriptor += " l " + [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " );
+                adjustedDescriptor += " l " + (
+                    !index ? [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " ) : 
+                    [ splitCommand[ 1 ] - xChange, splitCommand[ 2 ] - yChange ].join( " " )
+                );
                 break;
             case "a":
                 break;
@@ -138,6 +150,7 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
                 break;
         }
     } );
+    adjustedDescriptor += " " + splitDescriptor.slice( commandIndex + 2 ).join( " " );
     return adjustedDescriptor;
 }
 
