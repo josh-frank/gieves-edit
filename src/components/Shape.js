@@ -1,7 +1,10 @@
 import { useState } from "react";
+
 import { useDispatch } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
+
 import { parseDescriptor } from "../utilities/descriptorUtilities";
+
 import Handle from "./Handle";
 
 export default function Shape( { descriptor, active } ) {
@@ -26,9 +29,10 @@ export default function Shape( { descriptor, active } ) {
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ toggleActive }
         />
-        { active && Object.keys( parsedDescriptor ).map( ( command, index ) => {
+        { active && Object.keys( parsedDescriptor ).filter( command => command !== "z" ).map( ( command, index ) => {
             return <Handle
                 key={ index }
+                fullDescriptor={ descriptor }
                 command={ command }
                 parsedCommand={ parsedDescriptor[ command ] }
             />;

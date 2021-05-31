@@ -31,6 +31,12 @@ const shapesSlice = createSlice( {
                 inactiveShapes: [ ...state.inactiveShapes, action.payload ],
                 activeShape: null
             };
+        },
+        updateActiveShape( state, action ) {
+            return {
+                inactiveShapes: state.inactiveShapes,
+                activeShape: action.payload
+            };
         }
     }
 } );
@@ -39,6 +45,7 @@ export const {
     addShape,
     removeShape,
     activateShape,
-    deactivateShape
+    deactivateShape,
+    updateActiveShape
 } = shapesSlice.actions;
 export default shapesSlice.reducer;

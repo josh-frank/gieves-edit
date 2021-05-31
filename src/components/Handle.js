@@ -1,7 +1,10 @@
-export default function Handle( { command, parsedCommand } ) {
+export default function Handle( { fullDescriptor, command, parsedCommand } ) {
 
     return <g>
         <circle
+            data-name="point"
+            data-descriptor={ fullDescriptor }
+            data-command={ command }
             cx={ parsedCommand.point[ 0 ] }
             cy={ parsedCommand.point[ 1 ] }
             r="2"
@@ -9,6 +12,9 @@ export default function Handle( { command, parsedCommand } ) {
         />
         { parsedCommand.startHandle && <>
             <circle
+                data-name="startHandle"
+                data-descriptor={ fullDescriptor }
+                data-command={ command }
                 cx={ parsedCommand.startHandle[ 2 ] }
                 cy={ parsedCommand.startHandle[ 3 ] }
                 r="2"
@@ -24,6 +30,9 @@ export default function Handle( { command, parsedCommand } ) {
         </> }
         { parsedCommand.endHandle && <>
             <circle
+                data-name="endHandle"
+                data-descriptor={ fullDescriptor }
+                data-command={ command }
                 cx={ parsedCommand.endHandle[ 2 ] }
                 cy={ parsedCommand.endHandle[ 3 ] }
                 r="2"

@@ -95,4 +95,46 @@ function parseDescriptor( descriptor ) {
     return result;
 }
 
-export { parseDescriptor };
+function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
+    const splitCommand = command.split( splitCommandByParameters ).map( i => parseInt( i ) );
+    let updatedPoint, adjustedCommand;
+    switch ( command[ 0 ] ) {
+        case "m":
+            updatedPoint = [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ];
+            adjustedCommand = "m " + updatedPoint.join( "," );
+            break;
+        case "h":
+            updatedPoint = [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] ];
+            adjustedCommand = "h " + updatedPoint[ 0 ];
+            break;
+        case "v":
+            updatedPoint = [ splitCommand[ 1 ], splitCommand[ 2 ] + yChange ];
+            adjustedCommand = "h " + updatedPoint[ 1 ];
+            break;
+        case "l":
+            updatedPoint = [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ];
+            adjustedCommand = "l " + updatedPoint.join( "," );
+            break;
+        case "a":
+            break;
+        case "c":
+            break;
+        case "t":
+            break;
+        case "q":
+            break;
+        case "s":
+            break;
+        case "z":
+            adjustedCommand = "z";
+            break;
+        case "Z":
+            adjustedCommand = "Z";
+            break;
+        default:
+            break;
+    }
+    return descriptor.replace( command, adjustedCommand );
+}
+
+export { parseDescriptor, adjustDescriptorPoint };
