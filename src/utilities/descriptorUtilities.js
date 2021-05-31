@@ -1,6 +1,10 @@
 const splitDescriptorByCommands = /\s(?=[AaCcHhLlMmQqSsTtVvZz])/;
 const splitCommandByParameters = /[\s,]/;
 
+function absoluteToRelative( descriptor ) {}
+
+function relativeToAbsolute( descriptor ) {}
+
 function parseDescriptor( descriptor ) {
     const result = {};
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
@@ -96,45 +100,50 @@ function parseDescriptor( descriptor ) {
 }
 
 function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
-    const splitCommand = command.split( splitCommandByParameters ).map( i => parseInt( i ) );
-    let updatedPoint, adjustedCommand;
-    switch ( command[ 0 ] ) {
-        case "m":
-            updatedPoint = [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ];
-            adjustedCommand = "m " + updatedPoint.join( "," );
-            break;
-        case "h":
-            updatedPoint = [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] ];
-            adjustedCommand = "h " + updatedPoint[ 0 ];
-            break;
-        case "v":
-            updatedPoint = [ splitCommand[ 1 ], splitCommand[ 2 ] + yChange ];
-            adjustedCommand = "h " + updatedPoint[ 1 ];
-            break;
-        case "l":
-            updatedPoint = [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ];
-            adjustedCommand = "l " + updatedPoint.join( "," );
-            break;
-        case "a":
-            break;
-        case "c":
-            break;
-        case "t":
-            break;
-        case "q":
-            break;
-        case "s":
-            break;
-        case "z":
-            adjustedCommand = "z";
-            break;
-        case "Z":
-            adjustedCommand = "Z";
-            break;
-        default:
-            break;
-    }
-    return descriptor.replace( command, adjustedCommand );
+    const splitDescriptor = descriptor.split( splitDescriptorByCommands );
+    const commandIndex = splitDescriptor.findIndex( descriptorCommand => descriptorCommand === command );
+    let adjustedDescriptor = splitDescriptor.slice( 0, commandIndex ).join( " " );
+    splitDescriptor.slice( commandIndex ).forEach( ( commandToAdjust, index ) => {
+        const splitCommand = commandToAdjust.split( splitCommandByParameters ).map( i => parseInt( i ) );
+        switch ( commandToAdjust[ 0 ] ) {
+            case "m":
+                adjustedDescriptor += " m " + [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " );
+                break;
+            case "h":
+                adjustedDescriptor += " h " + ( splitCommand[ 1 ] + xChange );
+                break;
+            case "v":
+                adjustedDescriptor += " v " + ( splitCommand[ 2 ] + yChange );
+                break;
+            case "l":
+                adjustedDescriptor += " l " + [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " );
+                break;
+            case "a":
+                break;
+            case "c":
+                break;
+            case "t":
+                break;
+            case "q":
+                break;
+            case "s":
+                break;
+            case "z":
+                adjustedDescriptor += " z";
+                break;
+            case "Z":
+                adjustedDescriptor += " Z";
+                break;
+            default:
+                break;
+        }
+    } );
+    return adjustedDescriptor;
 }
 
-export { parseDescriptor, adjustDescriptorPoint };
+export {
+    absoluteToRelative,
+    relativeToAbsolute,
+    parseDescriptor,
+    adjustDescriptorPoint
+};
