@@ -190,20 +190,8 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
 function adjustStartHandlePoint( descriptor, command, xChange, yChange ) {
     const splitCommand = command.split( splitCommandByParameters ).map( i => parseInt( i ) );
     splitCommand[ 0 ] = command[ 0 ];
-    switch ( command[ 0 ] ) {
-        case "a":
-        case "q":
-        case "s":
-            splitCommand[ 1 ] += xChange;
-            splitCommand[ 2 ] += yChange;
-            break;
-        case "c":
-            splitCommand[ 3 ] += xChange;
-            splitCommand[ 4 ] += yChange;
-            break;
-        default:
-            break;
-    }
+    splitCommand[ 1 ] += xChange;
+    splitCommand[ 2 ] += yChange;
     return descriptor.replace( command, splitCommand.join( " " ) );
 }
 
