@@ -1,16 +1,32 @@
-const splitDescriptorByCommands = /\s(?=[AaCcHhLlMmQqSsTtVvZz])/;
+/* eslint-disable no-useless-escape */
+
+const splitDescriptorByCommands = /\s(?=[achlmqstvz])/i;
 const splitCommandByParameters = /[\s,]/;
+
+// const anyValidCommand = /[achlmqstvz]((\s*)([-\d],*))*/ig;
+
+// const validCoordinate = "0([.]\d+)?|-?\d+([.]\d+)?";
+// const validFirstCommand = "^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validMoveCommand = "m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validLineCommand = "l\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validHorizontalCommand = "h\s?(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validVerticalCommand = "v\s?(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validCubicCurveCommand = "c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validSmoothCubicCurveCommand = "s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validQuadCurveCommand = "q\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const validSmoothQuadCurveCommand = "t(\s?(0([.]\d+)?|-?\d+([.]\d+)?))+";
+// const validArcCurveCommand = "a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?)";
 
 function absoluteToRelative( descriptor ) {}
 
 function relativeToAbsolute( descriptor ) {}
 
 function parseDescriptor( descriptor ) {
-    const result = {};
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
     let currentPoint = [ 0, 0 ], nextPoint;
-    splitDescriptor.forEach( command => {
+    const result = splitDescriptor.reduce( ( result, command, index ) => {
         const splitCommand = command.split( splitCommandByParameters );
+        let startHandle, endHandle;
         switch ( command[ 0 ] ) {
             case "m":
                 nextPoint = [
@@ -42,22 +58,22 @@ function parseDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 break;
             case "c":
-                result[ command ] = { startHandle: [
+                startHandle = [
                     currentPoint[ 0 ],
                     currentPoint[ 1 ],
                     currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )                    
-                ] }
-                result[ command ] = { ...result[ command ], endHandle: [
+                ];
+                endHandle = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ 3 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 4 ] )                    
-                ] }
+                ];
                 nextPoint = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ 5 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 6 ] )
                 ];
-                result[ command ].endHandle.unshift( nextPoint[ 1 ] );
-                result[ command ].endHandle.unshift( nextPoint[ 0 ] );
+                endHandle.unshift( nextPoint[ 1 ] );
+                endHandle.unshift( nextPoint[ 0 ] );
                 currentPoint = nextPoint;
                 break;
             case "t":
@@ -75,16 +91,16 @@ function parseDescriptor( descriptor ) {
                 currentPoint = nextPoint;
                 break;
             case "s":
-                result[ command ] = { endHandle: [
+                endHandle = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )                    
-                ] }
+                ];
                 nextPoint = [
                     currentPoint[ 0 ] + parseInt( splitCommand[ 3 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ 4 ] )
                 ];
-                result[ command ].endHandle.unshift( nextPoint[ 1 ] );
-                result[ command ].endHandle.unshift( nextPoint[ 0 ] );
+                endHandle.unshift( nextPoint[ 1 ] );
+                endHandle.unshift( nextPoint[ 0 ] );
                 currentPoint = nextPoint;
                 break;
             case "z":
@@ -92,8 +108,8 @@ function parseDescriptor( descriptor ) {
             default:
                 break;
         }
-        result[ command ] = { ...result[ command ], point: currentPoint };
-    } );
+        return [ ...result, { index: index, command: command, point: currentPoint, startHandle: startHandle, endHandle: endHandle } ]
+    }, [] );
     // return [ ...new Set( result.map( coordinates => coordinates.toString() ) ) ].map( coordinates => coordinates.split( "," ).map( element => parseInt( element ) ) );
     // console.log('result: ', result);
     return result;

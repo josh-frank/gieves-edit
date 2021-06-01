@@ -29,12 +29,12 @@ export default function Shape( { descriptor, active } ) {
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ toggleActive }
         />
-        { active && Object.keys( parsedDescriptor ).filter( command => command !== "z" ).map( ( command, index ) => {
+        { active && parsedDescriptor.filter( point => point.command !== "z" ).map( parsedPoint => {
             return <Handle
-                key={ index }
+                key={ parsedPoint.index }
                 fullDescriptor={ descriptor }
-                command={ command }
-                parsedCommand={ parsedDescriptor[ command ] }
+                command={ parsedPoint.command }
+                parsedCommand={ parsedPoint }
             />;
         } ) }
     </g>;
