@@ -16,13 +16,13 @@ export default function Menu() {
             disabled={ editMode === "zoom" }
             onClick={ () => dispatch( zoomMode() ) }
         >
-            🔎
+            🔎 Zoom
         </button>
         <button
             disabled={ editMode === "path" }
             onClick={ () => dispatch( pathMode() ) }
         >
-            👆
+            👆 Path
         </button>
     </>;
 

@@ -125,26 +125,18 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
                 );
                 break;
             case "l":
-                adjustedDescriptor += " l " + (
-                    !index ? [ splitCommand[ 1 ] + xChange, splitCommand[ 2 ] + yChange ].join( " " ) : 
-                    [ splitCommand[ 1 ] - xChange, splitCommand[ 2 ] - yChange ].join( " " )
-                );
-                break;
             case "a":
-                break;
             case "c":
-                break;
             case "t":
-                break;
             case "q":
-                break;
             case "s":
+                splitCommand[ splitCommand.length - 2 ]  += !index ? xChange : -xChange; 
+                splitCommand[ splitCommand.length - 1 ]  += !index ? yChange : -yChange;
+                adjustedDescriptor += ` ${ commandToAdjust[ 0 ] } ` + splitCommand.slice( 1 ).join( " " );
                 break;
             case "z":
-                adjustedDescriptor += " z";
-                break;
             case "Z":
-                adjustedDescriptor += " Z";
+                adjustedDescriptor += ` ${ commandToAdjust[ 0 ] } `;
                 break;
             default:
                 break;
@@ -153,6 +145,8 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
     adjustedDescriptor += " " + splitDescriptor.slice( commandIndex + 2 ).join( " " );
     return adjustedDescriptor;
 }
+
+// function adjustHandlePoint( descriptor, command, xChange, yChange ) {}
 
 export {
     absoluteToRelative,

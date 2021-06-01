@@ -9,6 +9,7 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
             cy={ parsedCommand.point[ 1 ] }
             r="2"
             fill="red"
+            onMouseOver={ () => console.log(command) }
         />
         { parsedCommand.startHandle && <>
             <circle
@@ -19,6 +20,7 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
                 cy={ parsedCommand.startHandle[ 3 ] }
                 r="2"
                 fill="red"
+                onMouseOver={ () => console.log(command) }
             />
             <line
                 x1={ parsedCommand.startHandle[ 0 ] }
@@ -37,6 +39,7 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
                 cy={ parsedCommand.endHandle[ 3 ] }
                 r="2"
                 fill="red"
+                onMouseOver={ () => console.log(command) }
             />
             <line
                 x1={ parsedCommand.endHandle[ 0 ] }
