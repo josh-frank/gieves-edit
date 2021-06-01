@@ -3,23 +3,42 @@
 const splitDescriptorByCommands = /\s(?=[achlmqstvz])/i;
 const splitCommandByParameters = /[\s,]/;
 
-// const anyValidCommand = /[achlmqstvz]((\s*)([-\d],*))*/ig;
+// const validCoordinate = /0([.]\d+)?|-?\d+([.]\d+)?/ig;
+// const validFirstCommand = /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validMoveCommand = /m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validLineCommand = /l\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validHorizontalCommand = /h\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validVerticalCommand = /v\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validCubicCurveCommand = /c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validSmoothCubicCurveCommand = /s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validQuadCurveCommand = /q\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
+// const validContinuousQuadCurveCommand = /q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+/ig;
+// const validSmoothQuadCurveCommand = /t(\s?(0([.]\d+)?|-?\d+([.]\d+)?))+/ig;
+// const validArcCurveCommand = /a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?)/ig;
 
-// const validCoordinate = "0([.]\d+)?|-?\d+([.]\d+)?";
-// const validFirstCommand = "^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validMoveCommand = "m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validLineCommand = "l\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validHorizontalCommand = "h\s?(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validVerticalCommand = "v\s?(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validCubicCurveCommand = "c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validSmoothCubicCurveCommand = "s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validQuadCurveCommand = "q\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)";
-// const validSmoothQuadCurveCommand = "t(\s?(0([.]\d+)?|-?\d+([.]\d+)?))+";
-// const validArcCurveCommand = "a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?)";
+// const matchValidCommands = /([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?))|z/ig;
+// const isValidDescriptor = /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)(\s?(([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)))\s?)+z/ig;
 
-function absoluteToRelative( descriptor ) {}
+const commandRegexs = {
+    validCoordinate: /0([.]\d+)?|-?\d+([.]\d+)?/ig,
+    validFirstCommand: /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validMoveCommand: /m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validLineCommand: /l\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validHorizontalCommand: /h\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validVerticalCommand: /v\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validCubicCurveCommand: /c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validSmoothCubicCurveCommand: /s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validQuadCurveCommand: /q\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    validContinuousQuadCurveCommand: /q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+/ig,
+    validSmoothQuadCurveCommand: /t(\s?(0([.]\d+)?|-?\d+([.]\d+)?))+/ig,
+    validArcCurveCommand: /a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    matchValidCommands: /([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?))|z/ig,
+    isValidDescriptor: /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)(\s?(([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)))\s?)+z/ig
+};
 
-function relativeToAbsolute( descriptor ) {}
+function convertToRelative( descriptor ) {}
+
+function convertToAbsolute( descriptor ) {}
 
 function parseDescriptor( descriptor ) {
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
@@ -165,8 +184,8 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
 // function adjustHandlePoint( descriptor, command, xChange, yChange ) {}
 
 export {
-    absoluteToRelative,
-    relativeToAbsolute,
+    convertToRelative,
+    convertToAbsolute,
     parseDescriptor,
     adjustDescriptorPoint
 };
