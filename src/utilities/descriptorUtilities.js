@@ -19,22 +19,22 @@ const splitCommandByParameters = /[\s,]/;
 // const matchValidCommands = /([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?))|z/ig;
 // const isValidDescriptor = /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)(\s?(([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)))\s?)+z/ig;
 
-const commandRegexs = {
-    validCoordinate: /0([.]\d+)?|-?\d+([.]\d+)?/ig,
-    validFirstCommand: /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validMoveCommand: /m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validLineCommand: /l\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validHorizontalCommand: /h\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validVerticalCommand: /v\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validCubicCurveCommand: /c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validSmoothCubicCurveCommand: /s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validQuadCurveCommand: /q\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    validContinuousQuadCurveCommand: /q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+/ig,
-    validSmoothQuadCurveCommand: /t(\s?(0([.]\d+)?|-?\d+([.]\d+)?))+/ig,
-    validArcCurveCommand: /a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
-    matchValidCommands: /([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?))|z/ig,
-    isValidDescriptor: /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)(\s?(([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)))\s?)+z/ig
-};
+// const commandRegex = {
+    // validCoordinate: /0([.]\d+)?|-?\d+([.]\d+)?/ig,
+    // validFirstCommand: /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validMoveCommand: /m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validLineCommand: /l\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validHorizontalCommand: /h\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validVerticalCommand: /v\s?(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validCubicCurveCommand: /c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validSmoothCubicCurveCommand: /s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validQuadCurveCommand: /q\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // validContinuousQuadCurveCommand: /q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+/ig,
+    // validSmoothQuadCurveCommand: /t(\s?(0([.]\d+)?|-?\d+([.]\d+)?))+/ig,
+    // validArcCurveCommand: /a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?)/ig,
+    // matchValidCommands: /([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?))|z/ig,
+    // isValidDescriptor: /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)(\s?(([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)))\s?)+z/ig
+// };
 
 function convertToRelative( descriptor ) {}
 
@@ -107,6 +107,12 @@ function parseDescriptor( descriptor ) {
                     currentPoint[ 0 ] + parseInt( splitCommand[ splitCommand.length - 2 ] ),
                     currentPoint[ 1 ] + parseInt( splitCommand[ splitCommand.length - 1 ] )
                 ];
+                startHandle = [
+                    currentPoint[ 0 ],
+                    currentPoint[ 1 ],
+                    currentPoint[ 0 ] + parseInt( splitCommand[ 1 ] ),
+                    currentPoint[ 1 ] + parseInt( splitCommand[ 2 ] )                    
+                ];
                 currentPoint = nextPoint;
                 break;
             case "s":
@@ -127,7 +133,7 @@ function parseDescriptor( descriptor ) {
             default:
                 break;
         }
-        return [ ...result, { index: index, command: command, point: currentPoint, startHandle: startHandle, endHandle: endHandle } ]
+        return [ ...result, { index, command, point: currentPoint, startHandle, endHandle } ]
     }, [] );
     // return [ ...new Set( result.map( coordinates => coordinates.toString() ) ) ].map( coordinates => coordinates.split( "," ).map( element => parseInt( element ) ) );
     // console.log('result: ', result);
@@ -181,11 +187,49 @@ function adjustDescriptorPoint( descriptor, command, xChange, yChange ) {
     return adjustedDescriptor;
 }
 
-// function adjustHandlePoint( descriptor, command, xChange, yChange ) {}
+function adjustStartHandlePoint( descriptor, command, xChange, yChange ) {
+    const splitCommand = command.split( splitCommandByParameters ).map( i => parseInt( i ) );
+    splitCommand[ 0 ] = command[ 0 ];
+    switch ( command[ 0 ] ) {
+        case "a":
+        case "q":
+        case "s":
+            splitCommand[ 1 ] += xChange;
+            splitCommand[ 2 ] += yChange;
+            break;
+        case "c":
+            splitCommand[ 3 ] += xChange;
+            splitCommand[ 4 ] += yChange;
+            break;
+        default:
+            break;
+    }
+    return descriptor.replace( command, splitCommand.join( " " ) );
+}
+
+function adjustEndHandlePoint( descriptor, command, xChange, yChange ) {
+    const splitCommand = command.split( splitCommandByParameters ).map( i => parseInt( i ) );
+    splitCommand[ 0 ] = command[ 0 ];
+    switch ( command[ 0 ] ) {
+        case "s":
+            splitCommand[ 1 ] += xChange;
+            splitCommand[ 2 ] += yChange;
+            break;
+        case "c":
+            splitCommand[ 3 ] += xChange;
+            splitCommand[ 4 ] += yChange;
+            break;
+        default:
+            break;
+    }
+    return descriptor.replace( command, splitCommand.join( " " ) );
+}
 
 export {
     convertToRelative,
     convertToAbsolute,
     parseDescriptor,
-    adjustDescriptorPoint
+    adjustDescriptorPoint,
+    adjustStartHandlePoint,
+    adjustEndHandlePoint
 };

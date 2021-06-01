@@ -24,6 +24,12 @@ const artboardSlice = createSlice( {
         zoomOut( state ) {
             return { ...state, zoom: Math.max( state.zoom - 6.25, 6.25 ) };
         },
+        zoomInButton( state ) {
+            return { ...state, zoom: Math.min( state.zoom + 50, 625 ) };
+        },
+        zoomOutButton( state ) {
+            return { ...state, zoom: Math.max( state.zoom - 50, 6.25 ) };
+        },
         setArtboardOffset( state, action ) {
             return { ...state, offsetX: action.payload.offsetX || state.offsetX, offsetY: action.payload.offsetY || state.offsetY };
         },
@@ -53,6 +59,8 @@ export const {
     setZoom,
     zoomIn,
     zoomOut,
+    zoomInButton,
+    zoomOutButton,
     setArtboardOffset,
     moveArtboardLeft,
     moveArtboardRight,

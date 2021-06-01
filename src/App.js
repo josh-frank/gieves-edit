@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { addShape } from './redux/shapesSlice';
-import { zoomIn, zoomOut } from './redux/artboardSlice';
+import { zoomInButton, zoomOutButton } from './redux/artboardSlice';
 
 import Artboard from './components/Artboard';
 import ArtboardInfo from './components/ArtboardInfo';
@@ -27,8 +27,8 @@ function App() {
   useEffect( () => testShapes.forEach( shape => dispatch( addShape( shape ) ) ), [ dispatch ] );
 
   const ZoomButtons = () => <div className="zoom-buttons">
-    <button onClick={ () => dispatch( zoomIn() ) }>➕</button>
-    <button onClick={ () => dispatch( zoomOut() ) }>➖</button>
+    <button onClick={ () => dispatch( zoomInButton() ) }>➕</button>
+    <button onClick={ () => dispatch( zoomOutButton() ) }>➖</button>
   </div>;
 
   return <>

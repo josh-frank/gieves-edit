@@ -1,5 +1,14 @@
 export default function Handle( { fullDescriptor, command, parsedCommand } ) {
 
+    // const QuadPolyline = () => {
+        
+    //     return <polyline
+    //         points={ parsedCommand.quadPolyLine.join( " " ) }
+    //         fill="none"
+    //         stroke="red"
+    //     />;
+    // };
+
     return <g>
         <circle
             data-name="point"

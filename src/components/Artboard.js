@@ -9,7 +9,7 @@ import styled from "styled-components";
 import ArtboardGrid from "./ArtboardGrid";
 import Shape from "./Shape";
 
-import { adjustDescriptorPoint } from "../utilities/descriptorUtilities";
+import { adjustDescriptorPoint, adjustStartHandlePoint, adjustEndHandlePoint } from "../utilities/descriptorUtilities";
 
 const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
     style: {
@@ -44,13 +44,29 @@ export default function Artboard() {
           offsetX: offsetX + ( ( mouseMoveEvent.clientY - mouseDown.y ) / document.documentElement.clientHeight * 100 ),
           offsetY: offsetY + ( ( mouseMoveEvent.clientX - mouseDown.x ) / document.documentElement.clientWidth * 100 ),
         } ) );
-      } else if ( mouseDown && editMode === "path" && "point startHandle endHandle".includes( mouseDown.target.dataset.name ) ) {
-        dispatch( updateActiveShape( adjustDescriptorPoint(
-          mouseDown.target.dataset.descriptor,
-          mouseDown.target.dataset.command,
-          ( mouseMoveEvent.clientX - mouseDown.x ),
-          ( mouseMoveEvent.clientY - mouseDown.y )
-        ) ) );
+      } else if ( mouseDown && editMode === "path" ) {
+        if ( mouseDown.target.dataset.name === "point" ) {
+          dispatch( updateActiveShape( adjustDescriptorPoint(
+            mouseDown.target.dataset.descriptor,
+            mouseDown.target.dataset.command,
+            ( mouseMoveEvent.clientX - mouseDown.x ),
+            ( mouseMoveEvent.clientY - mouseDown.y )
+          ) ) );
+        } else if ( mouseDown.target.dataset.name === "startHandle" ) {
+          dispatch( updateActiveShape( adjustStartHandlePoint(
+            mouseDown.target.dataset.descriptor,
+            mouseDown.target.dataset.command,
+            ( mouseMoveEvent.clientX - mouseDown.x ),
+            ( mouseMoveEvent.clientY - mouseDown.y )
+          ) ) );
+        } else if ( mouseDown.target.dataset.name === "endHandle" ) {
+          dispatch( updateActiveShape( adjustEndHandlePoint(
+            mouseDown.target.dataset.descriptor,
+            mouseDown.target.dataset.command,
+            ( mouseMoveEvent.clientX - mouseDown.x ),
+            ( mouseMoveEvent.clientY - mouseDown.y )
+          ) ) );
+        };
       }
       if ( mouseDown ) setMouseDown( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY, target: mouseDown.target } );
     }, [ editMode, mouseDown, offsetX, offsetY, dispatch ] );
