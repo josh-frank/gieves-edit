@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const artboardSlice = createSlice( {
     name: "artboard",
     initialState: {
-        width: 500,
-        height: 400,
+        width: 1000,
+        height: 800,
         zoom: 100,
         offsetX: 50.0,
         offsetY: 50.0,

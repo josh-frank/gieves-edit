@@ -40,6 +40,12 @@ export default function Menu() {
         <button>
             💾 <b>Save manual path edits</b>
         </button>
+        <button>
+            𝙈 <b>Convert path to absolute</b>
+        </button>
+        <button>
+            𝙢 <b>Convert path to relative</b>
+        </button>
         <button
             onClick={ () => {
                 if ( activeShape ) dispatch( updateActiveShape( snapPathToGrid( activeShape, gridInterval ) ) );
