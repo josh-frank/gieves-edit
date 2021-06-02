@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setArtboardOffset, zoomIn, zoomOut } from "../redux/artboardSlice";
+import { setArtboardOffset, zoomInWheel, zoomOutWheel } from "../redux/artboardSlice";
 import { updateActiveShape } from "../redux/shapesSlice";
 
 import styled from "styled-components";
@@ -12,19 +12,21 @@ import Shape from "./Shape";
 import { adjustDescriptorPoint, adjustStartHandlePoint, adjustEndHandlePoint } from "../utilities/descriptorUtilities";
 
 const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
-    style: {
-      top: `${ offsetX }%`,
-      left: `${ offsetY }%`,
-      outline: `${ zoom }px solid #999999`,
-      boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
-    },
-  } ) )`position: absolute; transform: translate( -50%, -50% );`;
+  style: {
+    top: `${ offsetX }%`,
+    left: `${ offsetY }%`,
+    outline: `${ zoom }px solid #999999`,
+    boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
+  },
+} ) )`position: absolute; transform: translate( -50%, -50% );`;
+
+// const round = ( number, factor ) => factor ? Math.round( number / factor ) * factor : number;
 
 export default function Artboard() {
 
     const dispatch = useDispatch();
 
-    const { width, height, zoom, offsetX, offsetY, displayGrid } = useSelector( state => state.artboardDisplayOptions );
+    const { width, height, zoom, offsetX, offsetY, displayGrid, /*snapToGrid, gridInterval*/ } = useSelector( state => state.artboard );
 
     const { activeShape, inactiveShapes } = useSelector( state => state.shapes );
 
@@ -72,8 +74,8 @@ export default function Artboard() {
     }, [ editMode, mouseDown, offsetX, offsetY, dispatch ] );
   
     const handleZoom = useCallback( zoomEvent => {
-      if ( editMode === "zoom" && zoomEvent.deltaY > 0 ) dispatch( zoomIn() );
-      if ( editMode === "zoom" && zoomEvent.deltaY < 0 ) dispatch( zoomOut() );
+      if ( editMode === "zoom" && zoomEvent.deltaY > 0 ) dispatch( zoomInWheel() );
+      if ( editMode === "zoom" && zoomEvent.deltaY < 0 ) dispatch( zoomOutWheel() );
     }, [ editMode, dispatch ] );
   
     useEffect( () => {

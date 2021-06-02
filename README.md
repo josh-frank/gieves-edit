@@ -6,14 +6,22 @@ It will also hopefully one day work with a back end yet to be written, which wil
 
 Jeeves was written by [Josh Frank](https://github.com/facebook/create-react-app). 
 
-## Available Scripts
+## Modes
 
-In the project directory, you can run:
+In all modes, paths can be un/selected with a click.
 
-### `yarn start`
+### 🔍 Zoom
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+In Zoom mode, click-dragging the mouse will pan the artboard across the screen, and a scroll action will soom in/out depending on wheel direction.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 👆 Path
+
+In Path mode, click and drag a red ***handle*** to move it. You can edit either ***point handles*** where two edges meet or ***curve handles*** connected to point handles with a red line.
+
+## Artboard Info
+
+At any time you can directly edit some artboard settings in the ***artboard info*** panel at the bottom right of the screen:
+- 🤚 The artboard's offset from the center
+- 📏 The artboard's width/height
+- a toggle button for hiding/showing the grid
+- a field to define the grid interval

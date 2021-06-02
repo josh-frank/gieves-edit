@@ -14,6 +14,11 @@ body, html {
   background-color: lightgray;
 }
 
+.menu-panel {
+  display: flex;
+  flex-direction: column;
+}
+
 .menu-header {
   background-color: gray;
   color: white;
@@ -36,6 +41,7 @@ body, html {
   
 .artboard-info {
   position: fixed;
+  vertical-align: center;
   bottom: 2.5%;
   right: 2.5%;
 }

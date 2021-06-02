@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval } from "../redux/artboardSlice";
+import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval, toggleSnapToGrid } from "../redux/artboardSlice";
 
 const StyledInput = styled.input.attrs( ( { characterLength } ) => ( {
     style: { width: `${ characterLength }ch` },
@@ -13,11 +13,11 @@ function roundAndClamp( payload ){
     return Math.min( Math.max( Math.round( payload * 4 ) / 4, 6.25 ), 625 );
 }
 
-export default function ArtboardInfo() {
+export default function ArtboardPanel() {
     
     const dispatch = useDispatch();
 
-    const { offsetX, offsetY, width, height, zoom, displayGrid, gridInterval } = useSelector( state => state.artboardDisplayOptions );
+    const { offsetX, offsetY, width, height, zoom, displayGrid, snapToGrid, gridInterval } = useSelector( state => state.artboard );
 
     const [ activeInput, setActiveInput ] = useState( {} );
     
@@ -109,6 +109,14 @@ export default function ArtboardInfo() {
         />
         <label htmlFor="toggleGridDisplay">{ displayGrid ? "Hide grid" : "Show grid" }</label>
         { " • " }
+        <input
+            type="checkbox"
+            name="toggleSnapToGrid"
+            checked={ snapToGrid }
+            onChange={ () => dispatch( toggleSnapToGrid() ) }
+        />
+        <label htmlFor="toggleSnapToGrid">{ snapToGrid ? "Don't snap to grid" : "Snap to grid" }</label>
+        { " • " }
         Grid interval:
         <StyledInput
             type="number"
@@ -119,6 +127,10 @@ export default function ArtboardInfo() {
             onBlur={ dispatchinputStateChange }
             characterLength={ ( activeInput.name === "gridInterval" ? activeInput.value : gridInterval ).toString().length }
         />
+        { " • " }
+        <a href="https://github.com/josh-frank/gieves-edit" target="_blank" rel="noreferrer">
+            <img src="githubLogo.svg" height="12.5rem" alt="View this project on GitHub" />
+        </a>
     </div>;
 
 }

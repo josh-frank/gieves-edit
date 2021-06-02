@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const artboardSlice = createSlice( {
-    name: "artboardDisplayOptions",
+    name: "artboard",
     initialState: {
         width: 500,
         height: 400,
@@ -9,6 +9,7 @@ const artboardSlice = createSlice( {
         offsetX: 50.0,
         offsetY: 50.0,
         displayGrid: false,
+        snapToGrid: false,
         gridInterval: 50
     },
     reducers: {
@@ -18,10 +19,10 @@ const artboardSlice = createSlice( {
         setZoom( state, action ) {
             return { ...state, zoom: action.payload };
         },
-        zoomIn( state ) {
+        zoomInWheel( state ) {
             return { ...state, zoom: Math.min( state.zoom + 6.25, 625 ) };
         },
-        zoomOut( state ) {
+        zoomOutWheel( state ) {
             return { ...state, zoom: Math.max( state.zoom - 6.25, 6.25 ) };
         },
         zoomInButton( state ) {
@@ -48,6 +49,9 @@ const artboardSlice = createSlice( {
         toggleGridDisplay( state ) {
             return { ...state, displayGrid: !state.displayGrid };
         },
+        toggleSnapToGrid( state ) {
+            return { ...state, snapToGrid: !state.snapToGrid };
+        },
         setGridInterval( state, action ) {
             return { ...state, gridInterval: Math.min( Math.max( Math.round( action.payload ), 5 ), 100 ) };
         }
@@ -57,8 +61,8 @@ const artboardSlice = createSlice( {
 export const {
     setArtboardDimensions,
     setZoom,
-    zoomIn,
-    zoomOut,
+    zoomInWheel,
+    zoomOutWheel,
     zoomInButton,
     zoomOutButton,
     setArtboardOffset,
@@ -67,6 +71,7 @@ export const {
     moveArtboardUp,
     moveArtboardDown,
     toggleGridDisplay,
+    toggleSnapToGrid,
     setGridInterval
 } = artboardSlice.actions;
 export default artboardSlice.reducer;

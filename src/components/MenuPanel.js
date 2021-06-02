@@ -10,30 +10,30 @@ export default function Menu() {
 
     const editMode = useSelector( state => state.editMode );
 
-    const ModePanel = () => <>
+    const ModePanel = () => <div className="menu-panel">
         <div className="menu-header">Edit mode</div>
         <button
             disabled={ editMode === "zoom" }
             onClick={ () => dispatch( zoomMode() ) }
         >
-            🔎 Zoom
+            🔎 <b>Zoom</b>
         </button>
         <button
             disabled={ editMode === "path" }
             onClick={ () => dispatch( pathMode() ) }
         >
-            👆 Path
+            👆 <b>Path</b>
         </button>
-    </>;
+    </div>;
 
-    const PathPanel = () => <>
+    const PathPanel = () => <div className="menu-panel">
         <div className="menu-header">Path</div>
         <textarea
             rows="6"
             readOnly
             value={ activeShape || "No path selected" }
         />
-    </>;
+    </div>;
 
     return <div className="menu">
         <ModePanel />

@@ -16,7 +16,7 @@ const StyledGrid = styled.svg.attrs( ( { offsetX, offsetY } ) => ( {
 
 export default function ArtboardGrid() {
 
-  const { width, height, zoom, offsetX, offsetY, gridInterval } = useSelector( state => state.artboardDisplayOptions );
+  const { width, height, zoom, offsetX, offsetY, gridInterval } = useSelector( state => state.artboard );
 
   const HorizontalLines = () => gridLineSpacing( height, gridInterval ).map( line => {
     return <g key={ line }>

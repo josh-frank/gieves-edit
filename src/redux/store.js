@@ -5,7 +5,7 @@ import modeReducer from "./modeSlice"
 
 const store = configureStore( {
     reducer: {
-        artboardDisplayOptions: artboardReducer,
+        artboard: artboardReducer,
         shapes: shapesReducer,
         editMode: modeReducer
     }
