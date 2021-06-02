@@ -213,11 +213,20 @@ function adjustEndHandlePoint( descriptor, command, xChange, yChange ) {
     return descriptor.replace( command, splitCommand.join( " " ) );
 }
 
+function snapPathToGrid( descriptor, gridInterval ) {
+    return descriptor.split( splitDescriptorByCommands ).map( command =>
+        command.split( splitCommandByParameters ).map( element => !parseInt( element ) ? element : parseInt( element ) )
+    ).flat().map( commandElement => 
+        typeof commandElement === "string" ? commandElement : Math.round( commandElement / gridInterval ) * gridInterval
+    ).join( " " );
+}
+
 export {
     convertToRelative,
     convertToAbsolute,
     parseDescriptor,
     adjustDescriptorPoint,
     adjustStartHandlePoint,
-    adjustEndHandlePoint
+    adjustEndHandlePoint,
+    snapPathToGrid
 };

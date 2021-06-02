@@ -9,7 +9,6 @@ const artboardSlice = createSlice( {
         offsetX: 50.0,
         offsetY: 50.0,
         displayGrid: false,
-        snapToGrid: false,
         gridInterval: 50
     },
     reducers: {
@@ -49,9 +48,6 @@ const artboardSlice = createSlice( {
         toggleGridDisplay( state ) {
             return { ...state, displayGrid: !state.displayGrid };
         },
-        toggleSnapToGrid( state ) {
-            return { ...state, snapToGrid: !state.snapToGrid };
-        },
         setGridInterval( state, action ) {
             return { ...state, gridInterval: Math.min( Math.max( Math.round( action.payload ), 5 ), 100 ) };
         }
@@ -71,7 +67,6 @@ export const {
     moveArtboardUp,
     moveArtboardDown,
     toggleGridDisplay,
-    toggleSnapToGrid,
     setGridInterval
 } = artboardSlice.actions;
 export default artboardSlice.reducer;

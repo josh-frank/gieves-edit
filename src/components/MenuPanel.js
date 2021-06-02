@@ -1,10 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { zoomMode, pathMode } from '../redux/modeSlice';
+import { updateActiveShape } from "../redux/shapesSlice";
+import { snapPathToGrid } from "../utilities/descriptorUtilities";
 
 
 export default function Menu() {
 
     const dispatch = useDispatch();
+
+    const { gridInterval } = useSelector( state => state.artboard );
 
     const { activeShape } = useSelector( state => state.shapes );
 
@@ -33,6 +37,16 @@ export default function Menu() {
             readOnly
             value={ activeShape || "No path selected" }
         />
+        <button>
+            💾 <b>Save manual path edits</b>
+        </button>
+        <button
+            onClick={ () => {
+                if ( activeShape ) dispatch( updateActiveShape( snapPathToGrid( activeShape, gridInterval ) ) );
+            } }
+        >
+            👌 <b>Snap path to grid</b>
+        </button>
     </div>;
 
     return <div className="menu">

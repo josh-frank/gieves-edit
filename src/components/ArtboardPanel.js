@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval, toggleSnapToGrid } from "../redux/artboardSlice";
+import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval } from "../redux/artboardSlice";
 
 const StyledInput = styled.input.attrs( ( { characterLength } ) => ( {
     style: { width: `${ characterLength }ch` },
@@ -17,7 +17,7 @@ export default function ArtboardPanel() {
     
     const dispatch = useDispatch();
 
-    const { offsetX, offsetY, width, height, zoom, displayGrid, snapToGrid, gridInterval } = useSelector( state => state.artboard );
+    const { offsetX, offsetY, width, height, zoom, displayGrid, gridInterval } = useSelector( state => state.artboard );
 
     const [ activeInput, setActiveInput ] = useState( {} );
     
@@ -108,14 +108,6 @@ export default function ArtboardPanel() {
             onChange={ () => dispatch( toggleGridDisplay() ) }
         />
         <label htmlFor="toggleGridDisplay">{ displayGrid ? "Hide grid" : "Show grid" }</label>
-        { " • " }
-        <input
-            type="checkbox"
-            name="toggleSnapToGrid"
-            checked={ snapToGrid }
-            onChange={ () => dispatch( toggleSnapToGrid() ) }
-        />
-        <label htmlFor="toggleSnapToGrid">{ snapToGrid ? "Don't snap to grid" : "Snap to grid" }</label>
         { " • " }
         Grid interval:
         <StyledInput
