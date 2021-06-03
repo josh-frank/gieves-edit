@@ -19,32 +19,6 @@ const splitCommandByParameters = /[\s,]/;
 // const validCommand = /z|([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2})/ig;
 const isValidDescriptor = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))[\s,]?((([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}))[\s,]?)*z/i;
 
-/////////////////////////////////////////////// 
-/////////////////////////////////////////////// 
-///////////////////////////////////////////////
-
-const validCommandEx = /^[\t\n\f\r\s]*([achlmqstvz])[\t\n\f\r\s]*/i;
-const validFlagEx = /^[01]/;
-const validCoordinateEx = /^[+-]?((\d*\.\d+)|(\d+\.)|(\d+))(e[+-]?\d+)?/i;
-const commaEx = /^(([\t\n\f\r\s]+,?[\t\n\f\r\s]*)|(,[\t\n\f\r\s]*))/;
-
-const pathGrammar = {
-    M: [ validCoordinateEx, validCoordinateEx ],
-    L: [ validCoordinateEx, validCoordinateEx ],
-    H: [ validCoordinateEx ],
-    V: [ validCoordinateEx ],
-    Z: [],
-    C: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx ],
-    S: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx ],
-    Q: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx ],
-    T: [ validCoordinateEx, validCoordinateEx ],
-    A: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validFlagEx, validFlagEx, validCoordinateEx, validCoordinateEx ],
-};
-
-/////////////////////////////////////////////// 
-/////////////////////////////////////////////// 
-///////////////////////////////////////////////
-
 function convertToRelative( descriptor ) {}
 
 function convertToAbsolute( descriptor ) {}
