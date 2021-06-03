@@ -2,21 +2,48 @@
 
 const splitDescriptorByCommands = /\s(?=[achlmqstvz])/i;
 const splitCommandByParameters = /[\s,]/;
-const validCoordinate = /(-?\.\d+)|(-?\d+(\.\d+)?)/ig;
-const validFirstCommand = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
-const validMoveCommand = /m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
-const validLineCommand = /l\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
-const validHorizontalCommand = /h\s?((-?\.\d+)|(-?\d+(\.\d+)?))/ig;
-const validVerticalCommand = /v\s?((-?\.\d+)|(-?\d+(\.\d+)?))/ig;
-const validCubicCurveCommand = /c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5}/ig;
-const validSmoothCubicCurveCommand = /s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}/ig;
-const validQuadCurveCommand = /q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}/ig;
-const validContinuousQuadCurveCommand = /q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*/ig;
-const validSmoothQuadCurveCommand = /t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
-const validArcCurveCommand = /a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}/ig;
+// const validCoordinate = /(-?\.\d+)|(-?\d+(\.\d+)?)/ig;
+// const upToTwoValidCoordinates = /(-?\d+\.\d+\s*-?,?\.\d+)|(-?\.\d+\s*-?,?\.\d+)|(-?\d+(\.\d+)?,?\s*-?\d+(\.\d+)?)/ig;
+// const validFirstCommand = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
+// const validMoveCommand = /m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
+// const validLineCommand = /l\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
+// const validHorizontalCommand = /h\s?((-?\.\d+)|(-?\d+(\.\d+)?))/ig;
+// const validVerticalCommand = /v\s?((-?\.\d+)|(-?\d+(\.\d+)?))/ig;
+// const validCubicCurveCommand = /c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5}/ig;
+// const validSmoothCubicCurveCommand = /s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}/ig;
+// const validQuadCurveCommand = /q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}/ig;
+// const validContinuousQuadCurveCommand = /q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*/ig;
+// const validSmoothQuadCurveCommand = /t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
+// const validArcCurveCommand = /a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}/ig;
 
-const validCommand = /z|([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2})/ig;
+// const validCommand = /z|([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2})/ig;
 const isValidDescriptor = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))[\s,]?((([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}))[\s,]?)*z/i;
+
+/////////////////////////////////////////////// 
+/////////////////////////////////////////////// 
+///////////////////////////////////////////////
+
+const validCommandEx = /^[\t\n\f\r\s]*([achlmqstvz])[\t\n\f\r\s]*/i;
+const validFlagEx = /^[01]/;
+const validCoordinateEx = /^[+-]?((\d*\.\d+)|(\d+\.)|(\d+))(e[+-]?\d+)?/i;
+const commaEx = /^(([\t\n\f\r\s]+,?[\t\n\f\r\s]*)|(,[\t\n\f\r\s]*))/;
+
+const pathGrammar = {
+    M: [ validCoordinateEx, validCoordinateEx ],
+    L: [ validCoordinateEx, validCoordinateEx ],
+    H: [ validCoordinateEx ],
+    V: [ validCoordinateEx ],
+    Z: [],
+    C: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx ],
+    S: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx ],
+    Q: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validCoordinateEx ],
+    T: [ validCoordinateEx, validCoordinateEx ],
+    A: [ validCoordinateEx, validCoordinateEx, validCoordinateEx, validFlagEx, validFlagEx, validCoordinateEx, validCoordinateEx ],
+};
+
+/////////////////////////////////////////////// 
+/////////////////////////////////////////////// 
+///////////////////////////////////////////////
 
 function convertToRelative( descriptor ) {}
 
@@ -209,19 +236,20 @@ export {
 
     splitDescriptorByCommands,
     splitCommandByParameters,
-    validCoordinate,
-    validFirstCommand,
-    validMoveCommand,
-    validLineCommand,
-    validHorizontalCommand,
-    validVerticalCommand,
-    validCubicCurveCommand,
-    validSmoothCubicCurveCommand,
-    validQuadCurveCommand,
-    validContinuousQuadCurveCommand,
-    validSmoothQuadCurveCommand,
-    validArcCurveCommand,
-    validCommand,
+    // validCoordinate,
+    // upToTwoValidCoordinates,
+    // validFirstCommand,
+    // validMoveCommand,
+    // validLineCommand,
+    // validHorizontalCommand,
+    // validVerticalCommand,
+    // validCubicCurveCommand,
+    // validSmoothCubicCurveCommand,
+    // validQuadCurveCommand,
+    // validContinuousQuadCurveCommand,
+    // validSmoothQuadCurveCommand,
+    // validArcCurveCommand,
+    // validCommand,
     isValidDescriptor,
 
     convertToRelative,

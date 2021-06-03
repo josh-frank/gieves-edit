@@ -27,14 +27,14 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, 
             submitEvent.preventDefault();
             if ( isValidDescriptor.test( manualPathEdit ) ) {
                 dispatch( updateActiveShape( manualPathEdit ) );
-                setManualPathEdit( null );
             };
+            setManualPathEdit( null );
         } }
     >
         <textarea
             rows="6"
             value={ manualPathEdit || activeShape || "No path selected" }
-            onChange={ changeEvent => setManualPathEdit( changeEvent.target.value ) }
+            onChange={ changeEvent => activeShape && setManualPathEdit( changeEvent.target.value ) }
         />
         <input
             disabled={ !manualPathEdit }

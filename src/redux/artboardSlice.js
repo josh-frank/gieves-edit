@@ -8,8 +8,8 @@ const artboardSlice = createSlice( {
         zoom: 100,
         offsetX: 50.0,
         offsetY: 50.0,
-        displayGrid: false,
-        gridInterval: 50
+        displayGrid: true,
+        gridInterval: 10
     },
     reducers: {
         setArtboardDimensions( state, action ) {
