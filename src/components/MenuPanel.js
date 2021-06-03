@@ -37,13 +37,13 @@ export default function Menu() {
             readOnly
             value={ activeShape || "No path selected" }
         />
-        <button>
+        <button disabled>
             💾 <b>Save manual path edits</b>
         </button>
-        <button>
+        <button disabled>
             𝙈 <b>Convert path to absolute</b>
         </button>
-        <button>
+        <button disabled>
             𝙢 <b>Convert path to relative</b>
         </button>
         <button

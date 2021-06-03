@@ -46,7 +46,7 @@ export default function ArtboardPanel() {
         setActiveInput( {} );
     }
 
-    return <div className="artboard-info">
+    return <div className="artboard-panel">
         🤚
         <StyledInput
             type="number"

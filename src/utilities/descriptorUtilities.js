@@ -3,22 +3,6 @@
 const splitDescriptorByCommands = /\s(?=[achlmqstvz])/i;
 const splitCommandByParameters = /[\s,]/;
 
-const validCoordinate = /-?((\d+(\.\d+)?)|(\.\d+))/ig;
-const validFirstCommand = /^m(\s?-?((\d+(\.\d+)?)|(\.\d+)))[,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))/ig;
-const validMoveCommand = /m(\s?-?((\d+(\.\d+)?)|(\.\d+)))[,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))/ig;
-const validLineCommand = /l(\s?-?((\d+(\.\d+)?)|(\.\d+)))[,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))/ig;
-const validHorizontalCommand = /h(\s?-?((\d+(\.\d+)?)|(\.\d+)))/ig;
-const validVerticalCommand = /v(\s?-?((\d+(\.\d+)?)|(\.\d+)))/ig;
-const validCubicCurveCommand = /c(\s?-?((\d+(\.\d+)?)|(\.\d+)))([,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))){5}/ig;
-const validSmoothCubicCurveCommand = /s(\s?-?((\d+(\.\d+)?)|(\.\d+)))([,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))){3}/ig;
-const validQuadCurveCommand = /q(\s?-?((\d+(\.\d+)?)|(\.\d+)))([,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))){3}/ig;
-const validContinuousQuadCurveCommand = /q(\s?-?((\d+(\.\d+)?)|(\.\d+)))([,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))){3}(\s?t?(\s?-?((\d+(\.\d+)?)|(\.\d+)))[,\s]?(-?((\d+(\.\d+)?)|(\.\d+))))*/ig;
-const validSmoothQuadCurveCommand = /t(\s?-?((\d+(\.\d+)?)|(\.\d+)))[,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))/ig;
-const validArcCurveCommand = /a(\s?-?((\d+(\.\d+)?)|(\.\d+)))([,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))){2}[,\s]?[01][,\s]+[01][,\s]+([,\s]?(-?((\d+(\.\d+)?)|(\.\d+)))){2}/ig;
-
-// const matchValidCommands = /([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}[01][,\s]+[01][,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?))|z/ig;
-// const isValidDescriptor = /^m\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?)(\s?(([ml]\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+(0([.]\d+)?|-?\d+([.]\d+)?))|([hv]\s?(0([.]\d+)?|-?\d+([.]\d+)?))|(c\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){5}(0([.]\d+)?|-?\d+([.]\d+)?))|(a\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){6}(0([.]\d+)?|-?\d+([.]\d+)?))|(q(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){4}(t(\s?(0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){2,})+)|(s\s?((0([.]\d+)?|-?\d+([.]\d+)?)[,\s]+){3}(0([.]\d+)?|-?\d+([.]\d+)?)))\s?)+z/ig;
-
 function convertToRelative( descriptor ) {}
 
 function convertToAbsolute( descriptor ) {}

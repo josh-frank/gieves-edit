@@ -38,17 +38,18 @@ body, html {
   right: 2.5%;
   z-index: 1000;
 }
-  
-.artboard-info {
+
+.artboard-panel {
   position: fixed;
   vertical-align: center;
   bottom: 2.5%;
   right: 2.5%;
+  z-index: 1000;
 }
 
-.artboard-info input::-webkit-outer-spin-button,
-.artboard-info input::-webkit-inner-spin-button,
-.artboard-info input[type=number] {
+.artboard-panel input::-webkit-outer-spin-button,
+.artboard-panel input::-webkit-inner-spin-button,
+.artboard-panel input[type=number] {
   border: none;
   background-color: transparent;
   -moz-appearance: textfield;
