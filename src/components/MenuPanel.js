@@ -1,8 +1,61 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { zoomMode, pathMode } from '../redux/modeSlice';
 import { updateActiveShape } from "../redux/shapesSlice";
-import { snapPathToGrid } from "../utilities/descriptorUtilities";
+import { isValidDescriptor, snapPathToGrid } from "../utilities/descriptorUtilities";
 
+const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
+    <div className="menu-header">Edit mode</div>
+    <button
+        disabled={ editMode === "zoom" }
+        onClick={ () => dispatch( zoomMode() ) }
+    >
+        🔎 <b>Zoom</b>
+    </button>
+    <button
+        disabled={ editMode === "path" }
+        onClick={ () => dispatch( pathMode() ) }
+    >
+        👆 <b>Path</b>
+    </button>
+</div>;
+
+const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
+    <div className="menu-header">Path</div>
+    <form
+        onSubmit={ submitEvent => {
+            submitEvent.preventDefault();
+            if ( isValidDescriptor.test( manualPathEdit ) ) {
+                dispatch( updateActiveShape( manualPathEdit ) );
+                setManualPathEdit( null );
+            };
+        } }
+    >
+        <textarea
+            rows="6"
+            value={ manualPathEdit || activeShape || "No path selected" }
+            onChange={ changeEvent => setManualPathEdit( changeEvent.target.value ) }
+        />
+        <input
+            disabled={ !manualPathEdit }
+            type="submit"
+            value={ "💾 Save manual path edits" }
+        />
+    </form>
+    <button disabled>
+        𝙈 <b>Convert path to absolute</b>
+    </button>
+    <button disabled>
+        𝙢 <b>Convert path to relative</b>
+    </button>
+    <button
+        onClick={ () => {
+            if ( activeShape ) dispatch( updateActiveShape( snapPathToGrid( activeShape, gridInterval ) ) );
+        } }
+    >
+        👌 <b>Snap path to grid</b>
+    </button>
+</div>;
 
 export default function Menu() {
 
@@ -14,50 +67,20 @@ export default function Menu() {
 
     const editMode = useSelector( state => state.editMode );
 
-    const ModePanel = () => <div className="menu-panel">
-        <div className="menu-header">Edit mode</div>
-        <button
-            disabled={ editMode === "zoom" }
-            onClick={ () => dispatch( zoomMode() ) }
-        >
-            🔎 <b>Zoom</b>
-        </button>
-        <button
-            disabled={ editMode === "path" }
-            onClick={ () => dispatch( pathMode() ) }
-        >
-            👆 <b>Path</b>
-        </button>
-    </div>;
-
-    const PathPanel = () => <div className="menu-panel">
-        <div className="menu-header">Path</div>
-        <textarea
-            rows="6"
-            readOnly
-            value={ activeShape || "No path selected" }
-        />
-        <button disabled>
-            💾 <b>Save manual path edits</b>
-        </button>
-        <button disabled>
-            𝙈 <b>Convert path to absolute</b>
-        </button>
-        <button disabled>
-            𝙢 <b>Convert path to relative</b>
-        </button>
-        <button
-            onClick={ () => {
-                if ( activeShape ) dispatch( updateActiveShape( snapPathToGrid( activeShape, gridInterval ) ) );
-            } }
-        >
-            👌 <b>Snap path to grid</b>
-        </button>
-    </div>;
+    const [ manualPathEdit, setManualPathEdit ] = useState( null );
 
     return <div className="menu">
-        <ModePanel />
-        <PathPanel />
+        <ModePanel
+            dispatch={ dispatch }
+            editMode={ editMode }
+        />
+        <PathPanel
+            manualPathEdit={ manualPathEdit }
+            setManualPathEdit={ setManualPathEdit }
+            activeShape={ activeShape }
+            dispatch={ dispatch }
+            gridInterval={ gridInterval }
+        />
     </div>;
 
 }

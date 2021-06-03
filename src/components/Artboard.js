@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setArtboardOffset, zoomInWheel, zoomOutWheel } from "../redux/artboardSlice";
-import { updateActiveShape } from "../redux/shapesSlice";
+import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
 import styled from "styled-components";
 
@@ -77,19 +77,25 @@ export default function Artboard() {
       if ( editMode === "zoom" && zoomEvent.deltaY > 0 ) dispatch( zoomInWheel() );
       if ( editMode === "zoom" && zoomEvent.deltaY < 0 ) dispatch( zoomOutWheel() );
     }, [ editMode, dispatch ] );
+
+    const handleClick = useCallback( clickEvent => {
+      if ( clickEvent.target.tagName === "svg" ) dispatch( deactivateShape() );
+    }, [ dispatch ] );
   
     useEffect( () => {
       window.addEventListener( "wheel", handleZoom );
       window.addEventListener( "mousedown", handleMouseDown );
       window.addEventListener( "mouseup", handleMouseUp );
       window.addEventListener( "mousemove", handleMouseMove );
+      window.addEventListener( "click", handleClick );
       return () => {
         window.removeEventListener( "wheel", handleZoom );
         window.removeEventListener( "mousedown", handleMouseDown );
         window.removeEventListener( "mouseup", handleMouseUp );
         window.removeEventListener( "mousemove", handleMouseMove );
+        window.removeEventListener( "click", handleClick );
       };
-    }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove ] );
+    }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove, handleClick ] );
 
     return <>
       { displayGrid && <ArtboardGrid /> }

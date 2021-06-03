@@ -26,9 +26,9 @@ const shapesSlice = createSlice( {
                 activeShape: action.payload
             };           
         },
-        deactivateShape( state, action ) {
+        deactivateShape( state ) {
             return {
-                inactiveShapes: [ ...state.inactiveShapes, action.payload ],
+                inactiveShapes: [ ...state.inactiveShapes, state.activeShape ],
                 activeShape: null
             };
         },

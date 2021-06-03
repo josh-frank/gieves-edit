@@ -14,9 +14,15 @@ body, html {
   background-color: lightgray;
 }
 
-.menu-panel {
+.menu-panel,
+.menu-panel form {
   display: flex;
   flex-direction: column;
+}
+
+.menu-panel button,
+.menu-panel input[type=submit] {
+  font-weight: bold;
 }
 
 .menu-header {
