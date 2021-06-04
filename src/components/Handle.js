@@ -1,4 +1,4 @@
-export default function Handle( { fullDescriptor, command, parsedCommand } ) {
+export default function Handle( { fullDescriptor, parsedCommand } ) {
 
     // const QuadPolyline = () => {
     //     return <polyline
@@ -12,23 +12,23 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
         <circle
             data-name="point"
             data-descriptor={ fullDescriptor }
-            data-command={ command }
+            data-command={ parsedCommand.command }
             cx={ parsedCommand.absolute[ 0 ] }
             cy={ parsedCommand.absolute[ 1 ] }
             r="2"
             fill="red"
-            // onMouseOver={ () => console.log( command ) }
+            // onMouseOver={ () => console.log( parsedCommand.command ) }
         />
         { parsedCommand.startHandle && <>
             <circle
                 data-name="startHandle"
                 data-descriptor={ fullDescriptor }
-                data-command={ command }
+                data-command={ parsedCommand.command }
                 cx={ parsedCommand.startHandle[ 2 ] }
                 cy={ parsedCommand.startHandle[ 3 ] }
                 r="2"
                 fill="red"
-                // onMouseOver={ () => console.log( command ) }
+                // onMouseOver={ () => console.log( parsedCommand.command ) }
             />
             <line
                 x1={ parsedCommand.startHandle[ 0 ] }
@@ -42,12 +42,12 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
             <circle
                 data-name="endHandle"
                 data-descriptor={ fullDescriptor }
-                data-command={ command }
+                data-command={ parsedCommand.command }
                 cx={ parsedCommand.endHandle[ 2 ] }
                 cy={ parsedCommand.endHandle[ 3 ] }
                 r="2"
                 fill="red"
-                // onMouseOver={ () => console.log( command ) }
+                // onMouseOver={ () => console.log( parsedCommand.command ) }
             />
             <line
                 x1={ parsedCommand.endHandle[ 0 ] }

@@ -92,7 +92,6 @@ export default function Artboard() {
     }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove ] );
 
     return <>
-      { displayGrid && <ArtboardGrid /> }
       <StyledArtboard
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -109,6 +108,7 @@ export default function Artboard() {
           { activeShape && <Shape descriptor={ activeShape } active={ true } /> }
           { inactiveShapes.map( ( shape, index ) => <Shape key={ index } descriptor={ shape } active={ false } /> ) }
       </StyledArtboard>
+      { displayGrid && <ArtboardGrid /> }
     </>;
 
 }

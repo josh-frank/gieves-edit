@@ -33,7 +33,6 @@ export default function Shape( { descriptor, active } ) {
             return <Handle
                 key={ index }
                 fullDescriptor={ descriptor }
-                command={ parsedPoint.command }
                 parsedCommand={ parsedPoint }
             />;
         } ) }

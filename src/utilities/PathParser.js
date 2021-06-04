@@ -1,4 +1,11 @@
-class PathParser {
+// export class Point {
+//     constructor( x, y ){
+//         this.x = x;
+//         this.y = y;
+//     }
+// }
+
+export class PathParser {
 
     static validCommand = /^[\t\n\f\r\s]*([achlmqstvz])[\t\n\f\r\s]*/i;
     static validFlag = /^[01]/;
@@ -92,7 +99,7 @@ class PathParser {
             const coordinatesParsedFromCommand = {
                 command: command.join( " " ),
                 absolute: nextPoint,
-                relative: [ nextPoint[ 0 ] - currentPoint[ 0 ], nextPoint[ 1 ] - currentPoint[ 1 ] ]
+                relative: [ nextPoint[ 0 ] - currentPoint[ 0 ], nextPoint[ 1 ] - currentPoint[ 1 ] ],
             };
             switch ( command[ 0 ].toLowerCase() ) {
                 case "c":
@@ -100,13 +107,13 @@ class PathParser {
                         currentPoint[ 0 ],
                         currentPoint[ 1 ],
                         currentPoint[ 0 ] + command[ 1 ],
-                        currentPoint[ 1 ] + command[ 2 ]                 
+                        currentPoint[ 1 ] + command[ 2 ]
                     ];
                     coordinatesParsedFromCommand.endHandle = [
                         nextPoint[ 0 ],
                         nextPoint[ 1 ],
                         currentPoint[ 0 ] + command[ 3 ],
-                        currentPoint[ 1 ] + command[ 4 ]                 
+                        currentPoint[ 1 ] + command[ 4 ]
                     ];
                     break;
                 case "q":
@@ -114,7 +121,7 @@ class PathParser {
                         nextPoint[ 0 ],
                         nextPoint[ 1 ],
                         currentPoint[ 0 ] + command[ 1 ],
-                        currentPoint[ 1 ] + command[ 2 ]                 
+                        currentPoint[ 1 ] + command[ 2 ]
                     ];
                     break;
                 case "s":
@@ -122,7 +129,7 @@ class PathParser {
                         nextPoint[ 0 ],
                         nextPoint[ 1 ],
                         currentPoint[ 0 ] + command[ 1 ],
-                        currentPoint[ 1 ] + command[ 2 ]                 
+                        currentPoint[ 1 ] + command[ 2 ]
                     ];
                     break;
                 default: break;
@@ -197,9 +204,11 @@ class PathParser {
         ).join( " " );
     }
 
-    static convertToRelative( path ) {}
-
-    static convertToAbsolute( path ) {}
+    // static convertToRelative( path ) {
+    // }
+    
+    // static convertToAbsolute( path ) {
+    // }
     
 }
 

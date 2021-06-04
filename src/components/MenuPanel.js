@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { zoomMode, pathMode } from '../redux/modeSlice';
-import { updateActiveShape } from "../redux/shapesSlice";
+import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
 import PathParser from "../utilities/PathParser";
 
@@ -31,6 +31,7 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, 
                 dispatch( updateActiveShape( PathParser.parseRaw( manualPathEdit ).flat().join( " " ) ) );
                 setManualPathEdit( null );
             } catch ( error ) {
+                dispatch( deactivateShape() );
                 setManualPathEdit( error );
             }
         } }
@@ -46,10 +47,16 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, 
             value={ "💾 Save manual path edits" }
         />
     </form>
-    <button disabled>
+    <button
+        disabled={ !activeShape }
+        // onClick={ () => dispatch( updateActiveShape( PathParser.convertToAbsolute( activeShape ) ) ) }
+    >
         𝙈 <b>Convert path to absolute</b>
     </button>
-    <button disabled>
+    <button
+        disabled={ !activeShape }
+        // onClick={ () => dispatch( updateActiveShape( PathParser.convertToAbsolute( activeShape ) ) ) }
+    >
         𝙢 <b>Convert path to relative</b>
     </button>
     <button
