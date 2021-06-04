@@ -161,6 +161,46 @@ class PathParser {
         return parsedPath.flat().join( " " );
     }
 
+    static adjustStartHandlePoint( path, command, xChange, yChange ) {
+        const parsedPath = PathParser.parseRaw( path );
+        const parsedCommand = PathParser.parseRaw( command )[ 0 ];
+        const commandIndex = parsedPath.findIndex( otherCommand => otherCommand.join( " " ) === parsedCommand.join( " " ) );
+        parsedPath[ commandIndex ][ 1 ] += xChange;
+        parsedPath[ commandIndex ][ 2 ] += yChange;
+        return parsedPath.flat().join( " " );
+    }
+
+    static adjustEndHandlePoint( path, command, xChange, yChange ) {
+        const parsedPath = PathParser.parseRaw( path );
+        const parsedCommand = PathParser.parseRaw( command )[ 0 ];
+        const commandIndex = parsedPath.findIndex( otherCommand => otherCommand.join( " " ) === parsedCommand.join( " " ) );
+        switch ( command[ 0 ] ) {
+            case "s":
+                parsedPath[ commandIndex ][ 1 ] += xChange;
+                parsedPath[ commandIndex ][ 2 ] += yChange;
+                break;
+            case "c":
+                parsedPath[ commandIndex ][ 3 ] += xChange;
+                parsedPath[ commandIndex ][ 4 ] += yChange;
+                break;
+            default:
+                break;
+        }
+        return parsedPath.flat().join( " " );
+    }
+
+    static snapPathToGrid( path, gridInterval ) {
+        return PathParser.parseRaw( path ).map( command => 
+            command[ 0 ] === "a" ? command.map( ( element, index ) => [ 4, 5 ].includes( index ) ? element.toString() : element ) : command
+        ).flat().map( commandElement => 
+            typeof commandElement === "string" ? commandElement : Math.round( commandElement / gridInterval ) * gridInterval
+        ).join( " " );
+    }
+
+    static convertToRelative( path ) {}
+
+    static convertToAbsolute( path ) {}
+    
 }
 
 export default PathParser;

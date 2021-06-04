@@ -1,8 +1,10 @@
 import { useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { zoomMode, pathMode } from '../redux/modeSlice';
 import { updateActiveShape } from "../redux/shapesSlice";
-import { isValidDescriptor, snapPathToGrid } from "../utilities/descriptorUtilities";
+
+import PathParser from "../utilities/PathParser";
 
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     <div className="menu-header">Edit mode</div>
@@ -25,10 +27,12 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, 
     <form
         onSubmit={ submitEvent => {
             submitEvent.preventDefault();
-            if ( isValidDescriptor.test( manualPathEdit ) ) {
-                dispatch( updateActiveShape( manualPathEdit ) );
-            };
-            setManualPathEdit( null );
+            try {
+                dispatch( updateActiveShape( PathParser.parseRaw( manualPathEdit ).flat().join( " " ) ) );
+                setManualPathEdit( null );
+            } catch ( error ) {
+                setManualPathEdit( error );
+            }
         } }
     >
         <textarea
@@ -50,7 +54,7 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, 
     </button>
     <button
         onClick={ () => {
-            if ( activeShape ) dispatch( updateActiveShape( snapPathToGrid( activeShape, gridInterval ) ) );
+            if ( activeShape ) dispatch( updateActiveShape( PathParser.snapPathToGrid( activeShape, gridInterval ) ) );
         } }
     >
         👌 <b>Snap path to grid</b>

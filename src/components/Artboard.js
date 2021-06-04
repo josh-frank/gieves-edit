@@ -9,8 +9,6 @@ import styled from "styled-components";
 import ArtboardGrid from "./ArtboardGrid";
 import Shape from "./Shape";
 
-import { adjustStartHandlePoint, adjustEndHandlePoint } from "../utilities/descriptorUtilities";
-
 import PathParser from "../utilities/PathParser";
 
 const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
@@ -57,14 +55,14 @@ export default function Artboard() {
             ( mouseMoveEvent.clientY - mouseDown.y )
           ) ) );
         } else if ( mouseDown.target.dataset.name === "startHandle" ) {
-          dispatch( updateActiveShape( adjustStartHandlePoint(
+          dispatch( updateActiveShape( PathParser.adjustStartHandlePoint(
             mouseDown.target.dataset.descriptor,
             mouseDown.target.dataset.command,
             ( mouseMoveEvent.clientX - mouseDown.x ),
             ( mouseMoveEvent.clientY - mouseDown.y )
           ) ) );
         } else if ( mouseDown.target.dataset.name === "endHandle" ) {
-          dispatch( updateActiveShape( adjustEndHandlePoint(
+          dispatch( updateActiveShape( PathParser.adjustEndHandlePoint(
             mouseDown.target.dataset.descriptor,
             mouseDown.target.dataset.command,
             ( mouseMoveEvent.clientX - mouseDown.x ),

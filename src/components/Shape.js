@@ -3,8 +3,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
 
-// import { parseDescriptor } from "../utilities/descriptorUtilities";
-
 import PathParser from "../utilities/PathParser";
 
 import Handle from "./Handle";
