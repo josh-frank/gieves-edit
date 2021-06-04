@@ -84,12 +84,49 @@ class PathParser {
         return parsedComponents;
     }
 
-    static parse( path ) {
+    static parseDescriptor( path ) {
         let currentPoint = [ 0, 0 ], nextPoint;
         return PathParser.parseRaw( path ).reduce( ( result, command ) => {
             if ( command[ 0 ].toLowerCase() === "z" ) return result;
             nextPoint = this.pointGrammar[ command[ 0 ] ]( currentPoint, command );
-            const coordinatesParsedFromCommand = { absolute: nextPoint, relative: [ nextPoint[ 0 ] - currentPoint[ 0 ], nextPoint[ 1 ] - currentPoint[ 1 ] ] };
+            const coordinatesParsedFromCommand = {
+                command: command.join( " " ),
+                absolute: nextPoint,
+                relative: [ nextPoint[ 0 ] - currentPoint[ 0 ], nextPoint[ 1 ] - currentPoint[ 1 ] ]
+            };
+            switch ( command[ 0 ].toLowerCase() ) {
+                case "c":
+                    coordinatesParsedFromCommand.startHandle = [
+                        currentPoint[ 0 ],
+                        currentPoint[ 1 ],
+                        currentPoint[ 0 ] + command[ 1 ],
+                        currentPoint[ 1 ] + command[ 2 ]                 
+                    ];
+                    coordinatesParsedFromCommand.endHandle = [
+                        nextPoint[ 0 ],
+                        nextPoint[ 1 ],
+                        currentPoint[ 0 ] + command[ 3 ],
+                        currentPoint[ 1 ] + command[ 4 ]                 
+                    ];
+                    break;
+                case "q":
+                    coordinatesParsedFromCommand.startHandle = [
+                        nextPoint[ 0 ],
+                        nextPoint[ 1 ],
+                        currentPoint[ 0 ] + command[ 1 ],
+                        currentPoint[ 1 ] + command[ 2 ]                 
+                    ];
+                    break;
+                case "s":
+                    coordinatesParsedFromCommand.endHandle = [
+                        nextPoint[ 0 ],
+                        nextPoint[ 1 ],
+                        currentPoint[ 0 ] + command[ 1 ],
+                        currentPoint[ 1 ] + command[ 2 ]                 
+                    ];
+                    break;
+                default: break;
+            }
             currentPoint = nextPoint;
             return [ ...result, coordinatesParsedFromCommand ];
         }, [] );
@@ -97,7 +134,7 @@ class PathParser {
 
 }
 
-// export default PathParser;
+export default PathParser;
 
 // const testShapes = [
 //     "m 50,50 l 100,0 l 0,100 l -100,0 z",
@@ -108,15 +145,17 @@ class PathParser {
 //     "m 628 356 l 192 -224 l 96 -32 l -32 96 l -224 192 c 32 32 32 64 64 30 c 0 32 32 64 0 64 a 45.44 45.44 90 0 1 -32 32 a 160 160 90 0 0 -64 -96 q -16 -3.2 -16 16 t -48 41.6 t -25.6 -25.6 t 41.6 -48 t 16 -16 a 160 160 90 0 0 -96 -64 a 45.44 45.44 90 0 1 32 -32 c 0 -32 32 0 64 0 c -32 32 0 32 32 66 l 192 -224 l 0 64 l 64 0 l -57.6 -6.4 l -6.4 -57.6 z"
 // ];
 
-const sameShape = [
-    "m 25,25 l 50,0 l 0,50 l -50,0 z",
-    "M 25 25 L 75 25 L 75 75 L 25 75 Z",
-    "m 25,25 l 50,0  L 75 75 L 25 75 Z"
-];
+// const sameShape = [
+//     "m 25,25 l 50,0 l 0,50 l -50,0 z",
+//     "M 25 25 L 75 25 L 75 75 L 25 75 Z",
+//     "m 25,25 l 50,0  L 75 75 L 25 75 Z"
+// ];
 
 // testShapes.forEach( shape => console.log( PathParser.parseRaw( shape ) ) );
 
 // console.log( PathParser.parseRaw( "m l 250 a -400, -350 ." ) );
 
-console.log( PathParser.parse( sameShape[ 0 ] ) );
-console.log( PathParser.parse( sameShape[ 1 ] ) );
+// console.log( PathParser.parseDescriptor( sameShape[ 0 ] ) );
+// console.log( PathParser.parseDescriptor( sameShape[ 1 ] ) );
+
+// console.log( PathParser.parseDescriptor( testShapes[ 1 ] ) );

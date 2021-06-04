@@ -1,7 +1,6 @@
 export default function Handle( { fullDescriptor, command, parsedCommand } ) {
 
     // const QuadPolyline = () => {
-        
     //     return <polyline
     //         points={ parsedCommand.quadPolyLine.join( " " ) }
     //         fill="none"
@@ -14,11 +13,11 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
             data-name="point"
             data-descriptor={ fullDescriptor }
             data-command={ command }
-            cx={ parsedCommand.point[ 0 ] }
-            cy={ parsedCommand.point[ 1 ] }
+            cx={ parsedCommand.absolute[ 0 ] }
+            cy={ parsedCommand.absolute[ 1 ] }
             r="2"
             fill="red"
-            onMouseOver={ () => console.log(command) }
+            // onMouseOver={ () => console.log( command ) }
         />
         { parsedCommand.startHandle && <>
             <circle
@@ -29,7 +28,7 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
                 cy={ parsedCommand.startHandle[ 3 ] }
                 r="2"
                 fill="red"
-                onMouseOver={ () => console.log(command) }
+                // onMouseOver={ () => console.log( command ) }
             />
             <line
                 x1={ parsedCommand.startHandle[ 0 ] }
@@ -48,7 +47,7 @@ export default function Handle( { fullDescriptor, command, parsedCommand } ) {
                 cy={ parsedCommand.endHandle[ 3 ] }
                 r="2"
                 fill="red"
-                onMouseOver={ () => console.log(command) }
+                // onMouseOver={ () => console.log( command ) }
             />
             <line
                 x1={ parsedCommand.endHandle[ 0 ] }

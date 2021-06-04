@@ -3,7 +3,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
 
-import { parseDescriptor } from "../utilities/descriptorUtilities";
+// import { parseDescriptor } from "../utilities/descriptorUtilities";
+
+import PathParser from "../utilities/PathParser";
 
 import Handle from "./Handle";
 
@@ -17,7 +19,7 @@ export default function Shape( { descriptor, active } ) {
         dispatch( active ? deactivateShape( descriptor ) : activateShape( descriptor ) );
     }
 
-    const parsedDescriptor = active && parseDescriptor( descriptor );
+    const parsedDescriptor = active && PathParser.parseDescriptor( descriptor );
 
     return <g>
         <path
@@ -29,9 +31,9 @@ export default function Shape( { descriptor, active } ) {
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ toggleActive }
         />
-        { active && parsedDescriptor.filter( point => point.command !== "z" ).map( parsedPoint => {
+        { active && parsedDescriptor.map( ( parsedPoint, index ) => {
             return <Handle
-                key={ parsedPoint.index }
+                key={ index }
                 fullDescriptor={ descriptor }
                 command={ parsedPoint.command }
                 parsedCommand={ parsedPoint }
