@@ -41,17 +41,17 @@ class PathParser {
         S: ( point, command ) => command.slice( 3 ),
     };
 
-    static parseComponents( type, path, cursor ) {
+    static parseComponents( type, command, cursor ) {
         const expectedCommands = this.pathGrammar[ type.toLowerCase() ];
         const components = [];
-        while ( cursor <= path.length ) {
+        while ( cursor <= command.length ) {
             const component = [ type ];
             for ( const regex of expectedCommands ) {
-                const match = path.slice( cursor ).match( regex );
+                const match = command.slice( cursor ).match( regex );
                 if ( match !== null ) {
                     component.push( parseInt( match[ 0 ] ) );
                     cursor += match[ 0 ].length;
-                    const nextSlice = path.slice( cursor ).match( this.validComma );
+                    const nextSlice = command.slice( cursor ).match( this.validComma );
                     if ( nextSlice !== null ) cursor += nextSlice[ 0 ].length;
                 } else if ( component.length === 1 ) {
                     return [ cursor, components ];
@@ -132,6 +132,35 @@ class PathParser {
         }, [] );
     }
 
+    static adjustDescriptorPoint( path, command, xChange, yChange ) {
+        const parsedPath = PathParser.parseRaw( path );
+        const parsedCommand = PathParser.parseRaw( command )[ 0 ];
+        const commandIndex = parsedPath.findIndex( otherCommand => otherCommand.join( " " ) === parsedCommand.join( " " ) );
+        for ( let indexToAdjust of [ commandIndex, parsedCommand[ 0 ] === "z" ? 0 : commandIndex + 1 ] ) {
+            switch ( parsedPath[ indexToAdjust ][ 0 ].toLowerCase() ) {
+                case "h":
+                    parsedPath[ indexToAdjust ][ 1 ] += indexToAdjust === commandIndex ? xChange : -xChange;
+                    break;
+                case "v":
+                    parsedPath[ indexToAdjust ][ 1 ] += indexToAdjust === commandIndex ? yChange : -yChange;
+                    break;
+                case "m":
+                case "l":
+                case "a":
+                case "c":
+                case "t":
+                case "q":
+                case "s":
+                    parsedPath[ indexToAdjust ][ parsedPath[ indexToAdjust ].length - 2 ] += indexToAdjust === commandIndex ? xChange : -xChange;
+                    parsedPath[ indexToAdjust ][ parsedPath[ indexToAdjust ].length - 1 ] += indexToAdjust === commandIndex ? yChange : -yChange;
+                    break;
+                case "z": break;
+                default: break;
+            }
+        };
+        return parsedPath.flat().join( " " );
+    }
+
 }
 
 export default PathParser;
@@ -158,4 +187,4 @@ export default PathParser;
 // console.log( PathParser.parseDescriptor( sameShape[ 0 ] ) );
 // console.log( PathParser.parseDescriptor( sameShape[ 1 ] ) );
 
-// console.log( PathParser.parseDescriptor( testShapes[ 1 ] ) );
+// console.log( PathParser.adjustDescriptorPoint( testShapes[ 5 ], "l -224 192", 10, 10 ) );
