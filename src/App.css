@@ -26,15 +26,22 @@ body, html {
 }
 
 .menu-header {
-  background-color: gray;
+  padding: 0.25rem;
+  background-color: black;
   color: white;
   font-weight: bold;
+  font-style: italic;
 }
 
 .menu textarea {
   box-sizing: border-box;
   width: inherit;
   resize: none;
+}
+
+.menu-button-row {
+  display: flex;
+  flex-direction: row;
 }
   
 .zoom-buttons {

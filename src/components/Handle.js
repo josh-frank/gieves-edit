@@ -15,7 +15,7 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
             data-command={ parsedCommand.parsedCommand.join( " " ) }
             cx={ parsedCommand.absoluteNext[ 0 ] }
             cy={ parsedCommand.absoluteNext[ 1 ] }
-            r="2"
+            r="3"
             fill="red"
             // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
         />
@@ -26,7 +26,7 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
                 data-command={ parsedCommand.parsedCommand.join( " " ) }
                 cx={ parsedCommand.startHandle[ 2 ] }
                 cy={ parsedCommand.startHandle[ 3 ] }
-                r="2"
+                r="3"
                 fill="red"
                 // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
             />
@@ -45,7 +45,7 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
                 data-command={ parsedCommand.parsedCommand.join( " " ) }
                 cx={ parsedCommand.endHandle[ 2 ] }
                 cy={ parsedCommand.endHandle[ 3 ] }
-                r="2"
+                r="3"
                 fill="red"
                 // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
             />

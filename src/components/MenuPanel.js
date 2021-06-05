@@ -7,7 +7,7 @@ import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 import { PathParser } from "../utilities/PathParser";
 
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
-    <div className="menu-header">Edit mode</div>
+    <div className="menu-header">Mode</div>
     <button
         disabled={ editMode === "zoom" }
         onClick={ () => dispatch( zoomMode() ) }
@@ -22,7 +22,7 @@ const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     </button>
 </div>;
 
-const PathPanel = ( { activePath, setActivePath, manualPathEdit, setManualPathEdit, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
+const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch } ) => <div className="menu-panel">
     <div className="menu-header">Path</div>
     <form
         onSubmit={ submitEvent => {
@@ -41,12 +41,24 @@ const PathPanel = ( { activePath, setActivePath, manualPathEdit, setManualPathEd
             value={ manualPathEdit || activeShape || "No path selected" }
             onChange={ changeEvent => activeShape && setManualPathEdit( changeEvent.target.value ) }
         />
-        <input
-            disabled={ !manualPathEdit }
-            type="submit"
-            value={ "💾 Save manual path edits" }
-        />
+        <section className="menu-button-row">
+            <input
+                disabled={ !manualPathEdit }
+                type="submit"
+                value={ "💾 Save path edits" }
+            />
+            <button
+                disabled={ !manualPathEdit }
+                onClick={ () => setManualPathEdit( activeShape ) }
+            >
+                ❌ Revert
+            </button>
+        </section>
     </form>
+</div>;
+
+const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
+    <div className="menu-header">Transform</div>
     <button
         disabled={ !activeShape }
         onClick={ () => dispatch( updateActiveShape( activePath.absolute() ) ) }
@@ -88,10 +100,13 @@ export default function Menu( { activePath, setActivePath } ) {
             editMode={ editMode }
         />
         <PathPanel
-            activePath={ activePath }
-            setActivePath={ setActivePath }
             manualPathEdit={ manualPathEdit }
             setManualPathEdit={ setManualPathEdit }
+            activeShape={ activeShape }
+            dispatch={ dispatch }
+        />
+        <TransformPanel
+            activePath={ activePath }
             activeShape={ activeShape }
             dispatch={ dispatch }
             gridInterval={ gridInterval }
