@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { zoomMode, pathMode } from '../redux/modeSlice';
 import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
-import PathParser from "../utilities/PathParser";
+import { PathParser } from "../utilities/PathParser";
 
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     <div className="menu-header">Edit mode</div>
@@ -22,7 +22,7 @@ const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     </button>
 </div>;
 
-const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
+const PathPanel = ( { activePath, setActivePath, manualPathEdit, setManualPathEdit, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
     <div className="menu-header">Path</div>
     <form
         onSubmit={ submitEvent => {
@@ -49,26 +49,28 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch, 
     </form>
     <button
         disabled={ !activeShape }
-        // onClick={ () => dispatch( updateActiveShape( PathParser.convertToAbsolute( activeShape ) ) ) }
+        onClick={ () => dispatch( updateActiveShape( activePath.absolute() ) ) }
     >
         𝙈 <b>Convert path to absolute</b>
     </button>
     <button
         disabled={ !activeShape }
-        // onClick={ () => dispatch( updateActiveShape( PathParser.convertToAbsolute( activeShape ) ) ) }
+        onClick={ () => dispatch( updateActiveShape( activePath.relative() ) ) }
     >
         𝙢 <b>Convert path to relative</b>
     </button>
     <button
+        disabled={ !activeShape }
         onClick={ () => {
-            if ( activeShape ) dispatch( updateActiveShape( PathParser.snapPathToGrid( activeShape, gridInterval ) ) );
+            activePath.snapToGrid( gridInterval );
+            dispatch( updateActiveShape( activePath.toString() ) );
         } }
     >
         👌 <b>Snap path to grid</b>
     </button>
 </div>;
 
-export default function Menu() {
+export default function Menu( { activePath, setActivePath } ) {
 
     const dispatch = useDispatch();
 
@@ -86,6 +88,8 @@ export default function Menu() {
             editMode={ editMode }
         />
         <PathPanel
+            activePath={ activePath }
+            setActivePath={ setActivePath }
             manualPathEdit={ manualPathEdit }
             setManualPathEdit={ setManualPathEdit }
             activeShape={ activeShape }

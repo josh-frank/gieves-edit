@@ -12,23 +12,23 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
         <circle
             data-name="point"
             data-descriptor={ fullDescriptor }
-            data-command={ parsedCommand.command }
-            cx={ parsedCommand.point[ 0 ] }
-            cy={ parsedCommand.point[ 1 ] }
+            data-command={ parsedCommand.parsedCommand.join( " " ) }
+            cx={ parsedCommand.absoluteNext[ 0 ] }
+            cy={ parsedCommand.absoluteNext[ 1 ] }
             r="2"
             fill="red"
-            // onMouseOver={ () => console.log( parsedCommand.command ) }
+            // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
         />
         { parsedCommand.startHandle && <>
             <circle
                 data-name="startHandle"
                 data-descriptor={ fullDescriptor }
-                data-command={ parsedCommand.command }
+                data-command={ parsedCommand.parsedCommand.join( " " ) }
                 cx={ parsedCommand.startHandle[ 2 ] }
                 cy={ parsedCommand.startHandle[ 3 ] }
                 r="2"
                 fill="red"
-                // onMouseOver={ () => console.log( parsedCommand.command ) }
+                // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
             />
             <line
                 x1={ parsedCommand.startHandle[ 0 ] }
@@ -42,12 +42,12 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
             <circle
                 data-name="endHandle"
                 data-descriptor={ fullDescriptor }
-                data-command={ parsedCommand.command }
+                data-command={ parsedCommand.parsedCommand.join( " " ) }
                 cx={ parsedCommand.endHandle[ 2 ] }
                 cy={ parsedCommand.endHandle[ 3 ] }
                 r="2"
                 fill="red"
-                // onMouseOver={ () => console.log( parsedCommand.command ) }
+                // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
             />
             <line
                 x1={ parsedCommand.endHandle[ 0 ] }

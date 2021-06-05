@@ -1,24 +1,31 @@
 import { useState } from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { activateShape, deactivateShape } from "../redux/shapesSlice";
 
-import PathParser from "../utilities/PathParser";
+import { Path } from "../utilities/PathParser";
 
 import Handle from "./Handle";
 
-export default function Shape( { descriptor, active } ) {
+export default function Shape( { descriptor, setActive } ) {
 
     const dispatch = useDispatch();
 
+    const active = useSelector( state => state.shapes ).activeShape === descriptor;
+
     const [ hover, toggleHover ] = useState( false );
 
-    function toggleActive() {
-        dispatch( active ? deactivateShape( descriptor ) : activateShape( descriptor ) );
+    function activate() {
+        dispatch( activateShape( descriptor ) );
+        setActive( shape );
     }
 
-    const parsedDescriptor = active && PathParser.parseDescriptor( descriptor );
-    console.log('parsedDescriptor: ', parsedDescriptor);
+    function deactivate() {
+        dispatch( deactivateShape() );
+        setActive( null );
+    }
+
+    const shape = new Path( descriptor );
 
     return <g>
         <path
@@ -28,13 +35,13 @@ export default function Shape( { descriptor, active } ) {
             fill="white"
             onMouseEnter={ () => toggleHover( true ) }
             onMouseLeave={ () => toggleHover( false ) }
-            onClick={ toggleActive }
+            onClick={ active ? deactivate : activate }
         />
-        { active && parsedDescriptor.map( ( parsedPoint, index ) => {
+        { active && shape.parsedCommands.map( ( parsedCommand, index ) => {
             return <Handle
                 key={ index }
                 fullDescriptor={ descriptor }
-                parsedCommand={ parsedPoint }
+                parsedCommand={ parsedCommand }
             />;
         } ) }
     </g>;

@@ -9,8 +9,6 @@ import styled from "styled-components";
 import ArtboardGrid from "./ArtboardGrid";
 import Shape from "./Shape";
 
-import PathParser from "../utilities/PathParser";
-
 const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
   style: {
     top: `${ offsetX }%`,
@@ -20,16 +18,14 @@ const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
   },
 } ) )`position: absolute; transform: translate( -50%, -50% );`;
 
-// const round = ( number, factor ) => factor ? Math.round( number / factor ) * factor : number;
-
-export default function Artboard() {
+export default function Artboard( { activePath, setActivePath } ) {
 
     const dispatch = useDispatch();
 
     const { width, height, zoom, offsetX, offsetY, displayGrid, /*snapToGrid, gridInterval*/ } = useSelector( state => state.artboard );
 
     const { activeShape, inactiveShapes } = useSelector( state => state.shapes );
-
+    
     const editMode = useSelector( state => state.editMode );
   
     const [ mouseDown, setMouseDown ] = useState( null );
@@ -48,30 +44,30 @@ export default function Artboard() {
         } ) );
       } else if ( mouseDown && editMode === "path" ) {
         if ( mouseDown.target.dataset.name === "point" ) {
-          dispatch( updateActiveShape( PathParser.adjustDescriptorPoint(
-            mouseDown.target.dataset.descriptor,
+          activePath.adjustDescriptorPoint(
             mouseDown.target.dataset.command,
             ( mouseMoveEvent.clientX - mouseDown.x ),
             ( mouseMoveEvent.clientY - mouseDown.y )
-          ) ) );
+          );
+          dispatch( updateActiveShape( activePath.toString() ) );
         } else if ( mouseDown.target.dataset.name === "startHandle" ) {
-          dispatch( updateActiveShape( PathParser.adjustStartHandlePoint(
-            mouseDown.target.dataset.descriptor,
+          activePath.adjustStartHandlePoint(
             mouseDown.target.dataset.command,
             ( mouseMoveEvent.clientX - mouseDown.x ),
             ( mouseMoveEvent.clientY - mouseDown.y )
-          ) ) );
+          );
+          dispatch( updateActiveShape( activePath.toString() ) );
         } else if ( mouseDown.target.dataset.name === "endHandle" ) {
-          dispatch( updateActiveShape( PathParser.adjustEndHandlePoint(
-            mouseDown.target.dataset.descriptor,
+          activePath.adjustEndHandlePoint(
             mouseDown.target.dataset.command,
             ( mouseMoveEvent.clientX - mouseDown.x ),
             ( mouseMoveEvent.clientY - mouseDown.y )
-          ) ) );
+          );
+          dispatch( updateActiveShape( activePath.toString() ) );
         };
       }
       if ( mouseDown ) setMouseDown( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY, target: mouseDown.target } );
-    }, [ editMode, mouseDown, offsetX, offsetY, dispatch ] );
+    }, [ editMode, mouseDown, dispatch, offsetX, offsetY, activePath ] );
   
     const handleZoom = useCallback( zoomEvent => {
       if ( editMode === "zoom" && zoomEvent.deltaY > 0 ) dispatch( zoomInWheel() );
@@ -105,8 +101,15 @@ export default function Artboard() {
           zoom={ zoom / 100 }
           viewBox={ `0 0 ${ width } ${ height }` }
       >
-          { activeShape && <Shape descriptor={ activeShape } active={ true } /> }
-          { inactiveShapes.map( ( shape, index ) => <Shape key={ index } descriptor={ shape } active={ false } /> ) }
+          { activeShape && <Shape
+            descriptor={ activeShape }
+            setActive={ setActivePath }
+          /> }
+          { inactiveShapes.map( ( shape, index ) => <Shape
+            key={ index }
+            descriptor={ shape }
+            setActive={ setActivePath }
+          /> ) }
       </StyledArtboard>
       { displayGrid && <ArtboardGrid /> }
     </>;
