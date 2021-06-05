@@ -18,6 +18,7 @@ export default function Shape( { descriptor, active } ) {
     }
 
     const parsedDescriptor = active && PathParser.parseDescriptor( descriptor );
+    console.log('parsedDescriptor: ', parsedDescriptor);
 
     return <g>
         <path

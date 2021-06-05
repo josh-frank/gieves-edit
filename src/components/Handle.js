@@ -13,8 +13,8 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
             data-name="point"
             data-descriptor={ fullDescriptor }
             data-command={ parsedCommand.command }
-            cx={ parsedCommand.absolute[ 0 ] }
-            cy={ parsedCommand.absolute[ 1 ] }
+            cx={ parsedCommand.point[ 0 ] }
+            cy={ parsedCommand.point[ 1 ] }
             r="2"
             fill="red"
             // onMouseOver={ () => console.log( parsedCommand.command ) }

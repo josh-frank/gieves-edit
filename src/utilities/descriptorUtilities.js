@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 
-const splitDescriptorByCommands = /\s(?=[achlmqstvz])/i;
-const splitCommandByParameters = /[\s,]/;
+// const splitDescriptorByCommands = /\s(?=[achlmqstvz])/i;
+// const splitCommandByParameters = /[\s,]/;
 // const validCoordinate = /(-?\.\d+)|(-?\d+(\.\d+)?)/ig;
 // const upToTwoValidCoordinates = /(-?\d+\.\d+\s*-?,?\.\d+)|(-?\.\d+\s*-?,?\.\d+)|(-?\d+(\.\d+)?,?\s*-?\d+(\.\d+)?)/ig;
 // const validFirstCommand = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))/ig;
@@ -17,11 +17,11 @@ const splitCommandByParameters = /[\s,]/;
 // const validArcCurveCommand = /a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}/ig;
 
 // const validCommand = /z|([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2})/ig;
-const isValidDescriptor = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))[\s,]?((([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}))[\s,]?)*z/i;
+// const isValidDescriptor = /^m\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?))[\s,]?((([hv]\s?((-?\.\d+)|(-?\d+(\.\d+)?)))|([ml]\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))|(s\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3})|(c\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){5})|(q\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){3}([\s,]?t\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)))*)|(a\s?((-?\.\d+)|(-?\d+(\.\d+)?))((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}[,\s]?[01][,\s]+[01][,\s]+((-?\.\d+)|(,?\s?-?\d+(\.\d+)?)){2}))[\s,]?)*z/i;
 
-function convertToRelative( descriptor ) {}
+// function convertToRelative( descriptor ) {}
 
-function convertToAbsolute( descriptor ) {}
+// function convertToAbsolute( descriptor ) {}
 
 function parseDescriptor( descriptor ) {
     const splitDescriptor = descriptor.split( splitDescriptorByCommands );
