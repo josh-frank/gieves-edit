@@ -33,7 +33,7 @@ function App() {
   </div>;
 
   return <>
-    <Menu activePath={ activePath } setActivePath={ setActivePath } />
+    <Menu activePath={ activePath } />
     <ZoomButtons />
     <Artboard activePath={ activePath } setActivePath={ setActivePath } />
     <ArtboardPanel />

@@ -197,14 +197,20 @@ export class Path {
     toString() { return this.rawCommands.flat().join( " " ); }
 
     absolute() {
-        return this.parsedCommands.map( parsedCommand => {
-            return `${ parsedCommand.parsedCommand[ 0 ].toUpperCase() } ` + parsedCommand.absoluteCommand.join( " " );
+        return this.parsedCommands.map( command => {
+            return `${ command.parsedCommand[ 0 ].toUpperCase() } ` + (
+                command.parsedCommand[ 0 ].toLowerCase() === "h" ? command.absoluteCommand.slice( 0, 1 ).join( " " ) : 
+                command.parsedCommand[ 0 ].toLowerCase() === "v" ? command.absoluteCommand.slice( 1 ).join( " " ) :
+                command.absoluteCommand.join( " " ) );
         } ).join( " " ) + " Z";
     }
 
     relative() {
-        return this.parsedCommands.map( parsedCommand => {
-            return `${ parsedCommand.parsedCommand[ 0 ].toLowerCase() } ` + parsedCommand.relativeCommand.join( " " );
+        return this.parsedCommands.map( command => {
+            return `${ command.parsedCommand[ 0 ].toLowerCase() } ` + (
+                command.parsedCommand[ 0 ].toLowerCase() === "h" ? command.relativeCommand.slice( 0, 1 ).join( " " ) : 
+                command.parsedCommand[ 0 ].toLowerCase() === "v" ? command.relativeCommand.slice( 1 ).join( " " ) :
+                command.relativeCommand.join( " " ) );
         } ).join( " " ) + " z";
     }
 

@@ -82,7 +82,7 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval } ) =
     </button>
 </div>;
 
-export default function Menu( { activePath, setActivePath } ) {
+export default function Menu( { activePath } ) {
 
     const dispatch = useDispatch();
 
