@@ -2,8 +2,11 @@ import { useSelector } from "react-redux";
 
 function gridLineSpacing( range, unit ) {
   return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].map( i => i * unit );
-  // return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].slice( 1, Math.floor( range / unit ) ).map( i => i * unit );
 }
+
+// function evenlySpacedGridLines( range, numberOfLines ) {
+//   return [ ...Array( numberOfLines ).keys() ].map( i => i * Math.ceil( range / numberOfLines ) );
+// }
 
 export default function ArtboardGrid() {
 
@@ -61,6 +64,7 @@ export default function ArtboardGrid() {
   return <g
     transform={ `translate( ${ offsetY.toFixed( 2 ) } ${ offsetX.toFixed( 2 ) } ) scale( ${ zoom / 100 } ${ zoom / 100 } )` }
   >
+    {/* <rect x="0" y="0" width={ width } height={ height } fill="rgba( 255, 250, 245, 1 )" /> */}
     <HorizontalLines />
     <VerticalLines />
   </g>;

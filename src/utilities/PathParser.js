@@ -164,8 +164,8 @@ export class PathCommand {
                     this.absoluteCommand[ 1 ] - this.absolutePrevious[ 1 ]
                 ].concat( this.relativeCommand );
                 this.startHandle = [
-                    this.absoluteNext[ 0 ],
-                    this.absoluteNext[ 1 ],
+                    this.absolutePrevious[ 0 ],
+                    this.absolutePrevious[ 1 ],
                     this.absolutePrevious[ 0 ] + this.relativeCommand[ 0 ],
                     this.absolutePrevious[ 1 ] + this.relativeCommand[ 1 ]
                 ];
@@ -178,8 +178,8 @@ export class PathCommand {
                     this.absoluteCommand[ 1 ] - this.absolutePrevious[ 1 ]
                 ].concat( this.relativeCommand );
                 this.startHandle = [
-                    this.absoluteNext[ 0 ],
-                    this.absoluteNext[ 1 ],
+                    this.absolutePrevious[ 0 ],
+                    this.absolutePrevious[ 1 ],
                     this.absolutePrevious[ 0 ] + this.relativeCommand[ 0 ],
                     this.absolutePrevious[ 1 ] + this.relativeCommand[ 1 ]
                 ];
@@ -267,6 +267,31 @@ export class PathCommand {
         }
     }
 
+    quadPolyLine() {
+        const polyLineCoordinates = [];
+        let currentNode = this;
+        if ( this.commandLetter.toLowerCase() !== "q" ) return polyLineCoordinates;
+        let start = [
+            currentNode.absolutePrevious[ 0 ] + currentNode.relativeCommand[ 0 ],
+            currentNode.absolutePrevious[ 1 ] + currentNode.relativeCommand[ 1 ]
+        ];
+        while ( currentNode.next && currentNode.next.commandLetter.toLowerCase() === "t" ) {
+            const distance = [
+                currentNode.absoluteCommand[ currentNode.absoluteCommand.length - 2 ] - start[ 0 ],
+                currentNode.absoluteCommand[ currentNode.absoluteCommand.length - 1 ] - start[ 1 ]
+            ];
+            const end = [
+                currentNode.absoluteCommand[ currentNode.absoluteCommand.length - 2 ] + distance[ 0 ],
+                currentNode.absoluteCommand[ currentNode.absoluteCommand.length - 1 ] + distance[ 1 ]
+            ];
+            polyLineCoordinates.push( [ start, end ] );
+            currentNode = currentNode.next;
+            start = end;
+        }
+        polyLineCoordinates.push( currentNode.absoluteCommand.slice( currentNode.absoluteCommand.length - 2 ) );
+        return polyLineCoordinates;
+    }
+
 }
 
 export class Path {
@@ -276,7 +301,7 @@ export class Path {
         this.parse( descriptor );
     }
 
-    toString( relative ) { return relative ? this.relative() : this.absolute(); }
+    toString( absolute ) { return absolute ? this.absolute() : this.relative(); }
 
     absolute() {
         return this.parsedCommands.map( command => command.absolute().join( " " ) ).join( " " ) + " Z";

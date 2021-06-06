@@ -13,6 +13,7 @@ import { Path } from "../utilities/PathParser";
 const ArtboardFrame = styled.rect.attrs( ( { zoom } ) => ( {
   style: {
     outline: `${ zoom / 100 }px solid #999999`,
+    // boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
   },
 } ) )`position: absolute; top: 0; left: 0;`;
 

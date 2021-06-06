@@ -1,12 +1,12 @@
 export default function Handle( { parsedCommand } ) {
 
-    // const QuadPolyline = () => {
-    //     return <polyline
-    //         points={ parsedCommand.quadPolyLine.join( " " ) }
-    //         fill="none"
-    //         stroke="red"
-    //     />;
-    // };
+    const QuadPolyline = ( { parsedCommand } ) => {
+        return parsedCommand.commandLetter.toLowerCase() === "q" && <polyline
+            points={ parsedCommand.quadPolyLine().join( " " ) }
+            fill="none"
+            stroke="red"
+        />;
+    };
 
     return <g>
         <circle
@@ -54,6 +54,7 @@ export default function Handle( { parsedCommand } ) {
                 stroke="red"
             />
         </> }
+        { <QuadPolyline parsedCommand={ parsedCommand } /> }
     </g>;
 
 }
