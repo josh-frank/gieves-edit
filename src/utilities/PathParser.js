@@ -301,7 +301,7 @@ export class Path {
         this.parse( descriptor );
     }
 
-    toString( absolute ) { return absolute ? this.absolute() : this.relative(); }
+    toString( relative ) { return relative ? this.relative() : this.absolute(); }
 
     absolute() {
         return this.parsedCommands.map( command => command.absolute().join( " " ) ).join( " " ) + " Z";
