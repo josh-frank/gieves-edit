@@ -35,7 +35,7 @@ export default function ArtboardPanel() {
             case "height":
                 dispatch( setArtboardDimensions( { height: activeInput.value } ) );
                 break;
-            case "zoom":
+            case "pan":
                 dispatch( setZoom( roundAndClamp( activeInput.value ) ) );
                 break;
             case "gridInterval":
@@ -92,12 +92,12 @@ export default function ArtboardPanel() {
         🔎
         <StyledInput
             type="number"
-            name="zoom"
-            value={ activeInput.name === "zoom" ? activeInput.value : zoom }
-            onFocus={ () => setActiveInput( { name: "zoom", value: zoom } ) }
-            onChange={ changeEvent => setActiveInput( { name: "zoom", value: parseInt( changeEvent.target.value ) || 1 } ) }
+            name="pan"
+            value={ activeInput.name === "pan" ? activeInput.value : zoom }
+            onFocus={ () => setActiveInput( { name: "pan", value: zoom } ) }
+            onChange={ changeEvent => setActiveInput( { name: "pan", value: parseInt( changeEvent.target.value ) || 1 } ) }
             onBlur={ dispatchinputStateChange }
-            characterLength={ ( activeInput.name === "zoom" ? activeInput.value : zoom ).toString().length }
+            characterLength={ ( activeInput.name === "pan" ? activeInput.value : zoom ).toString().length }
         />
         %
         { " • " }

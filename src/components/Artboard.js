@@ -16,15 +16,6 @@ const ArtboardFrame = styled.rect.attrs( ( { zoom } ) => ( {
   },
 } ) )`position: absolute; top: 0; left: 0;`;
 
-// const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
-//   style: {
-//     top: `${ offsetX }%`,
-//     left: `${ offsetY }%`,
-//     outline: `${ zoom }px solid #999999`,
-//     boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
-//   },
-// } ) )`position: absolute; transform: translate( -50%, -50% );`;
-
 export default function Artboard() {
 
     const dispatch = useDispatch();
@@ -34,7 +25,8 @@ export default function Artboard() {
     const editMode = useSelector( state => state.editMode );
 
     const [ mouseDown, setMouseDown ] = useState( null );
-    
+
+    const [ clientDimensions, setClientDimensions ] = useState( { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight } );
     
     const handleMouseDown = useCallback( mouseDownEvent => {
       setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY, target: mouseDownEvent.target } );
@@ -43,7 +35,7 @@ export default function Artboard() {
     const handleMouseUp = useCallback( () => setMouseDown( null ), [] );
     
     const handleMouseMove = useCallback( mouseMoveEvent => {
-      if ( mouseDown && editMode === "zoom" ) {
+      if ( mouseDown && editMode === "pan" ) {
         dispatch( setArtboardOffset( {
           offsetX: offsetX + ( ( mouseMoveEvent.clientY - mouseDown.y ) ),
           offsetY: offsetY + ( ( mouseMoveEvent.clientX - mouseDown.x ) ),
@@ -77,32 +69,38 @@ export default function Artboard() {
     }, [ editMode, mouseDown, dispatch, offsetX, offsetY, zoom, activeShape ] );
   
     const handleZoom = useCallback( zoomEvent => {
-      if ( editMode === "zoom" && zoomEvent.deltaY > 0 ) dispatch( zoomInWheel() );
-      if ( editMode === "zoom" && zoomEvent.deltaY < 0 ) dispatch( zoomOutWheel() );
+      if ( editMode === "pan" && zoomEvent.deltaY > 0 ) dispatch( zoomInWheel() );
+      if ( editMode === "pan" && zoomEvent.deltaY < 0 ) dispatch( zoomOutWheel() );
     }, [ editMode, dispatch ] );
+  
+    const handleResize = useCallback( resizeEvent => {
+      setClientDimensions( { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight } );
+    }, [] );
   
     useEffect( () => {
       window.addEventListener( "wheel", handleZoom );
       window.addEventListener( "mousedown", handleMouseDown );
       window.addEventListener( "mouseup", handleMouseUp );
       window.addEventListener( "mousemove", handleMouseMove );
+      window.addEventListener( "resize", handleResize );
       return () => {
         window.removeEventListener( "wheel", handleZoom );
         window.removeEventListener( "mousedown", handleMouseDown );
         window.removeEventListener( "mouseup", handleMouseUp );
         window.removeEventListener( "mousemove", handleMouseMove );
+        window.removeEventListener( "resize", handleResize );
       };
-    }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove ] );
+    }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove, handleResize ] );
 
     return <>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         className="artboard"
-        width={ document.documentElement.clientWidth }
-        height={ document.documentElement.clientHeight }
+        width={ clientDimensions.width }
+        height={ clientDimensions.height }
         zoom={ zoom / 100 }
-        viewBox={ `0 0 ${ document.documentElement.clientWidth } ${ document.documentElement.clientHeight }` }
+        viewBox={ `0 0 ${ clientDimensions.width } ${ clientDimensions.height }` }
       >
         { displayGrid && <ArtboardGrid /> }
         <ArtboardFrame

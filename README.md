@@ -16,9 +16,9 @@ Current paths can be viewed in the artboard. Paths can be de/activated with a cl
 
 Use the Mode panel to select a mode.
 
-#### 🔍 Zoom
+#### 🎥 Pan
 
-In Zoom mode, click-dragging the mouse will pan the artboard across the screen, and scrolling will zoom in/out according to wheel direction.
+In Pan mode, click-dragging the mouse will pan the artboard across the screen, and scrolling will zoom in/out according to wheel direction.
 
 #### 👆 Path
 

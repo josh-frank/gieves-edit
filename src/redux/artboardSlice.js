@@ -6,8 +6,8 @@ const artboardSlice = createSlice( {
         width: 1000,
         height: 800,
         zoom: 100,
-        offsetX: 0.0,
-        offsetY: 0.0,
+        offsetX: ( document.documentElement.clientHeight - 800 ) / 2,
+        offsetY: ( document.documentElement.clientWidth - 1000 ) / 2,
         displayGrid: true,
         gridInterval: 10
     },

@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const modeSlice = createSlice( {
     name: "editMode",
-    initialState: "zoom",
+    initialState: "pan",
     reducers: {
-        zoomMode() { return "zoom"; },
+        panMode() { return "pan"; },
         pathMode() { return "path"; }
     }
 } );
 
-export const { zoomMode, pathMode } = modeSlice.actions;
+export const { panMode, pathMode } = modeSlice.actions;
 export default modeSlice.reducer;

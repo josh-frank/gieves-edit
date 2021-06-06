@@ -14,7 +14,7 @@ export default function Handle( { parsedCommand } ) {
             data-command-index={ parsedCommand.index }
             cx={ parsedCommand.absoluteNext[ 0 ] }
             cy={ parsedCommand.absoluteNext[ 1 ] }
-            r="3"
+            r="4"
             fill="red"
             // onMouseOver={ () => console.log( parsedCommand.commandLetter ) }
         />
@@ -24,7 +24,7 @@ export default function Handle( { parsedCommand } ) {
                 data-command-index={ parsedCommand.index }
                 cx={ parsedCommand.startHandle[ 2 ] }
                 cy={ parsedCommand.startHandle[ 3 ] }
-                r="3"
+                r="4"
                 fill="red"
                 // onMouseOver={ () => console.log( parsedCommand.commandLetter ) }
             />
@@ -42,7 +42,7 @@ export default function Handle( { parsedCommand } ) {
                 data-command-index={ parsedCommand.index }
                 cx={ parsedCommand.endHandle[ 2 ] }
                 cy={ parsedCommand.endHandle[ 3 ] }
-                r="3"
+                r="4"
                 fill="red"
                 // onMouseOver={ () => console.log( parsedCommand.commandLetter ) }
             />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { zoomMode, pathMode } from '../redux/modeSlice';
+import { panMode, pathMode } from '../redux/modeSlice';
 import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
 import { Path, PathParser } from "../utilities/PathParser";
@@ -9,10 +9,10 @@ import { Path, PathParser } from "../utilities/PathParser";
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     <div className="menu-header">Mode</div>
     <button
-        disabled={ editMode === "zoom" }
-        onClick={ () => dispatch( zoomMode() ) }
+        disabled={ editMode === "pan" }
+        onClick={ () => dispatch( panMode() ) }
     >
-        🔎 <b>Zoom</b>
+        🎥 <b>Pan</b>
     </button>
     <button
         disabled={ editMode === "path" }
