@@ -7,7 +7,7 @@ import { Path } from "../utilities/PathParser";
 
 import Handle from "./Handle";
 
-export default function Shape( { descriptor, setActive } ) {
+export default function Shape( { descriptor } ) {
 
     const dispatch = useDispatch();
 
@@ -15,19 +15,21 @@ export default function Shape( { descriptor, setActive } ) {
 
     const [ hover, toggleHover ] = useState( false );
 
+    const { zoom, offsetX, offsetY } = useSelector( state => state.artboard );
+
+    const shapePath = active && new Path( descriptor );
+
     function activate() {
         dispatch( activateShape( descriptor ) );
-        setActive( shape );
     }
 
     function deactivate() {
         dispatch( deactivateShape() );
-        setActive( null );
     }
 
-    const shape = new Path( descriptor );
-
-    return <g>
+    return <g
+        transform={ `translate( ${ offsetY.toFixed( 2 ) } ${ offsetX.toFixed( 2 ) } ) scale( ${ zoom / 100 } ${ zoom / 100 } )` }
+    >
         <path
             d={ descriptor }
             stroke={ hover ? "green" : active ? "blue" : "black" }
@@ -37,10 +39,9 @@ export default function Shape( { descriptor, setActive } ) {
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ active ? deactivate : activate }
         />
-        { active && shape.parsedCommands.map( ( parsedCommand, index ) => {
+        { active && shapePath.parsedCommands.map( parsedCommand => {
             return <Handle
-                key={ index }
-                fullDescriptor={ descriptor }
+                key={ parsedCommand.index }
                 parsedCommand={ parsedCommand }
             />;
         } ) }

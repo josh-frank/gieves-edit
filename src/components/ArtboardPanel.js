@@ -24,10 +24,10 @@ export default function ArtboardPanel() {
     function dispatchinputStateChange() {
         switch ( activeInput.name ) {
             case "offsetX":
-                dispatch( setArtboardOffset( { offsetX: activeInput.value + 50 } ) );
+                dispatch( setArtboardOffset( { offsetX: activeInput.value } ) );
                 break;
             case "offsetY":
-                dispatch( setArtboardOffset( { offsetY: activeInput.value + 50 } ) );
+                dispatch( setArtboardOffset( { offsetY: activeInput.value } ) );
                 break;
             case "width":
                 dispatch( setArtboardDimensions( { width: activeInput.value } ) );
@@ -51,21 +51,21 @@ export default function ArtboardPanel() {
         <StyledInput
             type="number"
             name="offsetX"
-            value={ activeInput.name === "offsetX" ? activeInput.value : Math.round( offsetX - 50 ) }
-            onFocus={ () => setActiveInput( { name: "offsetX", value: Math.round( offsetX - 50 ) } ) }
+            value={ activeInput.name === "offsetX" ? activeInput.value : Math.round( offsetX ) }
+            onFocus={ () => setActiveInput( { name: "offsetX", value: Math.round( offsetX ) } ) }
             onChange={ changeEvent => setActiveInput( { name: "offsetX", value: parseInt( changeEvent.target.value ) || 0 } ) }
             onBlur={ dispatchinputStateChange }
-            characterLength={ ( activeInput.name === "offsetX" ? activeInput.value : Math.round( offsetX - 50 ) ).toString().length }
+            characterLength={ ( activeInput.name === "offsetX" ? activeInput.value : Math.round( offsetX ) ).toString().length }
         />
         ,
         <StyledInput
             type="number"
             name="offsetY"
-            value={ activeInput.name === "offsetY" ? activeInput.value : Math.round( offsetY - 50 ) }
-            onFocus={ () => setActiveInput( { name: "offsetY", value: Math.round( offsetY - 50 ) } ) }
+            value={ activeInput.name === "offsetY" ? activeInput.value : Math.round( offsetY ) }
+            onFocus={ () => setActiveInput( { name: "offsetY", value: Math.round( offsetY ) } ) }
             onChange={ changeEvent => setActiveInput( { name: "offsetY", value: parseInt( changeEvent.target.value ) || 0 } ) }
             onBlur={ dispatchinputStateChange }
-            characterLength={ ( activeInput.name === "offsetY" ? activeInput.value : Math.round( offsetY - 50 ) ).toString().length }
+            characterLength={ ( activeInput.name === "offsetY" ? activeInput.value : Math.round( offsetY ) ).toString().length }
         />
         { " • " }
         📏

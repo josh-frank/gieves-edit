@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { zoomMode, pathMode } from '../redux/modeSlice';
 import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
-import { PathParser } from "../utilities/PathParser";
+import { Path, PathParser } from "../utilities/PathParser";
 
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     <div className="menu-header">Mode</div>
@@ -57,17 +57,21 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch }
     </form>
 </div>;
 
-const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
+const TransformPanel = ( { activePath, setActivePath, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
     <div className="menu-header">Transform</div>
     <button
         disabled={ !activeShape }
-        onClick={ () => dispatch( updateActiveShape( activePath.absolute() ) ) }
+        onClick={ () => {
+            dispatch( updateActiveShape( activePath.absolute() ) );
+        } }
     >
         𝙈 <b>Convert path to absolute</b>
     </button>
     <button
         disabled={ !activeShape }
-        onClick={ () => dispatch( updateActiveShape( activePath.relative() ) ) }
+        onClick={ () => {
+            dispatch( updateActiveShape( activePath.relative() ) )
+        } }
     >
         𝙢 <b>Convert path to relative</b>
     </button>
@@ -82,13 +86,15 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval } ) =
     </button>
 </div>;
 
-export default function Menu( { activePath } ) {
+export default function Menu() {
 
     const dispatch = useDispatch();
 
     const { gridInterval } = useSelector( state => state.artboard );
 
     const { activeShape } = useSelector( state => state.shapes );
+
+    const activePath = activeShape && new Path( activeShape );
 
     const editMode = useSelector( state => state.editMode );
 

@@ -52,6 +52,12 @@ body, html {
   z-index: 1000;
 }
 
+.artboard {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .artboard-panel {
   position: fixed;
   vertical-align: center;

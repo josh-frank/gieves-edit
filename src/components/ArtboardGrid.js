@@ -1,18 +1,9 @@
 import { useSelector } from "react-redux";
 
-import styled from "styled-components";
-
 function gridLineSpacing( range, unit ) {
   return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].map( i => i * unit );
   // return [ ...Array( Math.floor( range / unit ) + 1 ).keys() ].slice( 1, Math.floor( range / unit ) ).map( i => i * unit );
 }
-
-const StyledGrid = styled.svg.attrs( ( { offsetX, offsetY } ) => ( {
-    style: {
-      top: `${ offsetX }%`,
-      left: `${ offsetY }%`,
-    },
-  } ) )`position: absolute; transform: translate( -50%, -50% ); z-index: -1000;`;
 
 export default function ArtboardGrid() {
 
@@ -67,17 +58,11 @@ export default function ArtboardGrid() {
     </g>;
   } );
 
-  return <StyledGrid
-    x={ 0 }
-    y={ 0 }
-    width={ width * zoom / 100 }
-    height={ height * zoom / 100 }
-    offsetX={ offsetX }
-    offsetY={ offsetY }
-    viewBox={ `0 0 ${ width } ${ height }` }
+  return <g
+    transform={ `translate( ${ offsetY.toFixed( 2 ) } ${ offsetX.toFixed( 2 ) } ) scale( ${ zoom / 100 } ${ zoom / 100 } )` }
   >
     <HorizontalLines />
     <VerticalLines />
-  </StyledGrid>;
+  </g>;
 
 }

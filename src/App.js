@@ -1,6 +1,6 @@
 import './App.css';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { addShape } from './redux/shapesSlice';
@@ -23,8 +23,6 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const [ activePath, setActivePath ] = useState( null );
-
   useEffect( () => testShapes.forEach( shape => dispatch( addShape( shape ) ) ), [ dispatch ] );
 
   const ZoomButtons = () => <div className="zoom-buttons">
@@ -33,9 +31,9 @@ function App() {
   </div>;
 
   return <>
-    <Menu activePath={ activePath } />
+    <Menu />
     <ZoomButtons />
-    <Artboard activePath={ activePath } setActivePath={ setActivePath } />
+    <Artboard />
     <ArtboardPanel />
   </>;
 

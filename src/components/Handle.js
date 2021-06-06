@@ -1,4 +1,4 @@
-export default function Handle( { fullDescriptor, parsedCommand } ) {
+export default function Handle( { parsedCommand } ) {
 
     // const QuadPolyline = () => {
     //     return <polyline
@@ -11,24 +11,22 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
     return <g>
         <circle
             data-name="point"
-            data-descriptor={ fullDescriptor }
-            data-command={ parsedCommand.parsedCommand.join( " " ) }
+            data-command-index={ parsedCommand.index }
             cx={ parsedCommand.absoluteNext[ 0 ] }
             cy={ parsedCommand.absoluteNext[ 1 ] }
             r="3"
             fill="red"
-            // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
+            // onMouseOver={ () => console.log( parsedCommand.commandLetter ) }
         />
         { parsedCommand.startHandle && <>
             <circle
                 data-name="startHandle"
-                data-descriptor={ fullDescriptor }
-                data-command={ parsedCommand.parsedCommand.join( " " ) }
+                data-command-index={ parsedCommand.index }
                 cx={ parsedCommand.startHandle[ 2 ] }
                 cy={ parsedCommand.startHandle[ 3 ] }
                 r="3"
                 fill="red"
-                // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
+                // onMouseOver={ () => console.log( parsedCommand.commandLetter ) }
             />
             <line
                 x1={ parsedCommand.startHandle[ 0 ] }
@@ -41,13 +39,12 @@ export default function Handle( { fullDescriptor, parsedCommand } ) {
         { parsedCommand.endHandle && <>
             <circle
                 data-name="endHandle"
-                data-descriptor={ fullDescriptor }
-                data-command={ parsedCommand.parsedCommand.join( " " ) }
+                data-command-index={ parsedCommand.index }
                 cx={ parsedCommand.endHandle[ 2 ] }
                 cy={ parsedCommand.endHandle[ 3 ] }
                 r="3"
                 fill="red"
-                // onMouseOver={ () => console.log( parsedCommand.parsedCommand.join( " " ) ) }
+                // onMouseOver={ () => console.log( parsedCommand.commandLetter ) }
             />
             <line
                 x1={ parsedCommand.endHandle[ 0 ] }

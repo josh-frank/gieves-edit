@@ -8,66 +8,73 @@ import styled from "styled-components";
 
 import ArtboardGrid from "./ArtboardGrid";
 import Shape from "./Shape";
+import { Path } from "../utilities/PathParser";
 
-const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
+const ArtboardFrame = styled.rect.attrs( ( { zoom } ) => ( {
   style: {
-    top: `${ offsetX }%`,
-    left: `${ offsetY }%`,
-    outline: `${ zoom }px solid #999999`,
-    boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
+    outline: `${ zoom / 100 }px solid #999999`,
   },
-} ) )`position: absolute; transform: translate( -50%, -50% );`;
+} ) )`position: absolute; top: 0; left: 0;`;
 
-export default function Artboard( { activePath, setActivePath } ) {
+// const StyledArtboard = styled.svg.attrs( ( { offsetX, offsetY, zoom } ) => ( {
+//   style: {
+//     top: `${ offsetX }%`,
+//     left: `${ offsetY }%`,
+//     outline: `${ zoom }px solid #999999`,
+//     boxShadow: `${ zoom * 5 }px ${ zoom * 5 }px ${ zoom * 2 }px ${ zoom * 2 }px #999999`
+//   },
+// } ) )`position: absolute; transform: translate( -50%, -50% );`;
+
+export default function Artboard() {
 
     const dispatch = useDispatch();
 
-    const { width, height, zoom, offsetX, offsetY, displayGrid, /*snapToGrid, gridInterval*/ } = useSelector( state => state.artboard );
-
+    const { width, height, zoom, offsetX, offsetY, displayGrid } = useSelector( state => state.artboard );
     const { activeShape, inactiveShapes } = useSelector( state => state.shapes );
-    
     const editMode = useSelector( state => state.editMode );
-  
+
     const [ mouseDown, setMouseDown ] = useState( null );
-  
+    
+    
     const handleMouseDown = useCallback( mouseDownEvent => {
       setMouseDown( { x: mouseDownEvent.clientX, y: mouseDownEvent.clientY, target: mouseDownEvent.target } );
     }, [] );
-  
+    
     const handleMouseUp = useCallback( () => setMouseDown( null ), [] );
-  
+    
     const handleMouseMove = useCallback( mouseMoveEvent => {
       if ( mouseDown && editMode === "zoom" ) {
         dispatch( setArtboardOffset( {
-          offsetX: offsetX + ( ( mouseMoveEvent.clientY - mouseDown.y ) / document.documentElement.clientHeight * 100 ),
-          offsetY: offsetY + ( ( mouseMoveEvent.clientX - mouseDown.x ) / document.documentElement.clientWidth * 100 ),
+          offsetX: offsetX + ( ( mouseMoveEvent.clientY - mouseDown.y ) ),
+          offsetY: offsetY + ( ( mouseMoveEvent.clientX - mouseDown.x ) ),
         } ) );
       } else if ( mouseDown && editMode === "path" ) {
+        const activePath = activeShape && new Path( activeShape );
         if ( mouseDown.target.dataset.name === "point" ) {
           activePath.adjustDescriptorPoint(
-            mouseDown.target.dataset.command,
-            ( mouseMoveEvent.clientX - mouseDown.x ),
-            ( mouseMoveEvent.clientY - mouseDown.y )
+            mouseDown.target.dataset.commandIndex,
+            ( mouseMoveEvent.clientX - offsetY ) / zoom * 100,
+            ( mouseMoveEvent.clientY - offsetX ) / zoom * 100
           );
           dispatch( updateActiveShape( activePath.toString() ) );
         } else if ( mouseDown.target.dataset.name === "startHandle" ) {
           activePath.adjustStartHandlePoint(
-            mouseDown.target.dataset.command,
-            ( mouseMoveEvent.clientX - mouseDown.x ),
-            ( mouseMoveEvent.clientY - mouseDown.y )
+            mouseDown.target.dataset.commandIndex,
+            ( mouseMoveEvent.clientX - offsetY ) / zoom * 100,
+            ( mouseMoveEvent.clientY - offsetX ) / zoom * 100
           );
           dispatch( updateActiveShape( activePath.toString() ) );
         } else if ( mouseDown.target.dataset.name === "endHandle" ) {
           activePath.adjustEndHandlePoint(
-            mouseDown.target.dataset.command,
-            ( mouseMoveEvent.clientX - mouseDown.x ),
-            ( mouseMoveEvent.clientY - mouseDown.y )
+            mouseDown.target.dataset.commandIndex,
+            ( mouseMoveEvent.clientX - offsetY ) / zoom * 100,
+            ( mouseMoveEvent.clientY - offsetX ) / zoom * 100
           );
           dispatch( updateActiveShape( activePath.toString() ) );
         };
       }
       if ( mouseDown ) setMouseDown( { x: mouseMoveEvent.clientX, y: mouseMoveEvent.clientY, target: mouseDown.target } );
-    }, [ editMode, mouseDown, dispatch, offsetX, offsetY, activePath ] );
+    }, [ editMode, mouseDown, dispatch, offsetX, offsetY, zoom, activeShape ] );
   
     const handleZoom = useCallback( zoomEvent => {
       if ( editMode === "zoom" && zoomEvent.deltaY > 0 ) dispatch( zoomInWheel() );
@@ -88,30 +95,32 @@ export default function Artboard( { activePath, setActivePath } ) {
     }, [ handleZoom, handleMouseDown, handleMouseUp, handleMouseMove ] );
 
     return <>
-      <StyledArtboard
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          className="artboard"
-          x={ 0 }
-          y={ 0 }
-          width={ width * zoom / 100 }
-          height={ height * zoom / 100 }
-          offsetX={ offsetX }
-          offsetY={ offsetY }
-          zoom={ zoom / 100 }
-          viewBox={ `0 0 ${ width } ${ height }` }
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        className="artboard"
+        width={ document.documentElement.clientWidth }
+        height={ document.documentElement.clientHeight }
+        zoom={ zoom / 100 }
+        viewBox={ `0 0 ${ document.documentElement.clientWidth } ${ document.documentElement.clientHeight }` }
       >
-          { activeShape && <Shape
-            descriptor={ activeShape }
-            setActive={ setActivePath }
-          /> }
-          { inactiveShapes.map( ( shape, index ) => <Shape
-            key={ index }
-            descriptor={ shape }
-            setActive={ setActivePath }
-          /> ) }
-      </StyledArtboard>
-      { displayGrid && <ArtboardGrid /> }
+        { displayGrid && <ArtboardGrid /> }
+        <ArtboardFrame
+          className="artboard-frame"
+          width={ width }
+          height={ height }
+          zoom={ zoom }
+          transform={ `translate( ${ offsetY.toFixed( 2 ) } ${ offsetX.toFixed( 2 ) } ) scale( ${ zoom / 100 } ${ zoom / 100 } )` }
+          fill="none"
+        />
+        { activeShape && <Shape
+          descriptor={ activeShape }
+        /> }
+        { inactiveShapes.map( ( shape, index ) => <Shape
+          key={ index }
+          descriptor={ shape }
+        /> ) }
+      </svg>
     </>;
 
 }

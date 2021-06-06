@@ -90,25 +90,34 @@ export class PathParser {
 
 export class PathCommand {
 
-    constructor( parsedCommand, absolutePrevious ) {
-        this.parsedCommand = parsedCommand;
+    constructor( parsedCommand, absolutePrevious, index ) {
+        this.index = index;
+        this.commandLetter = parsedCommand[ 0 ];
         this.absolutePrevious = absolutePrevious.map( coordinate => round( coordinate, 1 ) );
-        this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( absolutePrevious, parsedCommand ).map( coordinate => round( coordinate, 1 ) );
+        this.parse( parsedCommand );
+    }
+
+    setNext( nextPathCommand ) {
+        this.next = nextPathCommand;
+    }
+
+    parse( parsedCommand ) {
+        this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( this.absolutePrevious, parsedCommand ).map( coordinate => round( coordinate, 1 ) );
         this.absoluteCommand = [ ...this.absoluteNext ];
-        this.relativeCommand = [ round( this.absoluteNext[ 0 ] - absolutePrevious[ 0 ], 1 ), round( this.absoluteNext[ 1 ] - absolutePrevious[ 1 ], 1 ) ]
+        this.relativeCommand = [ round( this.absoluteNext[ 0 ] - this.absolutePrevious[ 0 ], 1 ), round( this.absoluteNext[ 1 ] - this.absolutePrevious[ 1 ], 1 ) ]
         switch( parsedCommand[ 0 ] ) {
             case "c":
                 this.absoluteCommand = [
-                    absolutePrevious[ 0 ] + parsedCommand[ 1 ],
-                    absolutePrevious[ 1 ] + parsedCommand[ 2 ],
-                    absolutePrevious[ 0 ] + parsedCommand[ 3 ],
-                    absolutePrevious[ 1 ] + parsedCommand[ 4 ]
+                    this.absolutePrevious[ 0 ] + parsedCommand[ 1 ],
+                    this.absolutePrevious[ 1 ] + parsedCommand[ 2 ],
+                    this.absolutePrevious[ 0 ] + parsedCommand[ 3 ],
+                    this.absolutePrevious[ 1 ] + parsedCommand[ 4 ]
                 ].concat( this.absoluteCommand );
                 this.relativeCommand = [
-                    this.absoluteCommand[ 0 ] - absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 1 ] - absolutePrevious[ 1 ],
-                    this.absoluteCommand[ 2 ] - absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 3 ] - absolutePrevious[ 1 ],
+                    this.absoluteCommand[ 0 ] - this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 1 ] - this.absolutePrevious[ 1 ],
+                    this.absoluteCommand[ 2 ] - this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 3 ] - this.absolutePrevious[ 1 ],
                 ].concat( this.relativeCommand );
                 this.startHandle = [
                     this.absolutePrevious[ 0 ],
@@ -126,10 +135,10 @@ export class PathCommand {
             case "C":
                 this.absoluteCommand = parsedCommand.slice( 1 );
                 this.relativeCommand = [
-                    this.absoluteCommand[ 0 ] - absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 1 ] - absolutePrevious[ 1 ],
-                    this.absoluteCommand[ 2 ] - absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 3 ] - absolutePrevious[ 1 ]
+                    this.absoluteCommand[ 0 ] - this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 1 ] - this.absolutePrevious[ 1 ],
+                    this.absoluteCommand[ 2 ] - this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 3 ] - this.absolutePrevious[ 1 ]
                 ].concat( this.relativeCommand );
                 this.startHandle = [
                     this.absolutePrevious[ 0 ],
@@ -147,12 +156,12 @@ export class PathCommand {
             case "s":
             case "q":
                 this.absoluteCommand = [
-                    absolutePrevious[ 0 ] + parsedCommand[ 1 ],
-                    absolutePrevious[ 1 ] + parsedCommand[ 2 ],
+                    this.absolutePrevious[ 0 ] + parsedCommand[ 1 ],
+                    this.absolutePrevious[ 1 ] + parsedCommand[ 2 ],
                 ].concat( this.absoluteCommand );
                 this.relativeCommand = [
-                    this.absoluteCommand[ 0 ] - absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 1 ] - absolutePrevious[ 1 ]
+                    this.absoluteCommand[ 0 ] - this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 1 ] - this.absolutePrevious[ 1 ]
                 ].concat( this.relativeCommand );
                 this.startHandle = [
                     this.absoluteNext[ 0 ],
@@ -165,8 +174,8 @@ export class PathCommand {
             case "Q":
                 this.absoluteCommand = parsedCommand.slice( 1 );
                 this.relativeCommand = [
-                    this.absoluteCommand[ 0 ] - absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 1 ] - absolutePrevious[ 1 ]
+                    this.absoluteCommand[ 0 ] - this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 1 ] - this.absolutePrevious[ 1 ]
                 ].concat( this.relativeCommand );
                 this.startHandle = [
                     this.absoluteNext[ 0 ],
@@ -184,107 +193,129 @@ export class PathCommand {
         }
     }
 
+    absolute( gridInterval ) {
+        const snappedCommand = gridInterval && this.absoluteCommand.map( parameter => round( parameter / gridInterval, 1 ) * gridInterval );
+        return [ this.commandLetter.toUpperCase(), ...(
+            this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.absoluteCommand ).slice( 0, 1 ) : 
+            this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.absoluteCommand ).slice( 1 ) :
+            this.commandLetter.toLowerCase() === "a" ? [ ...this.absoluteCommand.slice( 0, 6 ), ...( snappedCommand || this.absoluteCommand ).slice( 6, 8 ) ] :
+            ( snappedCommand || this.absoluteCommand ) )
+        ];
+    }
+
+    relative( gridInterval ) {
+        const snappedCommand = gridInterval && this.relativeCommand.map( parameter => round( parameter / gridInterval, 1 ) * gridInterval );
+        return [ this.commandLetter.toLowerCase(), ...(
+            this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.relativeCommand ).slice( 0, 1 ) : 
+            this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.relativeCommand ).slice( 1 ) :
+            this.commandLetter.toLowerCase() === "a" ? [ ...this.relativeCommand.slice( 0, 6 ), ...( snappedCommand || this.relativeCommand ).slice( 6, 8 ) ] :
+            ( snappedCommand || this.relativeCommand ) )
+        ];
+    }
+
+    moveTo( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ] ) {
+        switch ( this.commandLetter.toLowerCase() ) {
+            case "h":
+                this.absoluteCommand[ 1 ] = absoluteX;
+                break;
+            case "v":
+                this.absoluteCommand[ 1 ] = absoluteY;
+                break;
+            case "m":
+            case "l":
+            case "a":
+            case "c":
+            case "t":
+            case "q":
+            case "s":
+                this.absoluteCommand[ this.absoluteCommand.length - 2 ] = absoluteX;
+                this.absoluteCommand[ this.absoluteCommand.length - 1 ] = absoluteY;
+                break;
+            case "z": break;
+            default: break;
+        }
+        this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+        if ( this.next ) {
+            this.next.absolutePrevious = [ absoluteX, absoluteY ];
+            this.next.parse( PathParser.parseRaw( this.next.absolute().join( " " ) )[ 0 ] );
+        }
+    }
+
+    moveStartHandleTo( absoluteX, absoluteY ) {
+        if ( this.startHandle ) {
+            this.absoluteCommand[ 0 ] = absoluteX;
+            this.absoluteCommand[ 1 ] = absoluteY;
+            this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+        }
+    }
+
+    moveEndHandleTo( absoluteX, absoluteY ) {
+        if ( this.endHandle ) {
+            switch ( this.commandLetter.toLowerCase() ) {
+                case "s":
+                    this.absoluteCommand[ 0 ] = absoluteX;
+                    this.absoluteCommand[ 1 ] = absoluteY;
+                    break;
+                case "c":
+                    this.absoluteCommand[ 2 ] = absoluteX;
+                    this.absoluteCommand[ 3 ] = absoluteY;
+                    break;
+                default:
+                    break;
+            }
+            this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+        }
+    }
+
 }
 
 export class Path {
 
     constructor( descriptor ) {
         this.descriptor = descriptor;
-        this.rawCommands = PathParser.parseRaw( descriptor );
-        this.parse();
+        this.parse( descriptor );
     }
 
-    toString() { return this.rawCommands.flat().join( " " ); }
+    toString( relative ) { return relative ? this.relative() : this.absolute(); }
 
     absolute() {
-        return this.parsedCommands.map( command => {
-            return `${ command.parsedCommand[ 0 ].toUpperCase() } ` + (
-                command.parsedCommand[ 0 ].toLowerCase() === "h" ? command.absoluteCommand.slice( 0, 1 ).join( " " ) : 
-                command.parsedCommand[ 0 ].toLowerCase() === "v" ? command.absoluteCommand.slice( 1 ).join( " " ) :
-                command.absoluteCommand.join( " " ) );
-        } ).join( " " ) + " Z";
+        return this.parsedCommands.map( command => command.absolute().join( " " ) ).join( " " ) + " Z";
     }
 
     relative() {
-        return this.parsedCommands.map( command => {
-            return `${ command.parsedCommand[ 0 ].toLowerCase() } ` + (
-                command.parsedCommand[ 0 ].toLowerCase() === "h" ? command.relativeCommand.slice( 0, 1 ).join( " " ) : 
-                command.parsedCommand[ 0 ].toLowerCase() === "v" ? command.relativeCommand.slice( 1 ).join( " " ) :
-                command.relativeCommand.join( " " ) );
-        } ).join( " " ) + " z";
+        return this.parsedCommands.map( command => command.relative().join( " " ) ).join( " " ) + " z";
     }
 
-    parse() {
-        let previous = [ 0, 0 ];
-        this.parsedCommands = this.rawCommands.reduce( ( result, command ) => {
+    parse( descriptor ) {
+        let previous = [ 0, 0 ], previousPathCommand = { next: null };
+        this.parsedCommands = PathParser.parseRaw( descriptor ).reduce( ( result, command, index ) => {
             if ( command[ 0 ].toLowerCase() === "z" ) return result;
-            const newPathCommand = new PathCommand( command, previous );
+            const newPathCommand = new PathCommand( command, previous, index );
+            previousPathCommand.next = newPathCommand;
             previous = newPathCommand.absoluteNext;
+            previousPathCommand = newPathCommand;
             return [ ...result, newPathCommand ];
         }, [] );
     }
 
-    adjustDescriptorPoint( command, xChange, yChange ) {
-        const parsedCommand = PathParser.parseRaw( command )[ 0 ];
-        const commandIndex = this.rawCommands.findIndex( otherCommand => otherCommand.join( " " ) === parsedCommand.join( " " ) );
-        for ( let indexToAdjust of [ commandIndex, parsedCommand[ 0 ] === "z" ? 0 : commandIndex + 1 ] ) {
-            switch ( this.rawCommands[ indexToAdjust ][ 0 ].toLowerCase() ) {
-                case "h":
-                    this.rawCommands[ indexToAdjust ][ 1 ] += indexToAdjust === commandIndex ? xChange : -xChange;
-                    break;
-                case "v":
-                    this.rawCommands[ indexToAdjust ][ 1 ] += indexToAdjust === commandIndex ? yChange : -yChange;
-                    break;
-                case "m":
-                case "l":
-                case "a":
-                case "c":
-                case "t":
-                case "q":
-                case "s":
-                    this.rawCommands[ indexToAdjust ][ this.rawCommands[ indexToAdjust ].length - 2 ] += indexToAdjust === commandIndex ? xChange : -xChange;
-                    this.rawCommands[ indexToAdjust ][ this.rawCommands[ indexToAdjust ].length - 1 ] += indexToAdjust === commandIndex ? yChange : -yChange;
-                    break;
-                case "z": break;
-                default: break;
-            }
-        };
-        this.parse();
+    adjustDescriptorPoint( index, absoluteX, absoluteY ) {
+        this.parsedCommands[ index ].moveTo( absoluteX, absoluteY );
+        // this.parse();
     }
 
-    adjustStartHandlePoint( command, xChange, yChange ) {
-        const parsedCommand = PathParser.parseRaw( command )[ 0 ];
-        const commandIndex = this.rawCommands.findIndex( otherCommand => otherCommand.join( " " ) === parsedCommand.join( " " ) );
-        this.rawCommands[ commandIndex ][ 1 ] += xChange;
-        this.rawCommands[ commandIndex ][ 2 ] += yChange;
-        this.parse();
+    adjustStartHandlePoint( index, absoluteX, absoluteY ) {
+        this.parsedCommands[ index ].moveStartHandleTo( absoluteX, absoluteY );
+        // this.parse();
     }
 
-    adjustEndHandlePoint( command, xChange, yChange ) {
-        const parsedCommand = PathParser.parseRaw( command )[ 0 ];
-        const commandIndex = this.rawCommands.findIndex( otherCommand => otherCommand.join( " " ) === parsedCommand.join( " " ) );
-        switch ( command[ 0 ] ) {
-            case "s":
-                this.rawCommands[ commandIndex ][ 1 ] += xChange;
-                this.rawCommands[ commandIndex ][ 2 ] += yChange;
-                break;
-            case "c":
-                this.rawCommands[ commandIndex ][ 3 ] += xChange;
-                this.rawCommands[ commandIndex ][ 4 ] += yChange;
-                break;
-            default:
-                break;
-        }
-        this.parse();
+    adjustEndHandlePoint( index, absoluteX, absoluteY ) {
+        this.parsedCommands[ index ].moveEndHandleTo( absoluteX, absoluteY );
+        // this.parse();
     }
 
     snapToGrid( gridInterval ) {
-        this.rawCommands = this.rawCommands.map( rawCommand => {
-            return rawCommand.map( ( parameter, index ) => {
-                return !index || ( rawCommand[ 0 ] === "a" && index < 6 ) ? parameter : round( parameter / gridInterval, 1 ) * gridInterval;
-            } );
-        } );
-        this.parse();
+        this.parsedCommands.forEach( parsedCommand => parsedCommand.parse( parsedCommand.absolute( gridInterval ) ) );
+        // this.parse();
     }
 
 }
