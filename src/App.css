@@ -25,6 +25,7 @@ body, html {
 .menu-panel button,
 .menu-panel input[type=submit] {
   font-weight: bold;
+  width: 100%;
 }
 
 .menu-header {
@@ -41,9 +42,13 @@ body, html {
   resize: none;
 }
 
-.menu-button-row {
+.menu-row {
   display: flex;
   flex-direction: row;
+}
+
+.menu-row input {
+  width: 5ch;
 }
   
 .zoom-buttons {

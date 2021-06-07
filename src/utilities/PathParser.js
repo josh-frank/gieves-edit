@@ -23,24 +23,24 @@ export class PathParser {
     static pointGrammar = {
         z: () => [],
         Z: () => [],
-        m: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
-        M: ( previousPoint, command ) => command.slice( 1 ),
-        h: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] ],
-        H: ( previousPoint, command ) => [ command[ 1 ], previousPoint[ 1 ] ],
-        v: ( previousPoint, command ) => [ previousPoint[ 0 ], previousPoint[ 1 ] + command[ 1 ] ],
-        V: ( previousPoint, command ) => [ previousPoint[ 0 ], command[ 1 ] ],
-        l: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
-        L: ( previousPoint, command ) => command.slice( 1 ),
-        a: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 6 ], previousPoint[ 1 ] + command[ 7 ] ],
-        A: ( previousPoint, command ) => command.slice( 6 ),
-        c: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 5 ], previousPoint[ 1 ] + command[ 6 ] ],
-        C: ( previousPoint, command ) => command.slice( 5 ),
-        t: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
-        T: ( previousPoint, command ) => command.slice( 1 ),
-        q: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 3 ], previousPoint[ 1 ] + command[ 4 ] ],
-        Q: ( previousPoint, command ) => command.slice( 3 ),
-        s: ( previousPoint, command ) => [ previousPoint[ 0 ] + command[ 3 ], previousPoint[ 1 ] + command[ 4 ] ],
-        S: ( previousPoint, command ) => command.slice( 3 ),
+        m: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
+        M: command => command.slice( 1 ),
+        h: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] ],
+        H: ( command, previousPoint ) => [ command[ 1 ], previousPoint[ 1 ] ],
+        v: ( command, previousPoint ) => [ previousPoint[ 0 ], previousPoint[ 1 ] + command[ 1 ] ],
+        V: ( command, previousPoint ) => [ previousPoint[ 0 ], command[ 1 ] ],
+        l: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
+        L: command => command.slice( 1 ),
+        a: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 6 ], previousPoint[ 1 ] + command[ 7 ] ],
+        A: command => command.slice( 6 ),
+        c: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 5 ], previousPoint[ 1 ] + command[ 6 ] ],
+        C: command => command.slice( 5 ),
+        t: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
+        T: command => command.slice( 1 ),
+        q: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 3 ], previousPoint[ 1 ] + command[ 4 ] ],
+        Q: command => command.slice( 3 ),
+        s: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 3 ], previousPoint[ 1 ] + command[ 4 ] ],
+        S: command => command.slice( 3 )
     };
 
     static parseComponents( type, command, cursor ) {
@@ -102,7 +102,7 @@ export class PathCommand {
     }
 
     parse( parsedCommand ) {
-        this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( this.absolutePrevious, parsedCommand ).map( coordinate => round( coordinate, 1 ) );
+        this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( parsedCommand, this.absolutePrevious ).map( coordinate => round( coordinate, 1 ) );
         this.absoluteCommand = [ ...this.absoluteNext ];
         this.relativeCommand = [ round( this.absoluteNext[ 0 ] - this.absolutePrevious[ 0 ], 1 ), round( this.absoluteNext[ 1 ] - this.absolutePrevious[ 1 ], 1 ) ]
         switch( parsedCommand[ 0 ] ) {
@@ -213,7 +213,7 @@ export class PathCommand {
         ];
     }
 
-    moveTo( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ] ) {
+    moveTo( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ], adjustPointOnly ) {
         switch ( this.commandLetter.toLowerCase() ) {
             case "h":
                 this.absoluteCommand[ 1 ] = absoluteX;
@@ -223,13 +223,29 @@ export class PathCommand {
                 break;
             case "m":
             case "l":
-            case "a":
-            case "c":
             case "t":
-            case "q":
-            case "s":
+            case "a":
                 this.absoluteCommand[ this.absoluteCommand.length - 2 ] = absoluteX;
                 this.absoluteCommand[ this.absoluteCommand.length - 1 ] = absoluteY;
+                break;
+            case "s":
+            case "q":
+                if ( !adjustPointOnly ) {
+                    this.absoluteCommand[ 0 ] = absoluteX - ( this.relativeCommand[ 2 ] - this.relativeCommand[ 0 ] );
+                    this.absoluteCommand[ 1 ] = absoluteY - ( this.relativeCommand[ 3 ] - this.relativeCommand[ 1 ] );
+                }
+                this.absoluteCommand[ 2 ] = absoluteX;
+                this.absoluteCommand[ 3 ] = absoluteY;
+                break;
+            case "c":
+                if ( !adjustPointOnly ) {
+                    this.absoluteCommand[ 0 ] = absoluteX - ( this.relativeCommand[ 4 ] - this.relativeCommand[ 0 ] );
+                    this.absoluteCommand[ 1 ] = absoluteY - ( this.relativeCommand[ 5 ] - this.relativeCommand[ 1 ] );
+                    this.absoluteCommand[ 2 ] = absoluteX - ( this.relativeCommand[ 4 ] - this.relativeCommand[ 2 ] );
+                    this.absoluteCommand[ 3 ] = absoluteY - ( this.relativeCommand[ 5 ] - this.relativeCommand[ 3 ] );
+                }
+                this.absoluteCommand[ 4 ] = absoluteX;
+                this.absoluteCommand[ 5 ] = absoluteY;
                 break;
             case "z": break;
             default: break;
@@ -324,23 +340,26 @@ export class Path {
     }
 
     adjustDescriptorPoint( index, absoluteX, absoluteY ) {
-        this.parsedCommands[ index ].moveTo( absoluteX, absoluteY );
-        // this.parse();
+        this.parsedCommands[ index ].moveTo( absoluteX, absoluteY, true );
     }
 
     adjustStartHandlePoint( index, absoluteX, absoluteY ) {
         this.parsedCommands[ index ].moveStartHandleTo( absoluteX, absoluteY );
-        // this.parse();
     }
 
     adjustEndHandlePoint( index, absoluteX, absoluteY ) {
         this.parsedCommands[ index ].moveEndHandleTo( absoluteX, absoluteY );
-        // this.parse();
     }
 
     snapToGrid( gridInterval ) {
         this.parsedCommands.forEach( parsedCommand => parsedCommand.parse( parsedCommand.absolute( gridInterval ) ) );
-        // this.parse();
+    }
+
+    translate( relativeX, relativeY ) {
+        this.parsedCommands.forEach( parsedCommand => parsedCommand.moveTo(
+            parsedCommand.absoluteCommand[ parsedCommand.absoluteCommand.length - 2 ] + relativeX,
+            parsedCommand.absoluteCommand[ parsedCommand.absoluteCommand.length - 1 ] + relativeY,
+        ) );
     }
 
 }

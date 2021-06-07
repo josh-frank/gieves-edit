@@ -41,7 +41,7 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch }
             value={ manualPathEdit || activeShape || "No path selected" }
             onChange={ changeEvent => activeShape && setManualPathEdit( changeEvent.target.value ) }
         />
-        <section className="menu-button-row">
+        <section className="menu-row">
             <input
                 disabled={ !manualPathEdit }
                 type="submit"
@@ -57,24 +57,51 @@ const PathPanel = ( { manualPathEdit, setManualPathEdit, activeShape, dispatch }
     </form>
 </div>;
 
-const TransformPanel = ( { activePath, setActivePath, activeShape, dispatch, gridInterval } ) => <div className="menu-panel">
+const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, transformation, setTransformation } ) => <div className="menu-panel">
     <div className="menu-header">Transform</div>
-    <button
-        disabled={ !activeShape }
-        onClick={ () => {
-            dispatch( updateActiveShape( activePath.absolute() ) );
-        } }
-    >
-        𝙈 <b>Convert path to absolute</b>
-    </button>
-    <button
-        disabled={ !activeShape }
-        onClick={ () => {
-            dispatch( updateActiveShape( activePath.relative() ) )
-        } }
-    >
-        𝙢 <b>Convert path to relative</b>
-    </button>
+    <section className="menu-row">
+        <button
+            disabled={ !activeShape }
+            onClick={ () => {
+                dispatch( updateActiveShape( activePath.absolute() ) );
+            } }
+        >
+            𝙈 <b>Absolute</b>
+        </button>
+        <button
+            disabled={ !activeShape }
+            onClick={ () => {
+                dispatch( updateActiveShape( activePath.relative() ) )
+            } }
+        >
+            𝙢 <b>Relative</b>
+        </button>
+    </section>
+    <section className="menu-row">
+        <button
+            disabled={ !activeShape }
+            onClick={ () => {
+                activePath.translate( transformation.translate[ 0 ], transformation.translate[ 1 ] )
+                dispatch( updateActiveShape( activePath.toString() ) );
+            } }
+        >
+            Translate
+        </button>
+        <label htmlFor="translateX">X:</label>
+        <input
+            type="number"
+            name="translateX"
+            value={ activeShape ? transformation.translate[ 0 ] : "" }
+            onChange={ changeEvent => setTransformation( { translate: [ parseInt( changeEvent.target.value ), transformation.translate[ 1 ] ] } ) }
+        />
+        <label htmlFor="translateY">Y:</label>
+        <input
+            type="number"
+            name="translateY"
+            value={ activeShape ? transformation.translate[ 1 ] : "" }
+            onChange={ changeEvent => setTransformation( { translate: [ transformation.translate[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
+        />
+    </section>
     <button
         disabled={ !activeShape }
         onClick={ () => {
@@ -100,6 +127,8 @@ export default function Menu() {
 
     const [ manualPathEdit, setManualPathEdit ] = useState( null );
 
+    const [ transformation, setTransformation ] = useState( { translate: [ 1, 1 ] } );
+
     return <div className="menu">
         <ModePanel
             dispatch={ dispatch }
@@ -116,6 +145,8 @@ export default function Menu() {
             activeShape={ activeShape }
             dispatch={ dispatch }
             gridInterval={ gridInterval }
+            transformation={ transformation }
+            setTransformation={ setTransformation }
         />
     </div>;
 
