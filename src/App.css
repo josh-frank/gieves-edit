@@ -68,6 +68,11 @@ body {
   z-index: 1000;
 }
 
+.zoom-buttons button {
+  width: 2rem;
+  height: 2rem;
+}
+
 .artboard {
   position: absolute;
   top: 0;
