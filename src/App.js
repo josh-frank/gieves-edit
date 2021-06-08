@@ -2,9 +2,9 @@ import './App.css';
 
 import { useEffect } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addShape } from './redux/shapesSlice';
-import { zoomInButton, zoomOutButton } from './redux/artboardSlice';
+import { toggleDark, zoomInButton, zoomOutButton } from './redux/artboardSlice';
 
 import Artboard from './components/Artboard';
 import ArtboardPanel from './components/ArtboardPanel';
@@ -26,16 +26,17 @@ function App() {
   useEffect( () => testShapes.forEach( shape => dispatch( addShape( shape ) ) ), [ dispatch ] );
 
   const ZoomButtons = () => <div className="zoom-buttons">
+    <button onClick={ () => dispatch( toggleDark() ) }>{ useSelector( state => state.artboard ).dark ? "☼" : "☾" }</button>
     <button onClick={ () => dispatch( zoomInButton() ) }>➕</button>
     <button onClick={ () => dispatch( zoomOutButton() ) }>➖</button>
   </div>;
 
-  return <>
+  return <main>
     <Menu />
     <ZoomButtons />
     <Artboard />
     <ArtboardPanel />
-  </>;
+  </main>;
 
 }
 

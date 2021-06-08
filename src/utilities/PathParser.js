@@ -88,7 +88,7 @@ export class PathParser {
 
 }
 
-export class PathCommand {
+class PathCommand {
 
     constructor( parsedCommand, absolutePrevious, index ) {
         this.index = index;

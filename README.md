@@ -1,6 +1,6 @@
 # Mr. Gieves
 
-Mr. Gieves is a basic SVG path editor. It's intended for  fashion/tailoring/sewing patterns but can also serve in a limited capacity for general-purpose editing of SVG paths.
+Mr. Gieves is a basic SVG path editor. It's intended for fashion/tailoring/sewing patterns but can also serve in a limited capacity for general-purpose editing of SVG paths.
 
 It will hopefully one day work with a back end yet to be written, which will accept measurement requests and respond with pattern pieces for several garments represented as SVG paths, using algorithms adapted from various sewing manuals of the 19th & 20th centuries.
 

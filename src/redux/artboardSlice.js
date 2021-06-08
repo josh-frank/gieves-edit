@@ -9,7 +9,8 @@ const artboardSlice = createSlice( {
         offsetX: ( document.documentElement.clientHeight - 800 ) / 2,
         offsetY: ( document.documentElement.clientWidth - 1000 ) / 2,
         displayGrid: true,
-        gridInterval: 10
+        gridInterval: 10,
+        dark: false
     },
     reducers: {
         setArtboardDimensions( state, action ) {
@@ -25,10 +26,10 @@ const artboardSlice = createSlice( {
             return { ...state, zoom: Math.max( state.zoom - 6.25, 6.25 ) };
         },
         zoomInButton( state ) {
-            return { ...state, zoom: Math.min( state.zoom + 50, 625 ) };
+            return { ...state, zoom: Math.min( state.zoom + 10, 625 ) };
         },
         zoomOutButton( state ) {
-            return { ...state, zoom: Math.max( state.zoom - 50, 6.25 ) };
+            return { ...state, zoom: Math.max( state.zoom - 10, 6.25 ) };
         },
         setArtboardOffset( state, action ) {
             return { ...state, offsetX: action.payload.offsetX || state.offsetX, offsetY: action.payload.offsetY || state.offsetY };
@@ -50,6 +51,9 @@ const artboardSlice = createSlice( {
         },
         setGridInterval( state, action ) {
             return { ...state, gridInterval: Math.min( Math.max( Math.round( action.payload ), 5 ), 100 ) };
+        },
+        toggleDark( state ) {
+            return { ...state, dark: !state.dark };
         }
     }
 } );
@@ -67,6 +71,7 @@ export const {
     moveArtboardUp,
     moveArtboardDown,
     toggleGridDisplay,
-    setGridInterval
+    setGridInterval,
+    toggleDark
 } = artboardSlice.actions;
 export default artboardSlice.reducer;

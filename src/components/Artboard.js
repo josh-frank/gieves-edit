@@ -21,7 +21,7 @@ export default function Artboard() {
 
     const dispatch = useDispatch();
 
-    const { width, height, zoom, offsetX, offsetY, displayGrid } = useSelector( state => state.artboard );
+    const { width, height, zoom, offsetX, offsetY, displayGrid, dark } = useSelector( state => state.artboard );
     const { activeShape, inactiveShapes } = useSelector( state => state.shapes );
     const editMode = useSelector( state => state.editMode );
 
@@ -97,7 +97,7 @@ export default function Artboard() {
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
-        className="artboard"
+        className={ "artboard" + ( dark && " dark" ) }
         width={ clientDimensions.width }
         height={ clientDimensions.height }
         zoom={ zoom / 100 }

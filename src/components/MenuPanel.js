@@ -117,7 +117,7 @@ export default function Menu() {
 
     const dispatch = useDispatch();
 
-    const { gridInterval } = useSelector( state => state.artboard );
+    const { gridInterval, dark } = useSelector( state => state.artboard );
 
     const { activeShape } = useSelector( state => state.shapes );
 
@@ -129,7 +129,7 @@ export default function Menu() {
 
     const [ transformation, setTransformation ] = useState( { translate: [ 1, 1 ] } );
 
-    return <div className="menu">
+    return <div className={ dark ? "menu dark" : "menu light" } >
         <ModePanel
             dispatch={ dispatch }
             editMode={ editMode }

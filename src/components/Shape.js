@@ -12,6 +12,8 @@ export default function Shape( { descriptor } ) {
     const dispatch = useDispatch();
 
     const active = useSelector( state => state.shapes ).activeShape === descriptor;
+    
+    const { dark } = useSelector( state => state.artboard );
 
     const [ hover, toggleHover ] = useState( false );
 
@@ -32,9 +34,9 @@ export default function Shape( { descriptor } ) {
     >
         <path
             d={ descriptor }
-            stroke={ hover ? "green" : active ? "blue" : "black" }
+            stroke={ hover | active ? "red" : dark ? "white" : "black" }
             strokeWidth="1"
-            fill="white"
+            fill={ dark ? "black" : "white" }
             onMouseEnter={ () => toggleHover( true ) }
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ active ? deactivate : activate }
