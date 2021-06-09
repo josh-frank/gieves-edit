@@ -92,14 +92,39 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, tran
             type="number"
             name="translateX"
             value={ activeShape ? transformation.translate[ 0 ] : "" }
-            onChange={ changeEvent => setTransformation( { translate: [ parseInt( changeEvent.target.value ), transformation.translate[ 1 ] ] } ) }
+            onChange={ changeEvent => setTransformation( { ...transformation, translate: [ parseInt( changeEvent.target.value ), transformation.translate[ 1 ] ] } ) }
         />
         <label htmlFor="translateY">Y:</label>
         <input
             type="number"
             name="translateY"
             value={ activeShape ? transformation.translate[ 1 ] : "" }
-            onChange={ changeEvent => setTransformation( { translate: [ transformation.translate[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
+            onChange={ changeEvent => setTransformation( { ...transformation, translate: [ transformation.translate[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
+        />
+    </section>
+    <section className="menu-row">
+        <button
+            disabled={ !activeShape }
+            onClick={ () => {
+                activePath.scale( transformation.scale[ 0 ], transformation.scale[ 1 ] )
+                dispatch( updateActiveShape( activePath.toString() ) );
+            } }
+        >
+            Scale
+        </button>
+        <label htmlFor="scaleX">X:</label>
+        <input
+            type="number"
+            name="scaleX"
+            value={ activeShape ? transformation.scale[ 0 ] : "" }
+            onChange={ changeEvent => setTransformation( { ...transformation, scale: [ parseInt( changeEvent.target.value ), transformation.scale[ 1 ] ] } ) }
+        />
+        <label htmlFor="scaleY">Y:</label>
+        <input
+            type="number"
+            name="scaleY"
+            value={ activeShape ? transformation.scale[ 1 ] : "" }
+            onChange={ changeEvent => setTransformation( { ...transformation, scale: [ transformation.scale[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
         />
     </section>
     <button
@@ -127,7 +152,7 @@ export default function Menu() {
 
     const [ manualPathEdit, setManualPathEdit ] = useState( null );
 
-    const [ transformation, setTransformation ] = useState( { translate: [ 1, 1 ] } );
+    const [ transformation, setTransformation ] = useState( { translate: [ 1, 1 ], scale: [ 1, 1 ] } );
 
     return <div className={ dark ? "menu dark" : "menu light" } >
         <ModePanel

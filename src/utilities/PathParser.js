@@ -213,7 +213,7 @@ class PathCommand {
         ];
     }
 
-    moveTo( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ], adjustPointOnly ) {
+    moveCommand( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ], adjustPointOnly ) {
         switch ( this.commandLetter.toLowerCase() ) {
             case "h":
                 this.absoluteCommand[ 1 ] = absoluteX;
@@ -253,6 +253,46 @@ class PathCommand {
         this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
         if ( this.next ) {
             this.next.absolutePrevious = [ absoluteX, absoluteY ];
+            this.next.parse( PathParser.parseRaw( this.next.absolute().join( " " ) )[ 0 ] );
+        }
+    }
+
+    scaleCommand( scaleX = 1, scaleY = 1 ) {
+        switch ( this.commandLetter.toLowerCase() ) {
+            case "h":
+                this.absoluteCommand[ 1 ] *= scaleX;
+                break;
+            case "v":
+                this.absoluteCommand[ 1 ] *= scaleY;
+                break;
+            case "m":
+            case "l":
+            case "t":
+            case "a":
+                this.absoluteCommand[ this.absoluteCommand.length - 2 ] *= scaleX;
+                this.absoluteCommand[ this.absoluteCommand.length - 1 ] *= scaleY;
+                break;
+            case "s":
+            case "q":
+                this.absoluteCommand[ 0 ] *= scaleX;
+                this.absoluteCommand[ 1 ] *= scaleY;
+                this.absoluteCommand[ 2 ] *= scaleX;
+                this.absoluteCommand[ 3 ] *= scaleY;
+                break;
+            case "c":
+                this.absoluteCommand[ 0 ] *= scaleX;
+                this.absoluteCommand[ 1 ] *= scaleY;
+                this.absoluteCommand[ 2 ] *= scaleX;
+                this.absoluteCommand[ 3 ] *= scaleY;
+                this.absoluteCommand[ 4 ] *= scaleX;
+                this.absoluteCommand[ 5 ] *= scaleY;
+                break;
+            case "z": break;
+            default: break;
+        }
+        this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+        if ( this.next ) {
+            this.next.absolutePrevious = [ this.next.absolutePrevious * scaleX, this.next.absolutePrevious * scaleY ];
             this.next.parse( PathParser.parseRaw( this.next.absolute().join( " " ) )[ 0 ] );
         }
     }
@@ -340,7 +380,7 @@ export class Path {
     }
 
     adjustDescriptorPoint( index, absoluteX, absoluteY ) {
-        this.parsedCommands[ index ].moveTo( absoluteX, absoluteY, true );
+        this.parsedCommands[ index ].moveCommand( absoluteX, absoluteY, true );
     }
 
     adjustStartHandlePoint( index, absoluteX, absoluteY ) {
@@ -356,10 +396,14 @@ export class Path {
     }
 
     translate( relativeX, relativeY ) {
-        this.parsedCommands.forEach( parsedCommand => parsedCommand.moveTo(
+        this.parsedCommands.forEach( parsedCommand => parsedCommand.moveCommand(
             parsedCommand.absoluteCommand[ parsedCommand.absoluteCommand.length - 2 ] + relativeX,
             parsedCommand.absoluteCommand[ parsedCommand.absoluteCommand.length - 1 ] + relativeY,
         ) );
+    }
+
+    scale( scaleX, scaleY ) {
+        this.parsedCommands.forEach( parsedCommand => parsedCommand.scaleCommand( scaleX, scaleY ) );
     }
 
 }
