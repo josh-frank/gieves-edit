@@ -97,7 +97,7 @@ export default function Artboard() {
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
-        className={ "artboard" + ( dark && " dark" ) }
+        className={ "artboard" + ( dark ? " dark" : "" ) }
         width={ clientDimensions.width }
         height={ clientDimensions.height }
         zoom={ zoom / 100 }

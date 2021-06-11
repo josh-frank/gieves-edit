@@ -27,3 +27,11 @@ test( 'PathCommand returns absolute and relative commands correctly', () => {
         expect( relative.parsedCommands[ i ].absolute().join( " " ) ).toEqual( absolute.parsedCommands[ i ].absolute().join( " " ) );
     }
 } );
+
+test( 'PathCommand normalizes itself correctly', () => {
+    const testPath = new Path( sameShape[ 0 ] );
+    testPath.normalize();
+    console.log( testPath.absolute() );
+    console.log( testPath.relative() );
+    expect( true );
+} );

@@ -257,6 +257,32 @@ class PathCommand {
         }
     }
 
+    moveStartHandleTo( absoluteX, absoluteY ) {
+        if ( this.startHandle ) {
+            this.absoluteCommand[ 0 ] = absoluteX;
+            this.absoluteCommand[ 1 ] = absoluteY;
+            this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+        }
+    }
+
+    moveEndHandleTo( absoluteX, absoluteY ) {
+        if ( this.endHandle ) {
+            switch ( this.commandLetter.toLowerCase() ) {
+                case "s":
+                    this.absoluteCommand[ 0 ] = absoluteX;
+                    this.absoluteCommand[ 1 ] = absoluteY;
+                    break;
+                case "c":
+                    this.absoluteCommand[ 2 ] = absoluteX;
+                    this.absoluteCommand[ 3 ] = absoluteY;
+                    break;
+                default:
+                    break;
+            }
+            this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+        }
+    }
+
     scaleCommand( scaleX = 1, scaleY = 1 ) {
         switch ( this.commandLetter.toLowerCase() ) {
             case "h":
@@ -297,30 +323,44 @@ class PathCommand {
         }
     }
 
-    moveStartHandleTo( absoluteX, absoluteY ) {
-        if ( this.startHandle ) {
-            this.absoluteCommand[ 0 ] = absoluteX;
-            this.absoluteCommand[ 1 ] = absoluteY;
-            this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
+    normalizeCommand() {
+        let normalizedCommand;
+        switch ( this.commandLetter.toLowerCase() ) {
+            case "h":
+                normalizedCommand = [
+                    ...this.absolutePrevious,
+                    this.absolutePrevious[ 0 ], this.absoluteCommand[ 0 ],
+                    this.absolutePrevious[ 0 ], this.absoluteCommand[ 0 ],
+                ];
+                break;
+            case "v":
+                normalizedCommand = [
+                    ...this.absolutePrevious,
+                    this.absoluteCommand[ 0 ], this.absolutePrevious[ 0 ],
+                    this.absoluteCommand[ 0 ], this.absolutePrevious[ 0 ],
+                ];
+                break;
+            case "m":
+            case "l":
+                normalizedCommand = [
+                    ...this.absolutePrevious,
+                    ...this.absoluteCommand,
+                    ...this.absoluteCommand
+                ];
+                break;
+            case "t":
+            case "a":
+                break;
+            case "s":
+            case "q":
+                break;
+            case "c":
+            case "z": break;
+            default: break;
         }
-    }
-
-    moveEndHandleTo( absoluteX, absoluteY ) {
-        if ( this.endHandle ) {
-            switch ( this.commandLetter.toLowerCase() ) {
-                case "s":
-                    this.absoluteCommand[ 0 ] = absoluteX;
-                    this.absoluteCommand[ 1 ] = absoluteY;
-                    break;
-                case "c":
-                    this.absoluteCommand[ 2 ] = absoluteX;
-                    this.absoluteCommand[ 3 ] = absoluteY;
-                    break;
-                default:
-                    break;
-            }
-            this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
-        }
+        this.absoluteCommand = [ "C", ...normalizedCommand ];
+        this.commandLetter = "C";
+        this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
     }
 
     quadPolyLine() {
@@ -379,6 +419,10 @@ export class Path {
         }, [] );
     }
 
+    normalize() {}
+
+    boundingBox() {}
+
     adjustDescriptorPoint( index, absoluteX, absoluteY ) {
         this.parsedCommands[ index ].moveCommand( absoluteX, absoluteY, true );
     }
@@ -404,6 +448,12 @@ export class Path {
 
     scale( scaleX, scaleY ) {
         this.parsedCommands.forEach( parsedCommand => parsedCommand.scaleCommand( scaleX, scaleY ) );
+    }
+
+    normalize() {
+        this.parsedCommands[ 0 ].commandLetter = this.parsedCommands[ 0 ].commandLetter.toUpperCase();
+        this.parsedCommands.slice( 1 ).forEach( parsedCommand => parsedCommand.normalizeCommand() );
+        this.descriptor = this.absolute();
     }
 
 }
