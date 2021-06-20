@@ -8,9 +8,11 @@ Mr. Gieves was written by [Josh Frank](https://github.com/facebook/create-react-
 
 ## Paths
 
-Current paths can be viewed in the artboard. Paths can be de/activated with a click in any mode; the current active path is highlit in blue with red handles. Up to one path can be activated at a time.
+Current paths can be viewed in the artboard. Paths can be de/activated with a click in any mode; the current active path is highlit in red with red handles. Up to one path can be activated at a time.
 
 ## Menu
+
+Collapse the menu with the ▶/◀ button on the left of the screen.
 
 ### Mode panel
 
@@ -30,9 +32,11 @@ Whenever a path is activated, use the path panel to edit the path directly by ty
 
 ### Transform panel
 
-Click the **Convert** buttons to convert the active path between absolute and relative definitions.
+Click the **Absolute** and **Relative** buttons to convert the active path between absolute and relative definitions. 
 
-You can also click the **Snap** button to snap the active path's points to the artboard's gridlines. Set the gridlines in the **artboard info** panel.
+Click the **Normalize** button to normalize the path (convert all shapes to cubic béziers).
+
+Click the **Snap** button to snap the active path's points to the artboard's gridlines. Set the gridlines in the **artboard info** panel.
 
 ## Artboard Info
 

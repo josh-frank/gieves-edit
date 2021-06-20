@@ -162,25 +162,35 @@ export default function Menu() {
 
     const [ transformation, setTransformation ] = useState( { translate: [ 1, 1 ], scale: [ 1, 1 ] } );
 
-    return <div className={ dark ? "menu dark" : "menu light" } >
-        <ModePanel
-            dispatch={ dispatch }
-            editMode={ editMode }
-        />
-        <PathPanel
-            manualPathEdit={ manualPathEdit }
-            setManualPathEdit={ setManualPathEdit }
-            activeShape={ activeShape }
-            dispatch={ dispatch }
-        />
-        <TransformPanel
-            activePath={ activePath }
-            activeShape={ activeShape }
-            dispatch={ dispatch }
-            gridInterval={ gridInterval }
-            transformation={ transformation }
-            setTransformation={ setTransformation }
-        />
+    const [ collapseMenu, toggleCollapseMenu ] = useState( false );
+
+    return <div className="menu-container">
+        { !collapseMenu && <section className={ dark ? "menu dark" : "menu light" } >
+            <ModePanel
+                dispatch={ dispatch }
+                editMode={ editMode }
+            />
+            <PathPanel
+                manualPathEdit={ manualPathEdit }
+                setManualPathEdit={ setManualPathEdit }
+                activeShape={ activeShape }
+                dispatch={ dispatch }
+            />
+            <TransformPanel
+                activePath={ activePath }
+                activeShape={ activeShape }
+                dispatch={ dispatch }
+                gridInterval={ gridInterval }
+                transformation={ transformation }
+                setTransformation={ setTransformation }
+            />
+        </section> }
+        <button
+            className={ dark ? "collapse-button dark" : "collapse-button light" }
+            onClick={ () => toggleCollapseMenu( !collapseMenu ) }
+        >
+            { collapseMenu ? "▶" : "◀" }
+        </button>
     </div>;
 
 }

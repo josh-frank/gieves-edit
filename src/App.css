@@ -16,7 +16,10 @@ body {
   color: white;
 }
 
-.menu {
+.menu-container {
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-start; */
   position: absolute;
   top: 0;
   left: 0;
@@ -24,6 +27,13 @@ body {
   height: 100%;
   z-index: 1000;
 }
+
+.collapse-button {
+  border: none;
+  background: none;
+}
+
+/* .menu {} */
 
 .menu-panel,
 .menu-panel form {
