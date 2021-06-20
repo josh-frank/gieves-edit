@@ -1,3 +1,5 @@
+import { arcToCubicBeziers } from "./arcToCubicBeziers";
+
 const round = ( value, decimals ) => Math.round( value * ( decimals ** 100 ) ) / ( decimals ** 100 );
 
 export class PathParser {
@@ -97,9 +99,9 @@ class PathCommand {
         this.parse( parsedCommand );
     }
 
-    setNext( nextPathCommand ) {
-        this.next = nextPathCommand;
-    }
+    setNext( nextPathCommand ) { this.next = nextPathCommand; }
+
+    setNormalized( normalizedCommand ) { this.normalizedCommand = normalizedCommand; }
 
     parse( parsedCommand ) {
         this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( parsedCommand, this.absolutePrevious ).map( coordinate => round( coordinate, 1 ) );
@@ -323,46 +325,6 @@ class PathCommand {
         }
     }
 
-    normalizeCommand() {
-        let normalizedCommand;
-        switch ( this.commandLetter.toLowerCase() ) {
-            case "h":
-                normalizedCommand = [
-                    ...this.absolutePrevious,
-                    this.absolutePrevious[ 0 ], this.absoluteCommand[ 0 ],
-                    this.absolutePrevious[ 0 ], this.absoluteCommand[ 0 ],
-                ];
-                break;
-            case "v":
-                normalizedCommand = [
-                    ...this.absolutePrevious,
-                    this.absoluteCommand[ 0 ], this.absolutePrevious[ 0 ],
-                    this.absoluteCommand[ 0 ], this.absolutePrevious[ 0 ],
-                ];
-                break;
-            case "m":
-            case "l":
-                normalizedCommand = [
-                    ...this.absolutePrevious,
-                    ...this.absoluteCommand,
-                    ...this.absoluteCommand
-                ];
-                break;
-            case "t":
-            case "a":
-                break;
-            case "s":
-            case "q":
-                break;
-            case "c":
-            case "z": break;
-            default: break;
-        }
-        this.absoluteCommand = [ "C", ...normalizedCommand ];
-        this.commandLetter = "C";
-        this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
-    }
-
     quadPolyLine() {
         const polyLineCoordinates = [];
         let currentNode = this;
@@ -392,6 +354,17 @@ class PathCommand {
 
 export class Path {
 
+    static quadratic( x1, y1, cx, cy, x2, y2 ){
+        return [
+          ( x1 / 3 ) + ( cx / 3 * 2 ),
+          ( y1 / 3 ) + ( cy / 3 * 2 ),
+          ( x2 / 3 ) + ( cx / 3 * 2 ),
+          ( y2 / 3 ) + ( cy / 3 * 2 ),
+          x2,
+          y2
+        ]
+    }
+
     constructor( descriptor ) {
         this.descriptor = descriptor;
         this.parse( descriptor );
@@ -407,21 +380,120 @@ export class Path {
         return this.parsedCommands.map( command => command.relative().join( " " ) ).join( " " ) + " z";
     }
 
+    normalized() {
+        return this.parsedCommands.map( command => command.normalizedCommand ).join( " " ) + " Z";
+    }
+
     parse( descriptor ) {
-        let previous = [ 0, 0 ], previousPathCommand = { next: null };
+        let quadX, quadY, 
+            bezierX, bezierY,
+            previous = [ 0, 0 ],
+            previousPathCommand = { next: null };
         this.parsedCommands = PathParser.parseRaw( descriptor ).reduce( ( result, command, index ) => {
             if ( command[ 0 ].toLowerCase() === "z" ) return result;
             const newPathCommand = new PathCommand( command, previous, index );
             previousPathCommand.next = newPathCommand;
             previous = newPathCommand.absoluteNext;
+            let normalizedCommand;
+            switch ( command[ 0 ].toLowerCase() ) {
+                case "h":
+                    normalizedCommand = [
+                        ...newPathCommand.absolutePrevious,
+                        newPathCommand.absoluteCommand[ 0 ], newPathCommand.absolutePrevious[ 1 ],
+                        newPathCommand.absoluteCommand[ 0 ], newPathCommand.absolutePrevious[ 1 ],
+                    ];
+                    break;
+                case "v":
+                    normalizedCommand = [
+                        ...newPathCommand.absolutePrevious,
+                        newPathCommand.absolutePrevious[ 0 ], newPathCommand.absoluteCommand[ 1 ],
+                        newPathCommand.absolutePrevious[ 0 ], newPathCommand.absoluteCommand[ 1 ],
+                    ];
+                    break;
+                case "m":
+                case "l":
+                    normalizedCommand = [
+                        ...newPathCommand.absolutePrevious,
+                        ...newPathCommand.absoluteCommand,
+                        ...newPathCommand.absoluteCommand
+                    ];
+                    break;
+                case "s":
+                    let cx = newPathCommand.absolutePrevious[ 0 ], cy = newPathCommand.absolutePrevious[ 1 ];
+                    if ( [ "c", "s" ].includes( previousPathCommand.commandLetter.toLowerCase() ) ) {
+                        cx += cx - bezierX;
+                        cy += cy - bezierY;
+                    }
+                    normalizedCommand = [
+                        cx,
+                        cy,
+                        newPathCommand.absoluteCommand[ 0 ],
+                        newPathCommand.absoluteCommand[ 1 ],
+                        newPathCommand.absoluteCommand[ 2 ],
+                        newPathCommand.absoluteCommand[ 3 ]
+                    ];
+                    break;
+                case "q":
+                    quadX = newPathCommand.absoluteCommand[ 0 ];
+                    quadY = newPathCommand.absoluteCommand[ 1 ];
+                    normalizedCommand = [
+                        newPathCommand.absolutePrevious[ 0 ] / 3 + ( 2 / 3 ) * newPathCommand.absoluteCommand[ 0 ],
+                        newPathCommand.absolutePrevious[ 1 ] / 3 + ( 2 / 3 ) * newPathCommand.absoluteCommand[ 1 ],
+                        newPathCommand.absoluteCommand[ 2 ] / 3 + ( 2 / 3 ) * newPathCommand.absoluteCommand[ 0 ],
+                        newPathCommand.absoluteCommand[ 3 ] / 3 + ( 2 / 3 ) * newPathCommand.absoluteCommand[ 1 ],
+                        newPathCommand.absoluteCommand[ 2 ],
+                        newPathCommand.absoluteCommand[ 3 ]
+                    ];
+                    break;
+                case "t":
+                    if ( [ "q", "t" ].includes( previousPathCommand.commandLetter.toLowerCase() ) ) {
+                        quadX = newPathCommand.absolutePrevious[ 0 ] * 2 - quadX;
+                        quadY = newPathCommand.absolutePrevious[ 1 ] * 2 - quadY;
+                    } else {
+                        quadX = newPathCommand.absolutePrevious[ 0 ];
+                        quadY = newPathCommand.absolutePrevious[ 1 ];
+                    }
+                    normalizedCommand = [
+                        newPathCommand.absolutePrevious[ 0 ] / 3 + ( 2 / 3 ) * quadX,
+                        newPathCommand.absolutePrevious[ 1 ] / 3 + ( 2 / 3 ) * quadY,
+                        newPathCommand.absoluteCommand[ 0 ] / 3 + ( 2 / 3 ) * quadX,
+                        newPathCommand.absoluteCommand[ 1 ] / 3 + ( 2 / 3 ) * quadY,
+                        newPathCommand.absoluteCommand[ 0 ],
+                        newPathCommand.absoluteCommand[ 1 ]
+                    ];
+                    break;
+                case "a":
+                    normalizedCommand = arcToCubicBeziers( newPathCommand.absolutePrevious, newPathCommand.absoluteCommand );
+                    break;
+                case "c":
+                    normalizedCommand = newPathCommand.absoluteCommand;
+                    break;
+                default: break;
+            }
+            newPathCommand.setNormalized( index ? "C " + normalizedCommand.flat().join( " " ) : "M " + newPathCommand.absoluteCommand.join( " " ) );
             previousPathCommand = newPathCommand;
+            if ( newPathCommand.absoluteCommand.length > 3 ) {
+                bezierX = newPathCommand.absoluteCommand[ newPathCommand.absoluteCommand.length - 4 ];
+                bezierY = newPathCommand.absoluteCommand[ newPathCommand.absoluteCommand.length - 3 ];
+            } else {
+                bezierX = newPathCommand.absolutePrevious[ 0 ];
+                bezierY = newPathCommand.absolutePrevious[ 1 ];
+            }
             return [ ...result, newPathCommand ];
         }, [] );
     }
 
-    normalize() {}
-
-    boundingBox() {}
+    // parse( descriptor ) {
+    //     let previous = [ 0, 0 ], previousPathCommand = { next: null };
+    //     this.parsedCommands = PathParser.parseRaw( descriptor ).reduce( ( result, command, index ) => {
+    //         if ( command[ 0 ].toLowerCase() === "z" ) return result;
+    //         const newPathCommand = new PathCommand( command, previous, index );
+    //         previousPathCommand.next = newPathCommand;
+    //         previous = newPathCommand.absoluteNext;
+    //         previousPathCommand = newPathCommand;
+    //         return [ ...result, newPathCommand ];
+    //     }, [] );
+    // }
 
     adjustDescriptorPoint( index, absoluteX, absoluteY ) {
         this.parsedCommands[ index ].moveCommand( absoluteX, absoluteY, true );
@@ -450,10 +522,7 @@ export class Path {
         this.parsedCommands.forEach( parsedCommand => parsedCommand.scaleCommand( scaleX, scaleY ) );
     }
 
-    normalize() {
-        this.parsedCommands[ 0 ].commandLetter = this.parsedCommands[ 0 ].commandLetter.toUpperCase();
-        this.parsedCommands.slice( 1 ).forEach( parsedCommand => parsedCommand.normalizeCommand() );
-        this.descriptor = this.absolute();
-    }
+    // boundingBox() {
+    // }
 
 }

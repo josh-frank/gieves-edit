@@ -76,6 +76,14 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, tran
         >
             𝙢 <b>Relative</b>
         </button>
+        <button
+            disabled={ !activeShape }
+            onClick={ () => {
+                dispatch( updateActiveShape( activePath.normalized() ) )
+            } }
+        >
+            𝗖 <b>Normalized</b>
+        </button>
     </section>
     <section className="menu-row">
         <button
