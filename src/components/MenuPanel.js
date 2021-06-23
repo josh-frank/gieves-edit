@@ -5,6 +5,7 @@ import { panMode, pathMode } from '../redux/modeSlice';
 import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
 import { Path, PathParser } from "../utilities/PathParser";
+import CommandsPanel from "./CommandsPanel";
 
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     <div className="menu-header">Mode</div>
@@ -184,6 +185,7 @@ export default function Menu() {
                 transformation={ transformation }
                 setTransformation={ setTransformation }
             />
+            <CommandsPanel />
         </section> }
         <button
             className={ dark ? "collapse-button dark" : "collapse-button light" }

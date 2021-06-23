@@ -61,13 +61,20 @@ body {
   resize: none;
 }
 
-.menu-row {
+.menu-row,
+.command-row {
   display: flex;
   flex-direction: row;
 }
 
 .menu-row input {
   width: 5ch;
+}
+
+.command-row input {
+  width: 2ch;
+  border: none;
+  background-color: transparent;
 }
   
 .zoom-buttons {
@@ -98,6 +105,9 @@ body {
   z-index: 1000;
 }
 
+.command-row input::-webkit-outer-spin-button,
+.command-row input::-webkit-inner-spin-button,
+.command-row input[type=number],
 .artboard-panel input::-webkit-outer-spin-button,
 .artboard-panel input::-webkit-inner-spin-button,
 .artboard-panel input[type=number] {
