@@ -61,6 +61,11 @@ body {
   resize: none;
 }
 
+.command-fields {
+  height: 20rem;
+  overflow-y: scroll;
+}
+
 .menu-row,
 .command-row {
   display: flex;
@@ -72,9 +77,13 @@ body {
 }
 
 .command-row input {
-  width: 2ch;
+  width: 3ch;
   border: none;
   background-color: transparent;
+}
+
+.command-row input[type=text] {
+  font-weight: bold;
 }
   
 .zoom-buttons {
