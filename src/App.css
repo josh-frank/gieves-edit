@@ -76,16 +76,13 @@ body {
   width: 5ch;
 }
 
-.command-row input {
-  width: 3ch;
-  border: none;
-  background-color: transparent;
-}
-
-.command-row input[type=text] {
+.command-row button {
+  /* background: none; */
+  /* border: none; */
+  width: 4ch;
   font-weight: bold;
 }
-  
+
 .zoom-buttons {
   display: grid;
   position: fixed;
