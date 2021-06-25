@@ -53,7 +53,7 @@ export class PathParser {
             for ( const regex of expectedCommands ) {
                 const match = command.slice( cursor ).match( regex );
                 if ( match !== null ) {
-                    component.push( round( match[ 0 ], 1 ) );
+                    component.push( round( match[ 0 ], 2 ) );
                     cursor += match[ 0 ].length;
                     const nextSlice = command.slice( cursor ).match( this.validComma );
                     if ( nextSlice !== null ) cursor += nextSlice[ 0 ].length;
@@ -95,7 +95,7 @@ class PathCommand {
     constructor( parsedCommand, absolutePrevious, index ) {
         this.index = index;
         this.commandLetter = parsedCommand[ 0 ];
-        this.absolutePrevious = absolutePrevious.map( coordinate => round( coordinate, 1 ) );
+        this.absolutePrevious = absolutePrevious.map( coordinate => round( coordinate, 2 ) );
         this.parse( parsedCommand );
     }
 
@@ -103,10 +103,16 @@ class PathCommand {
 
     setNormalized( normalizedCommand ) { this.normalizedCommand = normalizedCommand; }
 
+    setAbsolute() { this.commandLetter = this.commandLetter.toUpperCase(); }
+
+    setRelative() { this.commandLetter = this.commandLetter.toLowerCase(); }
+
+    isRelative() { return this.commandLetter === this.commandLetter.toLowerCase(); }
+
     parse( parsedCommand ) {
-        this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( parsedCommand, this.absolutePrevious ).map( coordinate => round( coordinate, 1 ) );
+        this.absoluteNext = PathParser.pointGrammar[ parsedCommand[ 0 ] ]( parsedCommand, this.absolutePrevious ).map( coordinate => round( coordinate, 2 ) );
         this.absoluteCommand = [ ...this.absoluteNext ];
-        this.relativeCommand = [ round( this.absoluteNext[ 0 ] - this.absolutePrevious[ 0 ], 1 ), round( this.absoluteNext[ 1 ] - this.absolutePrevious[ 1 ], 1 ) ]
+        this.relativeCommand = [ round( this.absoluteNext[ 0 ] - this.absolutePrevious[ 0 ], 2 ), round( this.absoluteNext[ 1 ] - this.absolutePrevious[ 1 ], 2 ) ]
         switch( parsedCommand[ 0 ] ) {
             case "c":
                 this.absoluteCommand = [
@@ -195,8 +201,15 @@ class PathCommand {
         }
     }
 
+    toString() {
+        let commandToStringify = this.commandLetter === this.commandLetter.toLowerCase() ? this.relativeCommand : this.absoluteCommand;
+        if ( this.commandLetter.toLowerCase() === "h" ) commandToStringify = commandToStringify.slice( 0, 1 );
+        if ( this.commandLetter.toLowerCase() === "v" ) commandToStringify = commandToStringify.slice( 1 );
+        return [ this.commandLetter, ...commandToStringify ].join( " " );
+    }
+    
     absolute( gridInterval ) {
-        const snappedCommand = gridInterval && this.absoluteCommand.map( parameter => round( parameter / gridInterval, 1 ) * gridInterval );
+        const snappedCommand = gridInterval && this.absoluteCommand.map( parameter => round( parameter / gridInterval, 2 ) * gridInterval );
         return [ this.commandLetter.toUpperCase(), ...(
             this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.absoluteCommand ).slice( 0, 1 ) : 
             this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.absoluteCommand ).slice( 1 ) :
@@ -206,7 +219,7 @@ class PathCommand {
     }
 
     relative( gridInterval ) {
-        const snappedCommand = gridInterval && this.relativeCommand.map( parameter => round( parameter / gridInterval, 1 ) * gridInterval );
+        const snappedCommand = gridInterval && this.relativeCommand.map( parameter => round( parameter / gridInterval, 2 ) * gridInterval );
         return [ this.commandLetter.toLowerCase(), ...(
             this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.relativeCommand ).slice( 0, 1 ) : 
             this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.relativeCommand ).slice( 1 ) :
@@ -297,6 +310,8 @@ class PathCommand {
             case "l":
             case "t":
             case "a":
+                // this.absoluteCommand[ 0 ] *= scaleX;
+                // this.absoluteCommand[ 1 ] *= scaleY;
                 this.absoluteCommand[ this.absoluteCommand.length - 2 ] *= scaleX;
                 this.absoluteCommand[ this.absoluteCommand.length - 1 ] *= scaleY;
                 break;
@@ -320,7 +335,7 @@ class PathCommand {
         }
         this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
         if ( this.next ) {
-            this.next.absolutePrevious = [ this.next.absolutePrevious * scaleX, this.next.absolutePrevious * scaleY ];
+            this.next.absolutePrevious = [ this.next.absolutePrevious[ 0 ] * scaleX, this.next.absolutePrevious[ 1 ] * scaleY ];
             this.next.parse( PathParser.parseRaw( this.next.absolute().join( " " ) )[ 0 ] );
         }
     }
@@ -366,11 +381,12 @@ export class Path {
     }
 
     constructor( descriptor ) {
-        this.descriptor = descriptor;
         this.parse( descriptor );
     }
 
-    toString( relative ) { return relative ? this.relative() : this.absolute(); }
+    toString() {
+        return this.parsedCommands.map( command => command.toString() ).join( " " ) + " Z";
+    }
 
     absolute() {
         return this.parsedCommands.map( command => command.absolute().join( " " ) ).join( " " ) + " Z";
