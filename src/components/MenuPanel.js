@@ -136,7 +136,7 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, tran
             onChange={ changeEvent => setTransformation( { ...transformation, scale: [ transformation.scale[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
         />
     </section> */}
-    {/* <button
+    <button
         disabled={ !activeShape }
         onClick={ () => {
             activePath.snapToGrid( gridInterval );
@@ -144,7 +144,7 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, tran
         } }
     >
         👌 <b>Snap path to grid</b>
-    </button> */}
+    </button>
 </div>;
 
 export default function Menu() {

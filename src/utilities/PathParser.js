@@ -209,23 +209,21 @@ class PathCommand {
     }
     
     absolute( gridInterval ) {
-        const snappedCommand = gridInterval && this.absoluteCommand.map( parameter => round( parameter / gridInterval, 2 ) * gridInterval );
+        const snappedCommand = gridInterval && this.absoluteCommand.map( parameter => Math.round( parameter / gridInterval ) * gridInterval );
         return [ this.commandLetter.toUpperCase(), ...(
             this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.absoluteCommand ).slice( 0, 1 ) : 
             this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.absoluteCommand ).slice( 1 ) :
-            this.commandLetter.toLowerCase() === "a" ? [ ...this.absoluteCommand.slice( 0, 6 ), ...( snappedCommand || this.absoluteCommand ).slice( 6, 8 ) ] :
-            ( snappedCommand || this.absoluteCommand ) )
-        ];
+            this.commandLetter.toLowerCase() === "a" ? [ ...this.absoluteCommand.slice( 0, 5 ), ...( snappedCommand || this.absoluteCommand ).slice( 5 ) ] :
+            ( snappedCommand || this.absoluteCommand ) ) ];
     }
 
     relative( gridInterval ) {
-        const snappedCommand = gridInterval && this.relativeCommand.map( parameter => round( parameter / gridInterval, 2 ) * gridInterval );
+        const snappedCommand = gridInterval && this.relativeCommand.map( parameter => Math.round( parameter / gridInterval ) * gridInterval );
         return [ this.commandLetter.toLowerCase(), ...(
             this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.relativeCommand ).slice( 0, 1 ) : 
             this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.relativeCommand ).slice( 1 ) :
-            this.commandLetter.toLowerCase() === "a" ? [ ...this.relativeCommand.slice( 0, 6 ), ...( snappedCommand || this.relativeCommand ).slice( 6, 8 ) ] :
-            ( snappedCommand || this.relativeCommand ) )
-        ];
+            this.commandLetter.toLowerCase() === "a" ? [ ...this.relativeCommand.slice( 0, 5 ), ...( snappedCommand || this.relativeCommand ).slice( 5 ) ] :
+            ( snappedCommand || this.relativeCommand ) ) ];
     }
 
     moveCommand( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ], adjustPointOnly ) {
@@ -524,7 +522,7 @@ export class Path {
     }
 
     snapToGrid( gridInterval ) {
-        this.parsedCommands.forEach( parsedCommand => parsedCommand.parse( parsedCommand.absolute( gridInterval ) ) );
+        this.parsedCommands.forEach( parsedCommand => parsedCommand.parse( parsedCommand.isRelative() ? parsedCommand.relative( gridInterval ) : parsedCommand.absolute( gridInterval ) ) );
     }
 
     translate( relativeX, relativeY ) {
