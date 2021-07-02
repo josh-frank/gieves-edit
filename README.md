@@ -36,6 +36,8 @@ Click the **Absolute** and **Relative** buttons to convert the active path betwe
 
 Click the **Normalize** button to normalize the path (convert all shapes to cubic béziers).
 
+Use the **Translate** button/fields to translate a path (move it up/down or left/right). Specify the X/Y distance in the relevant field to the right of the button. Use the **Scale** button/fields to grow/shrink a path in the same way.
+
 Click the **Snap** button to snap the active path's points to the artboard's gridlines. Set the gridlines in the **artboard info** panel.
 
 ## Artboard Info
