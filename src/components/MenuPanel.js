@@ -111,7 +111,7 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, tran
             onChange={ changeEvent => setTransformation( { ...transformation, translate: [ transformation.translate[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
         />
     </section>
-    {/* <section className="menu-row">
+    <section className="menu-row">
         <button
             disabled={ !activeShape }
             onClick={ () => {
@@ -135,7 +135,7 @@ const TransformPanel = ( { activePath, activeShape, dispatch, gridInterval, tran
             value={ activeShape ? transformation.scale[ 1 ] : "" }
             onChange={ changeEvent => setTransformation( { ...transformation, scale: [ transformation.scale[ 0 ], parseInt( changeEvent.target.value ) ] } ) }
         />
-    </section> */}
+    </section>
     <button
         disabled={ !activeShape }
         onClick={ () => {

@@ -299,17 +299,11 @@ class PathCommand {
     scaleCommand( scaleX = 1, scaleY = 1 ) {
         switch ( this.commandLetter.toLowerCase() ) {
             case "h":
-                this.absoluteCommand[ 1 ] *= scaleX;
-                break;
             case "v":
-                this.absoluteCommand[ 1 ] *= scaleY;
-                break;
             case "m":
             case "l":
             case "t":
             case "a":
-                // this.absoluteCommand[ 0 ] *= scaleX;
-                // this.absoluteCommand[ 1 ] *= scaleY;
                 this.absoluteCommand[ this.absoluteCommand.length - 2 ] *= scaleX;
                 this.absoluteCommand[ this.absoluteCommand.length - 1 ] *= scaleY;
                 break;
