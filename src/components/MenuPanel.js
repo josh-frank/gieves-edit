@@ -6,6 +6,7 @@ import { deactivateShape, updateActiveShape } from "../redux/shapesSlice";
 
 import { Path, PathParser } from "../utilities/PathParser";
 import CommandsPanel from "./CommandsPanel";
+import FilePanel from "./FilePanel";
 
 const ModePanel = ( { dispatch, editMode } ) => <div className="menu-panel">
     <div className="menu-header">Mode</div>
@@ -167,6 +168,7 @@ export default function Menu() {
 
     return <div className="menu-container">
         { !collapseMenu && <section className={ dark ? "menu dark" : "menu light" } >
+            <FilePanel />
             <ModePanel
                 dispatch={ dispatch }
                 editMode={ editMode }
