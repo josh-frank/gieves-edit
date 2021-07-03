@@ -111,6 +111,23 @@ body {
   z-index: 1000;
 }
 
+.command-fields::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.command-fields::-webkit-scrollbar:vertical {
+  width: 11px;
+}
+
+.command-fields::-webkit-scrollbar:horizontal {
+  height: 11px;
+}
+
+.command-fields::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, .5);
+}
+
 .command-row input::-webkit-outer-spin-button,
 .command-row input::-webkit-inner-spin-button,
 .command-row input[type=number],

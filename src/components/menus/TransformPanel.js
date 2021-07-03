@@ -3,11 +3,13 @@ import { updateActiveShape } from "../../redux/shapesSlice";
 
 import { Path } from "../../utilities/PathParser";
 
-export default function TransformPanel( { activeShape, transformation, setTransformation } ) {
+export default function TransformPanel( { transformation, setTransformation } ) {
 
     const dispatch = useDispatch();
 
     const { gridInterval } = useSelector( state => state.artboard );
+
+    const { activeShape } = useSelector( state => state.shapes );
 
     const activePath = activeShape && new Path( activeShape );
 

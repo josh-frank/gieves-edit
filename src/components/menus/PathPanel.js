@@ -1,11 +1,13 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deactivateShape, updateActiveShape } from "../../redux/shapesSlice";
 
 import { PathParser } from "../../utilities/PathParser";
 
-export default function PathPanel( { activeShape, manualPathEdit, setManualPathEdit } ) {
+export default function PathPanel( { manualPathEdit, setManualPathEdit } ) {
 
     const dispatch = useDispatch();
+
+    const { activeShape } = useSelector( state => state.shapes );
 
     return <div className="menu-panel">
         <div className="menu-header">Path</div>

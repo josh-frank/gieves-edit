@@ -7,12 +7,11 @@ import FilePanel from "../menus/FilePanel";
 import ModePanel from "../menus/ModePanel";
 import PathPanel from "../menus/PathPanel";
 import TransformPanel from "../menus/TransformPanel";
+import ShapesPanel from "./ShapesPanel";
 
 export default function MainMenu() {
 
     const { dark } = useSelector( state => state.artboard );
-
-    const { activeShape } = useSelector( state => state.shapes );
 
     const [ manualPathEdit, setManualPathEdit ] = useState( null );
 
@@ -23,14 +22,13 @@ export default function MainMenu() {
     return <div className="menu-container">
         { !collapseMenu && <section className={ dark ? "menu dark" : "menu light" } >
             <FilePanel />
+            <ShapesPanel />
             <ModePanel />
             <PathPanel
-                activeShape={ activeShape }
                 manualPathEdit={ manualPathEdit }
                 setManualPathEdit={ setManualPathEdit }
             />
             <TransformPanel
-                activeShape={ activeShape }
                 transformation={ transformation }
                 setTransformation={ setTransformation }
             />
