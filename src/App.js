@@ -7,8 +7,8 @@ import { addShape } from './redux/shapesSlice';
 import { toggleDark, zoomInButton, zoomOutButton } from './redux/artboardSlice';
 
 import Artboard from './components/Artboard';
-import ArtboardPanel from './components/ArtboardPanel';
-import Menu from './components/MenuPanel';
+import MainMenu from './components/menus/MainMenu';
+import ArtboardMenu from './components/menus/ArtboardMenu';
 
 const testShapes = [
   "m 50,50 l 100,0 l 0,100 l -100,0 z",
@@ -32,10 +32,10 @@ function App() {
   </div>;
 
   return <main>
-    <Menu />
+    <MainMenu />
     <ZoomButtons />
     <Artboard />
-    <ArtboardPanel />
+    <ArtboardMenu />
   </main>;
 
 }

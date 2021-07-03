@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval } from "../redux/artboardSlice";
+import { setArtboardDimensions, setZoom, setArtboardOffset, toggleGridDisplay, setGridInterval } from "../../redux/artboardSlice";
 
 const StyledInput = styled.input.attrs( ( { characterLength } ) => ( {
     style: { width: `${ characterLength }ch` },
@@ -19,7 +19,7 @@ function roundAndClamp( payload ){
     return Math.min( Math.max( Math.round( payload * 4 ) / 4, 6.25 ), 625 );
 }
 
-export default function ArtboardPanel() {
+export default function ArtboardMenu() {
     
     const dispatch = useDispatch();
 

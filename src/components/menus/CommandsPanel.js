@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { updateActiveShape } from "../redux/shapesSlice";
+import { updateActiveShape } from "../../redux/shapesSlice";
 
-import { Path } from "../utilities/PathParser";
+import { Path } from "../../utilities/PathParser";
 
 const StyledInput = styled.input.attrs( ( { characterLength } ) => ( {
     style: { width: `${ characterLength }ch` },

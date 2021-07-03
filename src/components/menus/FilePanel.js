@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { downloadPathsAsSvgFile } from "../utilities/pathsToSvgFile";
+import { downloadPathsAsSvgFile } from "../../utilities/pathsToSvgFile";
 
 export default function FilePanel() {
 
