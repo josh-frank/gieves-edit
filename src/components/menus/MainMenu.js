@@ -22,8 +22,8 @@ export default function MainMenu() {
     return <div className="menu-container">
         { !collapseMenu && <section className={ dark ? "menu dark" : "menu light" } >
             <FilePanel />
-            <ShapesPanel />
             <ModePanel />
+            <ShapesPanel />
             <PathPanel
                 manualPathEdit={ manualPathEdit }
                 setManualPathEdit={ setManualPathEdit }
