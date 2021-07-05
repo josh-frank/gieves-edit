@@ -7,6 +7,12 @@ const shapesSlice = createSlice( {
         activeShape: null
     },
     reducers: {
+        loadShapes( state, action ) {
+            return {
+                inactiveShapes: action.payload,
+                activeShape: null
+            };
+        },
         addShape( state, action ) {
             return {
                 inactiveShapes: [ ...state.inactiveShapes, action.payload ],
@@ -42,6 +48,7 @@ const shapesSlice = createSlice( {
 } );
 
 export const {
+    loadShapes,
     addShape,
     removeShape,
     activateShape,
