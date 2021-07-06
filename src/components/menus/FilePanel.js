@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadShapes } from "../../redux/shapesSlice";
 
-import { downloadPathsAsSvgFile, parsePathsFromSvgFile } from "../../utilities/fileUtilities";
+import { downloadArtboardAsSvg, parsePathsFromSvg } from "../../utilities/fileUtilities";
 
 export default function FilePanel() {
 
@@ -18,13 +18,13 @@ export default function FilePanel() {
         const uploadedFile = uploadEvent.target.files[ 0 ];
         if ( uploadedFile && uploadedFile.type === "image/svg+xml" ) {
             const fileReader = new FileReader();
-            fileReader.onload = async loadEvent => dispatch( loadShapes( parsePathsFromSvgFile( loadEvent.target.result ) ) );
+            fileReader.onload = async loadEvent => dispatch( loadShapes( parsePathsFromSvg( loadEvent.target.result ) ) );
             fileReader.readAsText( uploadedFile );
         }
     };
 
     const handleDownload = () => {
-        downloadPathsAsSvgFile( activeShape ? [ activeShape, ...inactiveShapes ] : [ ...inactiveShapes ], [ width, height ] );
+        downloadArtboardAsSvg( activeShape ? [ activeShape, ...inactiveShapes ] : [ ...inactiveShapes ], [ width, height ] );
     };
 
     return <div className="menu-panel">
@@ -35,7 +35,12 @@ export default function FilePanel() {
             onChange={ handleUpload }
             hidden
         />
-        <button onClick={ () => uploadRef.current.click() }>🗂 <b>Load from SVG</b></button>
+        <button onClick={ () => {
+            alert( "This will erase your artboard!" );
+            uploadRef.current.click();
+        } }>
+            🗂 <b>Load from SVG</b>
+        </button>
         <button onClick={ handleDownload }>〈／〉 <b>Download as SVG</b></button>
     </div>;
 

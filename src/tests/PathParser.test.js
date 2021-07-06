@@ -20,7 +20,7 @@ const normalizedShape = [
     "M 25 25 C 25 25 75 25 75 25 C 75 25 75 75 75 75 C 75 75 25 75 25 75 Z"
 ];
 
-test( 'PathCommand returns absolute and relative commands correctly', () => {
+test( "PathCommand returns absolute and relative commands correctly", () => {
     const relative = new Path( sameShape[ 0 ] );
     const absolute = new Path( sameShape[ 1 ] );
     for ( let i = 0; i < relative.length; i++ ) {
@@ -28,13 +28,17 @@ test( 'PathCommand returns absolute and relative commands correctly', () => {
     }
 } );
 
-test( 'PathCommand normalizes itself correctly', () => {
-    const testPath = new Path( normalizedShape[ 0 ] );
-    testPath.normalize();
-    // testPath.parsedCommands.forEach( command => console.log( command.absoluteCommand ) )
+test( "PathCommand normalizes itself correctly", () => {
+    const testPath = new Path( normalizedShape[ 0 ] ).normalized();
     expect( testPath.toString() ).toEqual( normalizedShape[ 1 ] );
-    const testPath1 = new Path( "m 0 0 q 60 0 60 40 q -60 0 -60 -40 z" );
-    testPath1.normalize();
-    console.log( 'testPath1: ', testPath1 );
+    const testPath1 = new Path( "m 0 0 q 60 0 60 40 q -60 0 -60 -40 z" ).normalized();
+    // console.log( "testPath1: ", testPath1 );
     expect( true );
 } );
+
+test( "PathCommands index themselves correctly", () => {
+    const elevenCommands = "M83.3,141.501c-2.035,0.603-4.071,1.732-5.979,3.64c-9.47,9.469-4.208,13.678-1.578,13.678 c2.63,0,5.824-1.876,4.208-6.313c-0.453-1.247,1.026-5.191,3.349-7.14V141.501z M76.069,156.812c-1.012,0-1.832-0.82-1.832-1.832 s0.82-1.832,1.832-1.832s1.833,0.82,1.833,1.832S77.081,156.812,76.069,156.812z";
+    const testPath = new Path( elevenCommands );
+    expect( testPath.parsedCommands.length ).toEqual( 11 );
+} );
+

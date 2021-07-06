@@ -25,7 +25,7 @@ const CommandRow = ( { fullPath, commandIndex, commandEdit, setCommandEdit, disp
         >
             { parsedCommand.commandLetter }
         </button>
-        { commandToUpdate.map( ( parameter, parameterIndex ) => <StyledInput
+        { parsedCommand.commandLetter.toLowerCase() !== "z" && commandToUpdate.map( ( parameter, parameterIndex ) => <StyledInput
             className={ dark ? "dark" : null }
             type="number"
             key={ parameterIndex }

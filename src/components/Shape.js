@@ -41,7 +41,7 @@ export default function Shape( { descriptor } ) {
             onMouseLeave={ () => toggleHover( false ) }
             onClick={ active ? deactivate : activate }
         />
-        { active && shapePath.parsedCommands.map( parsedCommand => {
+        { active && shapePath.parsedCommands.filter( parsedCommand => parsedCommand.commandLetter.toLowerCase() !== "z" ).map( parsedCommand => {
             return <Handle
                 key={ parsedCommand.index }
                 parsedCommand={ parsedCommand }

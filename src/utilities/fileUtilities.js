@@ -6,7 +6,7 @@
 //     `</svg>`
 // ];
 
-export const downloadPathsAsSvgFile = ( paths, dimensions ) => {
+export const downloadArtboardAsSvg = ( paths, dimensions ) => {
     var element = document.createElement( "a" );
     element.setAttribute( "href", "data:image/svg+xml;utf8," + encodeURIComponent( [
         `<?xml version="1.0" encoding="utf-8"?>`,
@@ -22,7 +22,7 @@ export const downloadPathsAsSvgFile = ( paths, dimensions ) => {
     document.body.removeChild( element );
 }
 
-export const parsePathsFromSvgFile = svg => {
+export const parsePathsFromSvg = svg => {
     const matchPathTag = /<path[\s\S]*?\/>/gmi,
         matchDescriptor = /(?<=\sd=")[\s\S]*?(?=")/gmi,
         cleanUpWhiteSpace = /[\n\s]+/g;

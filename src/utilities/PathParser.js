@@ -23,8 +23,8 @@ export class PathParser {
     };
 
     static pointGrammar = {
-        z: () => [],
-        Z: () => [],
+        z: ( origin, previousPoint ) => [ previousPoint[ 0 ] + origin[ 1 ], previousPoint[ 1 ] + origin[ 2 ] ],
+        Z: origin => origin.slice( 1 ),
         m: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
         M: command => command.slice( 1 ),
         h: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] ],
@@ -202,6 +202,7 @@ class PathCommand {
     }
 
     toString() {
+        if ( this.commandLetter.toLowerCase() === "z" ) return [ this.commandLetter ];
         let commandToStringify = this.commandLetter === this.commandLetter.toLowerCase() ? this.relativeCommand : this.absoluteCommand;
         if ( this.commandLetter.toLowerCase() === "h" ) commandToStringify = commandToStringify.slice( 0, 1 );
         if ( this.commandLetter.toLowerCase() === "v" ) commandToStringify = commandToStringify.slice( 1 );
@@ -209,6 +210,7 @@ class PathCommand {
     }
     
     absolute( gridInterval ) {
+        if ( this.commandLetter.toLowerCase() === "z" ) return [ this.commandLetter ];
         const snappedCommand = gridInterval && this.absoluteCommand.map( parameter => Math.round( parameter / gridInterval ) * gridInterval );
         return [ this.commandLetter.toUpperCase(), ...(
             this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.absoluteCommand ).slice( 0, 1 ) : 
@@ -216,14 +218,15 @@ class PathCommand {
             this.commandLetter.toLowerCase() === "a" ? [ ...this.absoluteCommand.slice( 0, 5 ), ...( snappedCommand || this.absoluteCommand ).slice( 5 ) ] :
             ( snappedCommand || this.absoluteCommand ) ) ];
     }
-
+    
     relative( gridInterval ) {
-        const snappedCommand = gridInterval && this.relativeCommand.map( parameter => Math.round( parameter / gridInterval ) * gridInterval );
-        return [ this.commandLetter.toLowerCase(), ...(
-            this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.relativeCommand ).slice( 0, 1 ) : 
-            this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.relativeCommand ).slice( 1 ) :
-            this.commandLetter.toLowerCase() === "a" ? [ ...this.relativeCommand.slice( 0, 5 ), ...( snappedCommand || this.relativeCommand ).slice( 5 ) ] :
-            ( snappedCommand || this.relativeCommand ) ) ];
+    if ( this.commandLetter.toLowerCase() === "z" ) return [ this.commandLetter ];
+    const snappedCommand = gridInterval && this.relativeCommand.map( parameter => Math.round( parameter / gridInterval ) * gridInterval );
+    return [ this.commandLetter.toLowerCase(), ...(
+        this.commandLetter.toLowerCase() === "h" ? ( snappedCommand || this.relativeCommand ).slice( 0, 1 ) : 
+        this.commandLetter.toLowerCase() === "v" ? ( snappedCommand || this.relativeCommand ).slice( 1 ) :
+        this.commandLetter.toLowerCase() === "a" ? [ ...this.relativeCommand.slice( 0, 5 ), ...( snappedCommand || this.relativeCommand ).slice( 5 ) ] :
+        ( snappedCommand || this.relativeCommand ) ) ];
     }
 
     moveCommand( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ], adjustPointOnly ) {
@@ -377,32 +380,32 @@ export class Path {
     }
 
     toString() {
-        return this.parsedCommands.map( command => command.toString() ).join( " " ) + " Z";
+        return this.parsedCommands.map( command => command.toString() ).join( " " );
     }
 
     absolute() {
-        return this.parsedCommands.map( command => command.absolute().join( " " ) ).join( " " ) + " Z";
+        return this.parsedCommands.map( command => command.absolute().join( " " ) ).join( " " );
     }
 
     relative() {
-        return this.parsedCommands.map( command => command.relative().join( " " ) ).join( " " ) + " z";
+        return this.parsedCommands.map( command => command.relative().join( " " ) ).join( " " );
     }
 
     normalized() {
-        return this.parsedCommands.map( command => command.normalizedCommand ).join( " " ) + " Z";
+        return this.parsedCommands.map( command => command.normalizedCommand ).join( " " ) + " z";
     }
 
     parse( descriptor ) {
         let quadX, quadY, 
             bezierX, bezierY,
+            origin,
             previous = [ 0, 0 ],
             previousPathCommand = { next: null };
         this.parsedCommands = PathParser.parseRaw( descriptor ).reduce( ( result, command, index ) => {
-            if ( command[ 0 ].toLowerCase() === "z" ) return result;
-            const newPathCommand = new PathCommand( command, previous, index );
+            const newPathCommand = new PathCommand( command[ 0 ].toLowerCase() === "z" ? [ command[ 0 ], ...origin.absoluteCommand ] : command, previous, index );
             previousPathCommand.next = newPathCommand;
             previous = newPathCommand.absoluteNext;
-            let normalizedCommand;
+            let normalizedCommand = "Z";
             switch ( command[ 0 ].toLowerCase() ) {
                 case "h":
                     normalizedCommand = [
@@ -478,7 +481,7 @@ export class Path {
                     break;
                 default: break;
             }
-            newPathCommand.setNormalized( index ? "C " + normalizedCommand.flat().join( " " ) : "M " + newPathCommand.absoluteCommand.join( " " ) );
+            if ( command[ 0 ].toLowerCase() !== "z" ) newPathCommand.setNormalized( index ? "C " + normalizedCommand.flat().join( " " ) : "M " + newPathCommand.absoluteCommand.join( " " ) );
             previousPathCommand = newPathCommand;
             if ( newPathCommand.absoluteCommand.length > 3 ) {
                 bezierX = newPathCommand.absoluteCommand[ newPathCommand.absoluteCommand.length - 4 ];
@@ -487,6 +490,7 @@ export class Path {
                 bezierX = newPathCommand.absolutePrevious[ 0 ];
                 bezierY = newPathCommand.absolutePrevious[ 1 ];
             }
+            if ( !index ) origin = newPathCommand;
             return [ ...result, newPathCommand ];
         }, [] );
     }
