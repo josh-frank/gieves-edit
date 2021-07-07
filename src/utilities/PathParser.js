@@ -23,7 +23,7 @@ export class PathParser {
     };
 
     static pointGrammar = {
-        z: ( origin, previousPoint ) => [ previousPoint[ 0 ] + origin[ 1 ], previousPoint[ 1 ] + origin[ 2 ] ],
+        z: origin => origin.slice( 1 ),
         Z: origin => origin.slice( 1 ),
         m: ( command, previousPoint ) => [ previousPoint[ 0 ] + command[ 1 ], previousPoint[ 1 ] + command[ 2 ] ],
         M: command => command.slice( 1 ),
@@ -396,7 +396,7 @@ export class Path {
     }
 
     parse( descriptor ) {
-        let quadX, quadY, 
+        let quadX, quadY,
             bezierX, bezierY,
             origin,
             previous = [ 0, 0 ],
@@ -405,7 +405,7 @@ export class Path {
             const newPathCommand = new PathCommand( command[ 0 ].toLowerCase() === "z" ? [ command[ 0 ], ...origin.absoluteCommand ] : command, previous, index );
             previousPathCommand.next = newPathCommand;
             previous = newPathCommand.absoluteNext;
-            let normalizedCommand = "Z";
+            let normalizedCommand;
             switch ( command[ 0 ].toLowerCase() ) {
                 case "h":
                     normalizedCommand = [
@@ -481,7 +481,11 @@ export class Path {
                     break;
                 default: break;
             }
-            if ( command[ 0 ].toLowerCase() !== "z" ) newPathCommand.setNormalized( index ? "C " + normalizedCommand.flat().join( " " ) : "M " + newPathCommand.absoluteCommand.join( " " ) );
+            if ( command[ 0 ].toLowerCase() === "z" ) {
+                newPathCommand.setNormalized( command[ 0 ] );
+            } else {
+                newPathCommand.setNormalized( index ? "C " + normalizedCommand.flat().join( " " ) : "M " + newPathCommand.absoluteCommand.join( " " ) );
+            }
             previousPathCommand = newPathCommand;
             if ( newPathCommand.absoluteCommand.length > 3 ) {
                 bezierX = newPathCommand.absoluteCommand[ newPathCommand.absoluteCommand.length - 4 ];

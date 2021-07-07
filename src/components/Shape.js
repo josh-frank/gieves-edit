@@ -20,6 +20,7 @@ export default function Shape( { descriptor } ) {
     const { zoom, offsetX, offsetY } = useSelector( state => state.artboard );
 
     const shapePath = active && new Path( descriptor );
+    // console.log( 'shapePath: ', shapePath );
 
     function activate() {
         dispatch( activateShape( descriptor ) );
