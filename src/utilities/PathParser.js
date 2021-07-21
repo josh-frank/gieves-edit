@@ -231,12 +231,8 @@ class PathCommand {
 
     moveCommand( absoluteX = this.absoluteCommand[ 0 ], absoluteY = this.absoluteCommand[ 1 ], adjustPointOnly ) {
         switch ( this.commandLetter.toLowerCase() ) {
-            case "h":
-                this.absoluteCommand[ 1 ] = absoluteX;
-                break;
-            case "v":
-                this.absoluteCommand[ 1 ] = absoluteY;
-                break;
+            case "h": break;
+            case "v": break;
             case "m":
             case "l":
             case "t":
@@ -267,7 +263,7 @@ class PathCommand {
             default: break;
         }
         this.parse( PathParser.parseRaw( this.absolute().join( " " ) )[ 0 ] );
-        if ( this.next ) {
+        if ( this.next && ![ "m", "h", "v" ].includes( this.commandLetter.toLowerCase() ) ) {
             this.next.absolutePrevious = [ absoluteX, absoluteY ];
             this.next.parse( PathParser.parseRaw( this.next.absolute().join( " " ) )[ 0 ] );
         }
@@ -392,7 +388,7 @@ export class Path {
     }
 
     normalized() {
-        return this.parsedCommands.map( command => command.normalizedCommand ).join( " " ) + " z";
+        return this.parsedCommands.map( command => command.normalizedCommand ).join( " " );
     }
 
     parse( descriptor ) {
